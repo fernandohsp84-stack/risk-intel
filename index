@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Risk Intel — Modelo & IA</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@400;500&display=swap');
+  :root{--bg:#080a0d;--surface:#0d0f13;--surface2:#111418;--border:#1a1e28;--text:#ddd8ce;--text-dim:#7a8090;--text-muted:#2a3040}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'DM Mono','Courier New',monospace;min-height:100vh;-webkit-font-smoothing:antialiased}
+  ::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  @keyframes shimmer{0%,100%{opacity:.25}50%{opacity:.9}}
+  #setup-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px;text-align:center}
+  .setup-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:26px;letter-spacing:4px;color:#4ecb71;margin-bottom:4px}
+  .setup-sub{font-size:9px;letter-spacing:3px;color:var(--text-muted);text-transform:uppercase;margin-bottom:36px}
+  .setup-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:28px 24px;width:100%;max-width:420px;text-align:left}
+  .setup-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text);margin-bottom:8px;letter-spacing:1px}
+  .setup-desc{font-size:11px;color:var(--text-dim);line-height:1.9;margin-bottom:20px}
+  .setup-desc a{color:#4a9eff;text-decoration:none}
+  .setup-label{font-size:9px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px}
+  .setup-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:12px 14px;font-family:'DM Mono',monospace;font-size:12px;color:var(--text);outline:none;margin-bottom:16px;transition:border-color .2s}
+  .setup-input:focus{border-color:#4ecb71}
+  .setup-btn{width:100%;padding:13px;background:#4ecb71;color:#080a0d;border:none;border-radius:5px;font-family:'Syne',sans-serif;font-weight:800;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer}
+  .setup-warning{margin-top:16px;padding:12px 14px;background:rgba(255,159,64,.08);border:1px solid rgba(255,159,64,.2);border-radius:5px;font-size:10px;color:#ff9f40;line-height:1.8}
+  #app-screen{display:none}
+  .header{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+  .logo-text{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;letter-spacing:3px;transition:color .3s}
+  .logo-sub{font-size:8px;letter-spacing:2px;color:var(--text-muted);margin-top:2px}
+  .live-badge{text-align:right}
+  .live-dot-wrap{font-size:9px;color:#4ecb71;letter-spacing:1px;display:flex;align-items:center;gap:5px;justify-content:flex-end}
+  .live-dot{width:5px;height:5px;border-radius:50%;background:#4ecb71;animation:pulse 2s infinite}
+  .clock{font-size:9px;color:var(--text-muted);margin-top:2px;font-family:'DM Mono',monospace}
+  .content{max-width:620px;margin:0 auto;padding:0 16px 60px}
+  .theme-toggle{display:flex;gap:10px;padding:18px 0 14px}
+  .theme-btn{flex:1;padding:14px 10px;border-radius:6px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;transition:all .2s;text-align:center}
+  .theme-btn .btn-icon{font-size:20px;margin-bottom:5px}
+  .section-label{font-size:8px;letter-spacing:3px;color:var(--text-muted);text-transform:uppercase;margin-bottom:10px}
+  .topics-wrap{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+  .topic-pill{padding:8px 13px;border:1px solid var(--border);border-radius:20px;background:transparent;cursor:pointer;font-size:10px;color:var(--text-dim);font-family:'DM Mono',monospace;letter-spacing:.5px;transition:all .15s;-webkit-tap-highlight-color:transparent}
+  .search-bar{display:flex;gap:8px;margin-bottom:22px}
+  .search-input{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:5px;padding:12px 14px;font-family:'DM Mono',monospace;font-size:12px;color:var(--text);outline:none;transition:border-color .2s;-webkit-appearance:none}
+  .search-input::placeholder{color:var(--text-muted)}
+  .search-input:focus{border-color:#4ecb71}
+  .search-btn{padding:12px 18px;border:none;border-radius:5px;font-family:'Syne',sans-serif;font-weight:700;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;white-space:nowrap;-webkit-tap-highlight-color:transparent}
+  .loading-box{text-align:center;padding:60px 20px}
+  .spinner{width:32px;height:32px;border:2px solid var(--border);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 16px}
+  .loading-label{font-size:9px;letter-spacing:3px;color:var(--text-muted);text-transform:uppercase;margin-bottom:14px}
+  .source-chips{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+  .source-chip-load{font-size:8px;padding:3px 8px;border:1px solid var(--border);border-radius:2px;color:var(--text-muted);letter-spacing:1px}
+  .error-box{background:var(--surface);border:1px solid #2a1a1a;border-radius:6px;padding:24px;text-align:center}
+  .error-icon{font-size:24px;opacity:.4;margin-bottom:10px}
+  .error-msg{font-size:11px;color:var(--text-dim);margin-bottom:14px}
+  .error-detail{background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:12px;text-align:left;margin-bottom:16px}
+  .diag-label{font-size:8px;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+  .diag-text{font-size:10px;color:var(--text-dim);line-height:1.8;word-break:break-all}
+  .retry-btn{padding:10px 22px;background:transparent;border-radius:4px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;cursor:pointer;text-transform:uppercase}
+  .welcome-box{text-align:center;padding:50px 20px}
+  .welcome-icon{font-size:50px;opacity:.07;margin-bottom:14px}
+  .welcome-title{font-family:'Syne',sans-serif;font-size:14px;letter-spacing:2px;color:var(--text-muted);margin-bottom:10px}
+  .welcome-sub{font-size:11px;color:var(--text-muted);line-height:2;max-width:300px;margin:0 auto}
+  .summary-box{border-radius:6px;padding:16px 18px;margin-bottom:18px;animation:fadeUp .4s ease forwards}
+  .summary-label{font-size:8px;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px}
+  .summary-text{font-size:13px;color:var(--text);line-height:1.85;font-style:italic;font-family:Georgia,serif}
+  .results-count{font-size:8px;letter-spacing:3px;color:var(--text-muted);text-transform:uppercase;margin-bottom:14px}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:16px 18px;margin-bottom:10px;border-left-width:3px;border-left-style:solid;animation:fadeUp .35s ease forwards;opacity:0;transition:transform .15s}
+  .card:active{transform:scale(.99)}
+  .card-top{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
+  .card-title{flex:1;font-family:Georgia,serif;font-size:14px;color:var(--text);line-height:1.5}
+  .card-badges{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
+  .source-badge{padding:3px 7px;border-radius:3px;font-size:8px;font-weight:700;color:#fff;letter-spacing:1px;font-family:'DM Mono',monospace}
+  .rel-badge{padding:2px 6px;border-radius:2px;font-size:7px;letter-spacing:1.5px;text-transform:uppercase;font-weight:500}
+  .card-body{font-size:11px;color:var(--text-dim);line-height:1.95;margin-bottom:12px}
+  .card-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+  .card-meta{display:flex;gap:10px;flex-wrap:wrap}
+  .meta-item{font-size:8px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase}
+  .source-link{font-size:9px;letter-spacing:1px;text-decoration:none;text-transform:uppercase}
+  .settings-btn{position:fixed;bottom:20px;right:20px;width:42px;height:42px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--text-dim);z-index:100;-webkit-tap-highlight-color:transparent}
+</style>
+</head>
+<body>
+<div id="setup-screen">
+  <div class="setup-logo">RISK INTEL</div>
+  <div class="setup-sub">Modelo · IA · Financeiro</div>
+  <div class="setup-card">
+    <div class="setup-title">Configure sua chave de API</div>
+    <div class="setup-desc">
+      Para usar este aplicativo, você precisa de uma chave de API da Anthropic.<br><br>
+      1. Acesse <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a><br>
+      2. Crie uma conta gratuita<br>
+      3. Em "API Keys", clique em "Create Key"<br>
+      4. Copie a chave e cole abaixo
+    </div>
+    <div class="setup-label">Sua chave de API</div>
+    <input id="api-key-input" class="setup-input" type="password" placeholder="sk-ant-api03-..." autocomplete="off" autocorrect="off" spellcheck="false"/>
+    <button class="setup-btn" onclick="saveKey()">ENTRAR NO APLICATIVO →</button>
+    <div class="setup-warning">⚠ Sua chave fica salva apenas no seu navegador. Nunca é enviada a terceiros. Não compartilhe com ninguém.</div>
+  </div>
+</div>
+<div id="app-screen">
+  <div class="header">
+    <div>
+      <div class="logo-text" id="logo-text">RISK INTEL</div>
+      <div class="logo-sub">MODELO · IA · FINANCEIRO</div>
+    </div>
+    <div class="live-badge">
+      <div class="live-dot-wrap"><div class="live-dot"></div>AO VIVO</div>
+      <div class="clock" id="clock">--:--:--</div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="theme-toggle">
+      <button class="theme-btn" id="btn-modelo" onclick="setTheme('modelo')"><div class="btn-icon">◈</div>Risco de Modelo</button>
+      <button class="theme-btn" id="btn-ia" onclick="setTheme('ia')"><div class="btn-icon">⬡</div>Risco de IA</button>
+    </div>
+    <div class="section-label">Tópicos Rápidos</div>
+    <div class="topics-wrap" id="topics-wrap"></div>
+    <div class="search-bar">
+      <input id="search-input" class="search-input" type="text" placeholder="Pesquisar..." autocomplete="off" onkeydown="if(event.key==='Enter')search()"/>
+      <button class="search-btn" id="search-btn" onclick="search()">BUSCAR</button>
+    </div>
+    <div id="results-area">
+      <div class="welcome-box">
+        <div class="welcome-icon" id="welcome-icon">◈</div>
+        <div class="welcome-title" id="welcome-title">RISCO DE MODELO</div>
+        <div class="welcome-sub">Selecione um tópico ou escreva sua consulta para obter análises técnicas das principais fontes do mercado financeiro brasileiro.</div>
+      </div>
+    </div>
+  </div>
+  <div class="settings-btn" onclick="showSettings()">⚙</div>
+</div>
+<script>
+const THEMES={modelo:{label:"Risco de Modelo",icon:"◈",accent:"#4ecb71",accentDim:"rgba(78,203,113,0.1)",accentBorder:"rgba(78,203,113,0.22)",topics:[{label:"Validação de Modelos",q:"validação independente modelos crédito mercado bancos Brasil regulação BCB SR 11-7"},{label:"IFRS 9 & ECL",q:"IFRS 9 ECL modelos perda esperada crédito bancos brasileiros Pilar 3 validação"},{label:"Backtesting",q:"backtesting benchmarking modelos internos VaR PD LGD bancos Brasil resultados"},{label:"Governança de Modelos",q:"governança risco de modelo comitê inventário ciclo de vida aprovação bancos"},{label:"Stress Test",q:"modelos stress test cenários adversos capital regulatório BCB DSBR bancos brasileiros"},{label:"Pilar 3 & Divulgação",q:"Pilar 3 divulgação risco de modelo bancos Itaú Santander BB BTG Nubank relatório"}]},ia:{label:"Risco de IA",icon:"⬡",accent:"#ff9f40",accentDim:"rgba(255,159,64,0.1)",accentBorder:"rgba(255,159,64,0.22)",topics:[{label:"IA Generativa em Bancos",q:"inteligência artificial generativa LLM bancos brasileiros riscos regulação uso casos práticos"},{label:"Regulação IA & BIS",q:"regulação inteligência artificial bancos Brasil Banco Central BIS FSB princípios riscos 2024 2025"},{label:"Viés Algorítmico",q:"viés algorítmico discriminação modelos crédito IA fairness bancos regulação LGPD"},{label:"Explainability (XAI)",q:"explainability interpretabilidade modelos IA XAI risco crédito bancos regulação BCB"},{label:"Cibersegurança & IA",q:"cibersegurança ataques adversariais modelos IA bancos risco operacional resiliência"},{label:"Open Finance & IA",q:"open finance dados IA modelos crédito personalização risco privacidade LGPD bancos Brasil"}]}};
+const SOURCE_COLORS={BCB:"#1a6b3a",ITAU:"#003399",SANB:"#b00000",BB:"#b89500",BTG:"#a07840",NU:"#6a04a0",BIS:"#2c5f8a",CMN:"#3a6a4a",FSB:"#4a3a7a",FEBRABAN:"#1a4060"};
+const REL={alto:{bg:"rgba(255,95,95,0.12)",text:"#ff5f5f",border:"rgba(255,95,95,0.25)"},médio:{bg:"rgba(200,169,110,0.12)",text:"#c8a96e",border:"rgba(200,169,110,0.25)"},baixo:{bg:"rgba(78,203,113,0.12)",text:"#4ecb71",border:"rgba(78,203,113,0.25)"}};
+const SYS=`Você é especialista sênior em gerenciamento de riscos financeiros bancários no Brasil, foco em risco de modelo e IA.\nFONTES: BCB, Itaú, Santander, BB, BTG, Nubank, BIS/BCBS, FSB, FEBRABAN, CMN.\nRetorne APENAS JSON válido sem texto extra:\n{"summary":"análise executiva 2 frases","items":[{"title":"título","body":"análise técnica 2-3 frases com normas e métricas","source":"fonte","sourceCode":"BCB","sourceColor":"#1a6b3a","riskLabel":"Risco de Modelo","date":"2025","relevance":"alto","url":"https://url"}]}\nRegras: 6 itens · relevance: alto médio baixo · sourceCode: BCB ITAU SANB BB BTG NU BIS CMN FSB FEBRABAN · refs reais SR11-7 IFRS9 Basel Pilar3 · APENAS JSON`;
+let theme="modelo",apiKey="",lastQ="",loading=false;
+function init(){
+  apiKey=localStorage.getItem("risk_intel_key")||"";
+  if(apiKey&&apiKey.startsWith("sk-")){showApp();}
+  else{document.getElementById("setup-screen").style.display="flex";document.getElementById("app-screen").style.display="none";}
+  setInterval(()=>{document.getElementById("clock").textContent=new Date().toLocaleTimeString("pt-BR");},1000);
+  document.getElementById("clock").textContent=new Date().toLocaleTimeString("pt-BR");
+}
+function saveKey(){
+  const k=document.getElementById("api-key-input").value.trim();
+  if(!k||!k.startsWith("sk-")){alert("Chave inválida. Deve começar com sk-ant...");return;}
+  apiKey=k;localStorage.setItem("risk_intel_key",k);showApp();
+}
+function showApp(){
+  document.getElementById("setup-screen").style.display="none";
+  document.getElementById("app-screen").style.display="block";
+  setTheme("modelo");
+}
+function showSettings(){
+  if(confirm("Deseja trocar a chave de API?")){
+    localStorage.removeItem("risk_intel_key");
+    document.getElementById("setup-screen").style.display="flex";
+    document.getElementById("app-screen").style.display="none";
+    document.getElementById("api-key-input").value="";
+  }
+}
+function setTheme(id){
+  theme=id;const T=THEMES[id];
+  document.getElementById("logo-text").style.color=T.accent;
+  ["modelo","ia"].forEach(t=>{
+    const b=document.getElementById("btn-"+t),TT=THEMES[t],a=t===id;
+    b.style.border="1px solid "+(a?TT.accent:"#1a1e28");
+    b.style.background=a?TT.accentDim:"#0d0f13";
+    b.style.color=a?TT.accent:"#2a3040";
+  });
+  document.getElementById("search-btn").style.background=T.accent;
+  document.getElementById("search-btn").style.color="#080a0d";
+  const w=document.getElementById("topics-wrap");w.innerHTML="";
+  T.topics.forEach(tp=>{
+    const b=document.createElement("button");b.className="topic-pill";b.textContent=tp.label;
+    b.onclick=()=>{document.getElementById("search-input").value=tp.q;doSearch(tp.q);};
+    b.onmouseenter=()=>{b.style.borderColor=T.accent;b.style.color=T.accent;b.style.background=T.accentDim;};
+    b.onmouseleave=()=>{b.style.borderColor="#1a1e28";b.style.color="#7a8090";b.style.background="transparent";};
+    w.appendChild(b);
+  });
+  document.getElementById("welcome-icon").textContent=T.icon;
+  document.getElementById("welcome-title").textContent=T.label.toUpperCase();
+  showWelcome();
+  document.getElementById("search-input").value="";
+  document.getElementById("search-input").placeholder="Pesquisar "+T.label+"...";
+}
+function search(){const q=document.getElementById("search-input").value.trim();if(q)doSearch(q);}
+async function doSearch(q){
+  if(!q||loading)return;lastQ=q;loading=true;
+  const T=THEMES[theme];setLoading(T);
+  try{
+    const res=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",
+      headers:{"Content-Type":"application/json","x-api-key":apiKey,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
+      body:JSON.stringify({model:"claude-haiku-4-5-20251001",max_tokens:3000,system:SYS,messages:[{role:"user",content:"Tema: "+T.label+"\nConsulta: "+q}]})
+    });
+    if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error?.message||"HTTP "+res.status);}
+    const data=await res.json();
+    if(data.type==="error")throw new Error(data.error?.message||"Erro da API");
+    if(!data.content?.length)throw new Error("Resposta vazia");
+    const text=data.content.filter(b=>b.type==="text").map(b=>b.text).join("");
+    let parsed=null;
+    for(const fn of[
+      ()=>JSON.parse(text.trim()),
+      ()=>JSON.parse(text.replace(/^```(?:json)?\s*/i,"").replace(/\s*```\s*$/i,"").trim()),
+      ()=>{let d=0,s=-1,e=-1;for(let i=0;i<text.length;i++){if(text[i]==="{"){if(d===0)s=i;d++;}else if(text[i]==="}"){d--;if(d===0){e=i;break;}}}if(s<0||e<0)throw 0;return JSON.parse(text.slice(s,e+1));}
+    ]){try{parsed=fn();if(parsed?.items?.length)break;}catch(_){}}
+    if(!parsed?.items?.length)throw new Error("Não foi possível interpretar a resposta.");
+    renderResults(parsed,T);
+  }catch(err){renderError(err.message,T);}
+  loading=false;
+}
+function setLoading(T){
+  document.getElementById("results-area").innerHTML=`<div class="loading-box"><div class="spinner" style="border-top-color:${T.accent}"></div><div class="loading-label">Consultando fontes</div><div class="source-chips">${["BCB","ITAÚ","BB","BTG","NUBANK","BIS","FSB"].map((s,i)=>`<span class="source-chip-load" style="animation:shimmer 1.4s ${i*.15}s infinite">${s}</span>`).join("")}</div></div>`;
+}
+function showWelcome(){
+  document.getElementById("results-area").innerHTML=`<div class="welcome-box"><div class="welcome-icon" id="welcome-icon">${THEMES[theme].icon}</div><div class="welcome-title" id="welcome-title">${THEMES[theme].label.toUpperCase()}</div><div class="welcome-sub">Selecione um tópico ou escreva sua consulta para obter análises técnicas das principais fontes do mercado financeiro brasileiro.</div></div>`;
+}
+function renderError(msg,T){
+  document.getElementById("results-area").innerHTML=`<div class="error-box"><div class="error-icon">⚠</div><div class="error-msg">Não foi possível processar a consulta.</div><div class="error-detail"><div class="diag-label" style="color:${T.accent}">Diagnóstico</div><div class="diag-text">${(msg||"Erro desconhecido").replace(/</g,"&lt;")}</div></div><button class="retry-btn" style="border:1px solid ${T.accent};color:${T.accent}" onclick="doSearch(lastQ)">↺ Tentar novamente</button></div>`;
+}
+function renderResults(parsed,T){
+  const items=parsed.items||[],summary=parsed.summary||"";
+  let html=`<div class="results-count">${items.length} resultados · ${T.label}</div>`;
+  if(summary)html+=`<div class="summary-box" style="background:${T.accentDim};border:1px solid ${T.accentBorder}"><div class="summary-label" style="color:${T.accent}">${T.icon} Análise Executiva</div><div class="summary-text">${esc(summary)}</div></div>`;
+  items.forEach((item,i)=>{
+    const sc=SOURCE_COLORS[item.sourceCode]||"#1e2430",rs=REL[item.relevance]||REL["médio"];
+    html+=`<div class="card" style="border-left-color:${T.accent};animation-delay:${i*55}ms"><div class="card-top"><div class="card-title">${esc(item.title)}</div><div class="card-badges"><span class="source-badge" style="background:${sc}">${esc(item.sourceCode)}</span>${item.relevance?`<span class="rel-badge" style="background:${rs.bg};color:${rs.text};border:1px solid ${rs.border}">${esc(item.relevance)}</span>`:""}</div></div><div class="card-body">${esc(item.body)}</div><div class="card-footer"><div class="card-meta"><span class="meta-item">${esc(item.source)}</span><span class="meta-item" style="color:#1a1e28">·</span><span class="meta-item">${esc(item.date)}</span></div>${item.url?`<a href="${item.url}" target="_blank" rel="noopener" class="source-link" style="color:${T.accent}">→ Fonte</a>`:""}</div></div>`;
+  });
+  document.getElementById("results-area").innerHTML=html;
+}
+function esc(s){return(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+init();
+</script>
+</body>
+</html>
