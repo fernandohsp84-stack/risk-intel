@@ -2231,9 +2231,8 @@ function getAllSeenTitles() {
 // INIT
 // ════════════════════════════════════════
 function init() {
-  const rawKey = localStorage.getItem("ri_key") || "";
-  apiKey = rawKey.replace(/\s/g,"").replace(/[^\x20-\x7E]/g,"").trim();
-  if (apiKey && apiKey.length >= 10) { showApp(); }
+  apiKey = cleanKey(localStorage.getItem("ri_key") || "");
+  if (apiKey) { showApp(); }
   else {
     document.getElementById("setup-screen").style.display = "flex";
     document.getElementById("app-screen").style.display = "none";
@@ -2244,20 +2243,30 @@ function init() {
   document.getElementById("clock").textContent = new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
 }
 
+// Clean a key: remove only leading/trailing whitespace and common
+// invisible Unicode chars that iOS/Safari inserts on paste.
+// Does NOT strip anything from the middle of the key.
+function cleanKey(raw) {
+  if (!raw) return "";
+  // Only strip from the edges: whitespace, zero-width, BOM, NBSP
+  return raw
+    .replace(/^[\s\u200B\u200C\u200D\uFEFF\u00A0]+/, "")
+    .replace(/[\s\u200B\u200C\u200D\uFEFF\u00A0]+$/, "");
+}
+
 function saveKey() {
   const raw = document.getElementById("api-key-input").value || "";
-  // Remove all invisible chars iOS/Safari may insert on paste
-  const k = raw.replace(/\s/g,"").replace(/[^\x20-\x7E]/g,"").trim();
+  const k = cleanKey(raw);
 
   if (!k) {
-    showSetupError("Por favor, cole ou digite sua chave de API.");
+    showSetupError("Por favor, cole sua chave de API no campo acima.");
     return;
   }
-  if (k.length < 10) {
-    showSetupError("Chave muito curta. Verifique se copiou a chave completa.");
+  if (k.length < 20) {
+    showSetupError("Chave muito curta (" + k.length + " caracteres). Verifique se copiou a chave completa do console.anthropic.com.");
     return;
   }
-  // Store and proceed — we validate against API on first real call
+
   apiKey = k;
   localStorage.setItem("ri_key", k);
   clearSetupError();
