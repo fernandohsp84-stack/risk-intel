@@ -1,12 +1,14 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Risk Intel — Modelo & IA</title>
+<title>Risk Intel — Gestão de Riscos</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@400;500&display=swap');
-  :root{--bg:#080a0d;--surface:#0d0f13;--surface2:#111418;--border:#1a1e28;--text:#ddd8ce;--text-dim:#7a8090;--text-muted:#2a3040}
+  :root{--bg:#080a0d;--surface:#0d0f13;--surface2:#111418;--border:#1a1e28;--text:#ddd8ce;--text-dim:#7a8090;--text-muted:#2a3040;--green:#4ecb71;--orange:#ff9f40;--red:#ff5f5f;--blue:#4a9eff;--gold:#c8a96e}
   *{box-sizing:border-box;margin:0;padding:0}
   body{background:var(--bg);color:var(--text);font-family:'DM Mono','Courier New',monospace;min-height:100vh;-webkit-font-smoothing:antialiased}
   ::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
@@ -14,74 +16,165 @@
   @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
   @keyframes shimmer{0%,100%{opacity:.25}50%{opacity:.9}}
-  #setup-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px;text-align:center}
-  .setup-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:26px;letter-spacing:4px;color:#4ecb71;margin-bottom:4px}
-  .setup-sub{font-size:9px;letter-spacing:3px;color:var(--text-muted);text-transform:uppercase;margin-bottom:36px}
-  .setup-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:28px 24px;width:100%;max-width:420px;text-align:left}
-  .setup-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text);margin-bottom:8px;letter-spacing:1px}
-  .setup-desc{font-size:11px;color:var(--text-dim);line-height:1.9;margin-bottom:20px}
-  .setup-desc a{color:#4a9eff;text-decoration:none}
-  .setup-label{font-size:9px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px}
-  .setup-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:12px 14px;font-family:'DM Mono',monospace;font-size:12px;color:var(--text);outline:none;margin-bottom:16px;transition:border-color .2s}
-  .setup-input:focus{border-color:#4ecb71}
-  .setup-btn{width:100%;padding:13px;background:#4ecb71;color:#080a0d;border:none;border-radius:5px;font-family:'Syne',sans-serif;font-weight:800;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer}
-  .setup-warning{margin-top:16px;padding:12px 14px;background:rgba(255,159,64,.08);border:1px solid rgba(255,159,64,.2);border-radius:5px;font-size:10px;color:#ff9f40;line-height:1.8}
-  #app-screen{display:none}
-  .header{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
-  .logo-text{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;letter-spacing:3px;transition:color .3s}
-  .logo-sub{font-size:8px;letter-spacing:2px;color:var(--text-muted);margin-top:2px}
-  .live-badge{text-align:right}
-  .live-dot-wrap{font-size:9px;color:#4ecb71;letter-spacing:1px;display:flex;align-items:center;gap:5px;justify-content:flex-end}
-  .live-dot{width:5px;height:5px;border-radius:50%;background:#4ecb71;animation:pulse 2s infinite}
-  .clock{font-size:9px;color:var(--text-muted);margin-top:2px;font-family:'DM Mono',monospace}
-  .content{max-width:620px;margin:0 auto;padding:0 16px 60px}
-  .theme-toggle{display:flex;gap:10px;padding:18px 0 14px}
-  .theme-btn{flex:1;padding:14px 10px;border-radius:6px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;transition:all .2s;text-align:center}
-  .theme-btn .btn-icon{font-size:20px;margin-bottom:5px}
-  .section-label{font-size:8px;letter-spacing:3px;color:var(--text-muted);text-transform:uppercase;margin-bottom:10px}
-  .topics-wrap{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
-  .topic-pill{padding:8px 13px;border:1px solid var(--border);border-radius:20px;background:transparent;cursor:pointer;font-size:10px;color:var(--text-dim);font-family:'DM Mono',monospace;letter-spacing:.5px;transition:all .15s;-webkit-tap-highlight-color:transparent}
-  .search-bar{display:flex;gap:8px;margin-bottom:22px}
-  .search-input{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:5px;padding:12px 14px;font-family:'DM Mono',monospace;font-size:12px;color:var(--text);outline:none;transition:border-color .2s;-webkit-appearance:none}
-  .search-input::placeholder{color:var(--text-muted)}
-  .search-input:focus{border-color:#4ecb71}
-  .search-btn{padding:12px 18px;border:none;border-radius:5px;font-family:'Syne',sans-serif;font-weight:700;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;white-space:nowrap;-webkit-tap-highlight-color:transparent}
-  .loading-box{text-align:center;padding:60px 20px}
-  .spinner{width:32px;height:32px;border:2px solid var(--border);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 16px}
-  .loading-label{font-size:9px;letter-spacing:3px;color:var(--text-muted);text-transform:uppercase;margin-bottom:14px}
-  .source-chips{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
-  .source-chip-load{font-size:8px;padding:3px 8px;border:1px solid var(--border);border-radius:2px;color:var(--text-muted);letter-spacing:1px}
-  .error-box{background:var(--surface);border:1px solid #2a1a1a;border-radius:6px;padding:24px;text-align:center}
-  .error-icon{font-size:24px;opacity:.4;margin-bottom:10px}
-  .error-msg{font-size:11px;color:var(--text-dim);margin-bottom:14px}
-  .error-detail{background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:12px;text-align:left;margin-bottom:16px}
-  .diag-label{font-size:8px;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
-  .diag-text{font-size:10px;color:var(--text-dim);line-height:1.8;word-break:break-all}
-  .retry-btn{padding:10px 22px;background:transparent;border-radius:4px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;cursor:pointer;text-transform:uppercase}
-  .welcome-box{text-align:center;padding:50px 20px}
-  .welcome-icon{font-size:50px;opacity:.07;margin-bottom:14px}
-  .welcome-title{font-family:'Syne',sans-serif;font-size:14px;letter-spacing:2px;color:var(--text-muted);margin-bottom:10px}
-  .welcome-sub{font-size:11px;color:var(--text-muted);line-height:2;max-width:300px;margin:0 auto}
-  .summary-box{border-radius:6px;padding:16px 18px;margin-bottom:18px;animation:fadeUp .4s ease forwards}
-  .summary-label{font-size:8px;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px}
-  .summary-text{font-size:13px;color:var(--text);line-height:1.85;font-style:italic;font-family:Georgia,serif}
-  .results-count{font-size:8px;letter-spacing:3px;color:var(--text-muted);text-transform:uppercase;margin-bottom:14px}
-  .card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:16px 18px;margin-bottom:10px;border-left-width:3px;border-left-style:solid;animation:fadeUp .35s ease forwards;opacity:0;transition:transform .15s}
-  .card:active{transform:scale(.99)}
-  .card-top{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
-  .card-title{flex:1;font-family:Georgia,serif;font-size:14px;color:var(--text);line-height:1.5}
-  .card-badges{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
-  .source-badge{padding:3px 7px;border-radius:3px;font-size:8px;font-weight:700;color:#fff;letter-spacing:1px;font-family:'DM Mono',monospace}
-  .rel-badge{padding:2px 6px;border-radius:2px;font-size:7px;letter-spacing:1.5px;text-transform:uppercase;font-weight:500}
-  .card-body{font-size:11px;color:var(--text-dim);line-height:1.95;margin-bottom:12px}
-  .card-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
-  .card-meta{display:flex;gap:10px;flex-wrap:wrap}
-  .meta-item{font-size:8px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase}
-  .source-link{font-size:9px;letter-spacing:1px;text-decoration:none;text-transform:uppercase}
-  .settings-btn{position:fixed;bottom:20px;right:20px;width:42px;height:42px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--text-dim);z-index:100;-webkit-tap-highlight-color:transparent}
+
+/* ── SETUP ── */
+#setup-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px;text-align:center}
+.setup-logo{font-family:‘Syne’,sans-serif;font-weight:800;font-size:26px;letter-spacing:4px;color:var(–green);margin-bottom:4px}
+.setup-sub{font-size:9px;letter-spacing:3px;color:var(–text-muted);text-transform:uppercase;margin-bottom:36px}
+.setup-card{background:var(–surface);border:1px solid var(–border);border-radius:10px;padding:28px 24px;width:100%;max-width:420px;text-align:left}
+.setup-title{font-family:‘Syne’,sans-serif;font-size:14px;font-weight:700;color:var(–text);margin-bottom:8px}
+.setup-desc{font-size:11px;color:var(–text-dim);line-height:1.9;margin-bottom:20px}
+.setup-desc a{color:var(–blue);text-decoration:none}
+.setup-label{font-size:9px;letter-spacing:2px;color:var(–text-muted);text-transform:uppercase;margin-bottom:8px}
+.setup-input{width:100%;background:var(–bg);border:1px solid var(–border);border-radius:5px;padding:12px 14px;font-family:‘DM Mono’,monospace;font-size:12px;color:var(–text);outline:none;margin-bottom:16px;transition:border-color .2s}
+.setup-input:focus{border-color:var(–green)}
+.setup-btn{width:100%;padding:13px;background:var(–green);color:var(–bg);border:none;border-radius:5px;font-family:‘Syne’,sans-serif;font-weight:800;font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer}
+.setup-warning{margin-top:16px;padding:12px 14px;background:rgba(255,159,64,.08);border:1px solid rgba(255,159,64,.2);border-radius:5px;font-size:10px;color:var(–orange);line-height:1.8}
+
+/* ── NAV ── */
+#app-screen{display:none}
+.header{background:var(–surface);border-bottom:1px solid var(–border);padding:12px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.logo-text{font-family:‘Syne’,sans-serif;font-weight:800;font-size:17px;letter-spacing:3px;transition:color .3s}
+.logo-sub{font-size:7px;letter-spacing:2px;color:var(–text-muted);margin-top:1px}
+.live-dot-wrap{font-size:8px;color:var(–green);letter-spacing:1px;display:flex;align-items:center;gap:4px;justify-content:flex-end}
+.live-dot{width:5px;height:5px;border-radius:50%;background:var(–green);animation:pulse 2s infinite}
+.clock{font-size:8px;color:var(–text-muted);margin-top:2px;font-family:‘DM Mono’,monospace}
+
+/* Bottom nav */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(–surface);border-top:1px solid var(–border);display:flex;z-index:50}
+.nav-btn{flex:1;padding:10px 4px 8px;background:transparent;border:none;cursor:pointer;font-family:‘DM Mono’,monospace;font-size:8px;letter-spacing:1px;color:var(–text-muted);text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:3px;transition:color .2s;-webkit-tap-highlight-color:transparent}
+.nav-btn.active{color:var(–green)}
+.nav-icon{font-size:16px;line-height:1}
+
+/* ── CONTENT AREAS ── */
+.content{max-width:640px;margin:0 auto;padding:0 16px 80px}
+.page{display:none}
+.page.active{display:block}
+
+/* ── THEME TOGGLE ── */
+.theme-toggle{display:flex;gap:8px;padding:14px 0 10px;flex-wrap:wrap}
+.theme-btn{flex:1;min-width:calc(33% - 6px);padding:11px 6px;border-radius:6px;cursor:pointer;font-family:‘Syne’,sans-serif;font-weight:700;font-size:9px;letter-spacing:1px;text-transform:uppercase;transition:all .2s;text-align:center;border:1px solid var(–border)}
+.theme-btn .btn-icon{font-size:18px;margin-bottom:4px}
+
+/* ── PILLS ── */
+.section-label{font-size:8px;letter-spacing:3px;color:var(–text-muted);text-transform:uppercase;margin-bottom:8px}
+.topics-wrap{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.topic-pill{padding:7px 12px;border:1px solid var(–border);border-radius:20px;background:transparent;cursor:pointer;font-size:10px;color:var(–text-dim);font-family:‘DM Mono’,monospace;transition:all .15s;-webkit-tap-highlight-color:transparent}
+
+/* ── SEARCH ── */
+.search-bar{display:flex;gap:8px;margin-bottom:20px}
+.search-input{flex:1;background:var(–surface);border:1px solid var(–border);border-radius:5px;padding:11px 13px;font-family:‘DM Mono’,monospace;font-size:12px;color:var(–text);outline:none;transition:border-color .2s;-webkit-appearance:none}
+.search-input::placeholder{color:var(–text-muted)}
+.search-btn{padding:11px 16px;border:none;border-radius:5px;font-family:‘Syne’,sans-serif;font-weight:700;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent}
+
+/* ── STATES ── */
+.loading-box{text-align:center;padding:50px 20px}
+.spinner{width:30px;height:30px;border:2px solid var(–border);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 14px}
+.loading-label{font-size:9px;letter-spacing:3px;color:var(–text-muted);text-transform:uppercase;margin-bottom:12px}
+.source-chips{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.source-chip-load{font-size:8px;padding:3px 8px;border:1px solid var(–border);border-radius:2px;color:var(–text-muted);letter-spacing:1px}
+.welcome-box{text-align:center;padding:40px 20px}
+.welcome-icon{font-size:44px;opacity:.07;margin-bottom:12px}
+.welcome-title{font-family:‘Syne’,sans-serif;font-size:13px;letter-spacing:2px;color:var(–text-muted);margin-bottom:8px}
+.welcome-sub{font-size:10px;color:var(–text-muted);line-height:2;max-width:280px;margin:0 auto}
+.error-box{background:var(–surface);border:1px solid #2a1a1a;border-radius:6px;padding:20px;text-align:center}
+.error-icon{font-size:22px;opacity:.4;margin-bottom:8px}
+.error-msg{font-size:11px;color:var(–text-dim);margin-bottom:12px}
+.error-detail{background:var(–surface2);border:1px solid var(–border);border-radius:4px;padding:10px;text-align:left;margin-bottom:14px}
+.diag-label{font-size:8px;letter-spacing:2px;text-transform:uppercase;margin-bottom:5px}
+.diag-text{font-size:10px;color:var(–text-dim);line-height:1.8;word-break:break-all}
+.retry-btn{padding:9px 20px;background:transparent;border-radius:4px;font-family:‘DM Mono’,monospace;font-size:10px;letter-spacing:2px;cursor:pointer;text-transform:uppercase}
+
+/* ── SUMMARY ── */
+.summary-box{border-radius:6px;padding:14px 16px;margin-bottom:16px;animation:fadeUp .4s ease forwards}
+.summary-label{font-size:8px;letter-spacing:3px;text-transform:uppercase;margin-bottom:7px}
+.summary-text{font-size:12px;color:var(–text);line-height:1.85;font-style:italic;font-family:Georgia,serif}
+.results-count{font-size:8px;letter-spacing:3px;color:var(–text-muted);text-transform:uppercase;margin-bottom:12px}
+
+/* ── CARDS ── */
+.card{background:var(–surface);border:1px solid var(–border);border-radius:6px;padding:14px 16px;margin-bottom:10px;border-left-width:3px;border-left-style:solid;animation:fadeUp .35s ease forwards;opacity:0}
+.card-top{display:flex;gap:8px;align-items:flex-start;margin-bottom:8px}
+.card-title{flex:1;font-family:Georgia,serif;font-size:13px;color:var(–text);line-height:1.5}
+.card-badges{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
+.source-badge{padding:3px 6px;border-radius:3px;font-size:7px;font-weight:700;color:#fff;letter-spacing:1px}
+.rel-badge{padding:2px 5px;border-radius:2px;font-size:7px;letter-spacing:1.5px;text-transform:uppercase;font-weight:500}
+.card-body{font-size:11px;color:var(–text-dim);line-height:1.9;margin-bottom:10px}
+.card-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.card-meta{display:flex;gap:8px;flex-wrap:wrap}
+.meta-item{font-size:8px;color:var(–text-muted);letter-spacing:1px;text-transform:uppercase}
+.source-link{font-size:9px;letter-spacing:1px;text-decoration:none;text-transform:uppercase}
+
+/* ── CARD ACTIONS ── */
+.card-actions{display:flex;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(–border);flex-wrap:wrap}
+.action-btn{padding:5px 10px;border-radius:4px;font-family:‘DM Mono’,monospace;font-size:9px;letter-spacing:1px;cursor:pointer;border:1px solid var(–border);background:transparent;color:var(–text-dim);transition:all .15s;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;gap:4px}
+.action-btn:hover{border-color:var(–text-dim);color:var(–text)}
+.action-btn.save{border-color:var(–green);color:var(–green)}
+.action-btn.saved{background:rgba(78,203,113,.1);border-color:var(–green);color:var(–green)}
+.action-btn.good{border-color:var(–green);color:var(–green)}
+.action-btn.good.rated{background:rgba(78,203,113,.15)}
+.action-btn.bad{border-color:var(–red);color:var(–red)}
+.action-btn.bad.rated{background:rgba(255,95,95,.15)}
+.action-btn.email-btn{border-color:var(–blue);color:var(–blue)}
+
+/* ── LIBRARY ── */
+.lib-header{padding:16px 0 12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.lib-title{font-family:‘Syne’,sans-serif;font-size:14px;font-weight:700;color:var(–text);letter-spacing:1px}
+.lib-count{font-size:9px;color:var(–text-muted);letter-spacing:2px;text-transform:uppercase}
+.lib-filters{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.lib-filter{padding:5px 10px;border:1px solid var(–border);border-radius:20px;background:transparent;cursor:pointer;font-size:9px;color:var(–text-dim);font-family:‘DM Mono’,monospace;transition:all .15s}
+.lib-filter.active{border-color:var(–gold);color:var(–gold);background:rgba(200,169,110,.08)}
+.lib-search{width:100%;background:var(–surface);border:1px solid var(–border);border-radius:5px;padding:10px 13px;font-family:‘DM Mono’,monospace;font-size:11px;color:var(–text);outline:none;margin-bottom:14px}
+.lib-search:focus{border-color:var(–gold)}
+.lib-empty{text-align:center;padding:40px 20px;color:var(–text-muted);font-size:11px;line-height:2}
+.lib-empty-icon{font-size:36px;opacity:.1;margin-bottom:10px}
+.lib-card{background:var(–surface);border:1px solid var(–border);border-radius:6px;padding:14px 16px;margin-bottom:8px;border-left:3px solid var(–gold)}
+.lib-card-title{font-family:Georgia,serif;font-size:13px;color:var(–text);line-height:1.4;margin-bottom:6px}
+.lib-card-body{font-size:10px;color:var(–text-dim);line-height:1.8;margin-bottom:8px}
+.lib-card-meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.lib-meta-tags{display:flex;gap:6px;flex-wrap:wrap}
+.lib-tag{padding:2px 7px;border-radius:2px;font-size:7px;letter-spacing:1px;text-transform:uppercase;border:1px solid var(–border);color:var(–text-muted)}
+.lib-actions{display:flex;gap:6px}
+.lib-del{padding:3px 8px;border:1px solid #2a1a1a;border-radius:3px;background:transparent;color:var(–red);font-size:8px;cursor:pointer;font-family:‘DM Mono’,monospace;opacity:.6}
+.lib-del:hover{opacity:1}
+.rating-good{color:var(–green);font-size:8px;letter-spacing:1px}
+.rating-bad{color:var(–red);font-size:8px;letter-spacing:1px}
+
+/* ── EMAIL MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{background:var(–surface);border:1px solid var(–border);border-radius:10px;padding:24px;width:100%;max-width:400px}
+.modal-title{font-family:‘Syne’,sans-serif;font-size:13px;font-weight:700;color:var(–text);margin-bottom:6px;letter-spacing:1px}
+.modal-sub{font-size:10px;color:var(–text-dim);line-height:1.8;margin-bottom:18px}
+.modal-label{font-size:8px;letter-spacing:2px;color:var(–text-muted);text-transform:uppercase;margin-bottom:6px}
+.modal-input{width:100%;background:var(–bg);border:1px solid var(–border);border-radius:5px;padding:11px 13px;font-family:‘DM Mono’,monospace;font-size:12px;color:var(–text);outline:none;margin-bottom:14px}
+.modal-input:focus{border-color:var(–blue)}
+.modal-preview{background:var(–bg);border:1px solid var(–border);border-radius:4px;padding:10px;font-size:10px;color:var(–text-dim);line-height:1.8;max-height:120px;overflow-y:auto;margin-bottom:16px}
+.modal-btns{display:flex;gap:8px}
+.modal-send{flex:1;padding:11px;background:var(–blue);color:#fff;border:none;border-radius:5px;font-family:‘Syne’,sans-serif;font-weight:700;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer}
+.modal-cancel{padding:11px 16px;background:transparent;border:1px solid var(–border);border-radius:5px;color:var(–text-dim);font-family:‘DM Mono’,monospace;font-size:10px;cursor:pointer}
+
+/* ── BI DASHBOARD ── */
+.bi-header{padding:16px 0 14px}
+.bi-title{font-family:‘Syne’,sans-serif;font-size:14px;font-weight:700;color:var(–text);letter-spacing:1px;margin-bottom:4px}
+.bi-sub{font-size:9px;color:var(–text-muted);letter-spacing:1px}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.stat-card{background:var(–surface);border:1px solid var(–border);border-radius:6px;padding:12px 10px;text-align:center}
+.stat-val{font-family:‘Syne’,sans-serif;font-size:22px;font-weight:800;color:var(–text);margin-bottom:2px}
+.stat-label{font-size:8px;letter-spacing:1.5px;color:var(–text-muted);text-transform:uppercase}
+.chart-card{background:var(–surface);border:1px solid var(–border);border-radius:6px;padding:16px;margin-bottom:12px}
+.chart-title{font-size:9px;letter-spacing:2px;color:var(–text-muted);text-transform:uppercase;margin-bottom:14px}
+.chart-wrap{position:relative;height:200px}
+.bi-empty{text-align:center;padding:50px 20px;color:var(–text-muted);font-size:11px;line-height:2}
+.bi-empty-icon{font-size:36px;opacity:.1;margin-bottom:10px}
+
+/* ── SETTINGS BTN ── */
+.settings-fab{position:fixed;bottom:72px;right:16px;width:38px;height:38px;border-radius:50%;background:var(–surface2);border:1px solid var(–border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(–text-dim);z-index:49;-webkit-tap-highlight-color:transparent}
 </style>
+
 </head>
 <body>
+
+<!-- ══ SETUP ══ -->
+
 <div id="setup-screen">
   <div class="setup-logo">RISK INTEL</div>
   <div class="setup-sub">Modelo · IA · Financeiro</div>
@@ -97,47 +190,241 @@
     <div class="setup-label">Sua chave de API</div>
     <input id="api-key-input" class="setup-input" type="password" placeholder="sk-ant-api03-..." autocomplete="off" autocorrect="off" spellcheck="false"/>
     <button class="setup-btn" onclick="saveKey()">ENTRAR NO APLICATIVO →</button>
-    <div class="setup-warning">⚠ Sua chave fica salva apenas no seu navegador. Nunca é enviada a terceiros. Não compartilhe com ninguém.</div>
+    <div class="setup-warning">⚠ Sua chave fica salva apenas no seu navegador. Nunca é enviada a terceiros além da Anthropic.</div>
   </div>
 </div>
+
+<!-- ══ APP ══ -->
+
 <div id="app-screen">
+
+  <!-- Header -->
+
   <div class="header">
     <div>
       <div class="logo-text" id="logo-text">RISK INTEL</div>
-      <div class="logo-sub">MODELO · IA · FINANCEIRO</div>
+      <div class="logo-sub">MODELO · IA · OPERACIONAL · MERCADO · LIQUIDEZ · TERCEIROS</div>
     </div>
-    <div class="live-badge">
+    <div style="text-align:right">
       <div class="live-dot-wrap"><div class="live-dot"></div>AO VIVO</div>
       <div class="clock" id="clock">--:--:--</div>
     </div>
   </div>
+
+  <!-- Pages -->
+
   <div class="content">
-    <div class="theme-toggle">
-      <button class="theme-btn" id="btn-modelo" onclick="setTheme('modelo')"><div class="btn-icon">◈</div>Risco de Modelo</button>
-      <button class="theme-btn" id="btn-ia" onclick="setTheme('ia')"><div class="btn-icon">⬡</div>Risco de IA</button>
-    </div>
-    <div class="section-label">Tópicos Rápidos</div>
-    <div class="topics-wrap" id="topics-wrap"></div>
-    <div class="search-bar">
-      <input id="search-input" class="search-input" type="text" placeholder="Pesquisar..." autocomplete="off" onkeydown="if(event.key==='Enter')search()"/>
-      <button class="search-btn" id="search-btn" onclick="search()">BUSCAR</button>
-    </div>
-    <div id="results-area">
-      <div class="welcome-box">
-        <div class="welcome-icon" id="welcome-icon">◈</div>
-        <div class="welcome-title" id="welcome-title">RISCO DE MODELO</div>
-        <div class="welcome-sub">Selecione um tópico ou escreva sua consulta para obter análises técnicas das principais fontes do mercado financeiro brasileiro.</div>
-      </div>
+
+```
+<!-- ── PAGE: BUSCA ── -->
+<div class="page active" id="page-search">
+  <div class="theme-toggle" style="flex-wrap:wrap;gap:8px;padding:14px 0 10px">
+    <button class="theme-btn" id="btn-modelo" onclick="setTheme('modelo')"><div class="btn-icon">◈</div>Modelo</button>
+    <button class="theme-btn" id="btn-ia" onclick="setTheme('ia')"><div class="btn-icon">⬡</div>IA</button>
+    <button class="theme-btn" id="btn-operacional" onclick="setTheme('operacional')"><div class="btn-icon">⚙</div>Operacional</button>
+    <button class="theme-btn" id="btn-mercado" onclick="setTheme('mercado')"><div class="btn-icon">◑</div>Mercado</button>
+    <button class="theme-btn" id="btn-liquidez" onclick="setTheme('liquidez')"><div class="btn-icon">◎</div>Liquidez</button>
+    <button class="theme-btn" id="btn-terceiros" onclick="setTheme('terceiros')"><div class="btn-icon">◇</div>Terceiros</button>
+  </div>
+  <div class="section-label">Tópicos Rápidos</div>
+  <div class="topics-wrap" id="topics-wrap"></div>
+  <div class="search-bar">
+    <input id="search-input" class="search-input" type="text" placeholder="Pesquisar..." autocomplete="off" onkeydown="if(event.key==='Enter')search()"/>
+    <button class="search-btn" id="search-btn" onclick="search()">BUSCAR</button>
+  </div>
+  <div id="results-area">
+    <div class="welcome-box">
+      <div class="welcome-icon" id="welcome-icon">◈</div>
+      <div class="welcome-title" id="welcome-title">RISCO DE MODELO</div>
+      <div class="welcome-sub">Selecione um tópico ou escreva sua consulta para obter análises técnicas das principais fontes do mercado financeiro brasileiro.</div>
     </div>
   </div>
-  <div class="settings-btn" onclick="showSettings()">⚙</div>
 </div>
+
+<!-- ── PAGE: BIBLIOTECA ── -->
+<div class="page" id="page-library">
+  <div class="lib-header">
+    <div>
+      <div class="lib-title">Biblioteca</div>
+      <div class="lib-count" id="lib-count">0 achados salvos</div>
+    </div>
+    <button onclick="exportLibrary()" style="padding:7px 12px;border:1px solid var(--gold);border-radius:4px;background:transparent;color:var(--gold);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;cursor:pointer;text-transform:uppercase">↗ Exportar</button>
+  </div>
+  <input class="lib-search" id="lib-search" placeholder="Buscar na biblioteca..." oninput="renderLibrary()"/>
+  <div class="lib-filters" id="lib-filters">
+    <button class="lib-filter active" data-filter="all" onclick="setLibFilter('all',this)">Todos</button>
+    <button class="lib-filter" data-filter="modelo" onclick="setLibFilter('modelo',this)">Modelo</button>
+    <button class="lib-filter" data-filter="ia" onclick="setLibFilter('ia',this)">IA</button>
+    <button class="lib-filter" data-filter="operacional" onclick="setLibFilter('operacional',this)">Operacional</button>
+    <button class="lib-filter" data-filter="mercado" onclick="setLibFilter('mercado',this)">Mercado</button>
+    <button class="lib-filter" data-filter="liquidez" onclick="setLibFilter('liquidez',this)">Liquidez</button>
+    <button class="lib-filter" data-filter="terceiros" onclick="setLibFilter('terceiros',this)">Terceiros</button>
+    <button class="lib-filter" data-filter="good" onclick="setLibFilter('good',this)">✓ Assertivos</button>
+    <button class="lib-filter" data-filter="bad" onclick="setLibFilter('bad',this)">✗ Não aplicáveis</button>
+  </div>
+  <div id="lib-content"></div>
+</div>
+
+<!-- ── PAGE: BI ── -->
+<div class="page" id="page-bi">
+  <div class="bi-header">
+    <div class="bi-title">Dashboard BI</div>
+    <div class="bi-sub">Análise dos achados salvos na biblioteca</div>
+  </div>
+  <div id="bi-content"></div>
+</div>
+```
+
+  </div>
+
+  <!-- Bottom Nav -->
+
+  <div class="bottom-nav">
+    <button class="nav-btn active" id="nav-search" onclick="showPage('search')">
+      <span class="nav-icon">⌕</span>BUSCA
+    </button>
+    <button class="nav-btn" id="nav-library" onclick="showPage('library')">
+      <span class="nav-icon">◫</span>BIBLIOTECA
+    </button>
+    <button class="nav-btn" id="nav-bi" onclick="showPage('bi')">
+      <span class="nav-icon">◻</span>BI
+    </button>
+  </div>
+
+  <div class="settings-fab" onclick="showSettings()" title="Configurações">⚙</div>
+</div>
+
+<!-- ══ EMAIL MODAL ══ -->
+
+<div class="modal-overlay" id="email-modal" style="display:none" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-title">Enviar por E-mail</div>
+    <div class="modal-sub">Digite o endereço de e-mail para receber este achado. Será aberto o seu app de e-mail com o conteúdo preenchido.</div>
+    <div class="modal-label">Endereço de e-mail</div>
+    <input class="modal-input" id="modal-email" type="email" placeholder="seu@email.com"/>
+    <div class="modal-label">Prévia do conteúdo</div>
+    <div class="modal-preview" id="modal-preview"></div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="modal-send" onclick="sendEmail()">✉ ENVIAR</button>
+    </div>
+  </div>
+</div>
+
 <script>
-const THEMES={modelo:{label:"Risco de Modelo",icon:"◈",accent:"#4ecb71",accentDim:"rgba(78,203,113,0.1)",accentBorder:"rgba(78,203,113,0.22)",topics:[{label:"Validação de Modelos",q:"validação independente modelos crédito mercado bancos Brasil regulação BCB SR 11-7"},{label:"IFRS 9 & ECL",q:"IFRS 9 ECL modelos perda esperada crédito bancos brasileiros Pilar 3 validação"},{label:"Backtesting",q:"backtesting benchmarking modelos internos VaR PD LGD bancos Brasil resultados"},{label:"Governança de Modelos",q:"governança risco de modelo comitê inventário ciclo de vida aprovação bancos"},{label:"Stress Test",q:"modelos stress test cenários adversos capital regulatório BCB DSBR bancos brasileiros"},{label:"Pilar 3 & Divulgação",q:"Pilar 3 divulgação risco de modelo bancos Itaú Santander BB BTG Nubank relatório"}]},ia:{label:"Risco de IA",icon:"⬡",accent:"#ff9f40",accentDim:"rgba(255,159,64,0.1)",accentBorder:"rgba(255,159,64,0.22)",topics:[{label:"IA Generativa em Bancos",q:"inteligência artificial generativa LLM bancos brasileiros riscos regulação uso casos práticos"},{label:"Regulação IA & BIS",q:"regulação inteligência artificial bancos Brasil Banco Central BIS FSB princípios riscos 2024 2025"},{label:"Viés Algorítmico",q:"viés algorítmico discriminação modelos crédito IA fairness bancos regulação LGPD"},{label:"Explainability (XAI)",q:"explainability interpretabilidade modelos IA XAI risco crédito bancos regulação BCB"},{label:"Cibersegurança & IA",q:"cibersegurança ataques adversariais modelos IA bancos risco operacional resiliência"},{label:"Open Finance & IA",q:"open finance dados IA modelos crédito personalização risco privacidade LGPD bancos Brasil"}]}};
+// ══════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════
+const THEMES={
+  modelo:{label:"Risco de Modelo",icon:"◈",accent:"#4ecb71",accentDim:"rgba(78,203,113,0.1)",accentBorder:"rgba(78,203,113,0.22)",
+    topics:[
+      {label:"Validação de Modelos",q:"validação independente modelos crédito mercado bancos Brasil regulação BCB SR 11-7"},
+      {label:"IFRS 9 & ECL",q:"IFRS 9 ECL modelos perda esperada crédito bancos brasileiros Pilar 3 validação"},
+      {label:"Backtesting",q:"backtesting benchmarking modelos internos VaR PD LGD bancos Brasil resultados"},
+      {label:"Governança de Modelos",q:"governança risco de modelo comitê inventário ciclo de vida aprovação bancos"},
+      {label:"Stress Test",q:"modelos stress test cenários adversos capital regulatório BCB DSBR bancos brasileiros"},
+      {label:"Pilar 3 & Divulgação",q:"Pilar 3 divulgação risco de modelo bancos Itaú Santander BB BTG Nubank relatório"},
+    ]},
+  ia:{label:"Risco de IA",icon:"⬡",accent:"#ff9f40",accentDim:"rgba(255,159,64,0.1)",accentBorder:"rgba(255,159,64,0.22)",
+    topics:[
+      {label:"IA Generativa em Bancos",q:"inteligência artificial generativa LLM bancos brasileiros riscos regulação uso casos práticos"},
+      {label:"Regulação IA & BIS",q:"regulação inteligência artificial bancos Brasil Banco Central BIS FSB princípios riscos 2024 2025"},
+      {label:"Viés Algorítmico",q:"viés algorítmico discriminação modelos crédito IA fairness bancos regulação LGPD"},
+      {label:"Explainability (XAI)",q:"explainability interpretabilidade modelos IA XAI risco crédito bancos regulação BCB"},
+      {label:"Cibersegurança & IA",q:"cibersegurança ataques adversariais modelos IA bancos risco operacional resiliência"},
+      {label:"Open Finance & IA",q:"open finance dados IA modelos crédito personalização risco privacidade LGPD bancos Brasil"},
+    ]},
+  operacional:{label:"Risco Operacional",icon:"⚙",accent:"#a855f7",accentDim:"rgba(168,85,247,0.1)",accentBorder:"rgba(168,85,247,0.22)",
+    topics:[
+      {label:"SA-OR Basileia IV",q:"SA-OR abordagem padronizada risco operacional Basileia IV implementação Brasil BCB capital"},
+      {label:"Perdas Operacionais",q:"base de dados perdas operacionais OR bancos brasileiros coleta reporte Resolução BCB"},
+      {label:"Continuidade de Negócios",q:"plano continuidade negócios PCN recuperação desastre bancos regulação BCB resiliência operacional"},
+      {label:"Fraude & Controles Internos",q:"prevenção fraude controles internos bancos brasileiros risco operacional auditoria"},
+      {label:"Risco de Conduta",q:"risco de conduta misselling compliance bancos brasileiros regulação BCB CVM sanções"},
+      {label:"Cyber & Segurança da Informação",q:"risco cibernético segurança informação bancos Resolução BCB 85 LGPD incidentes"},
+    ]},
+  mercado:{label:"Risco de Mercado",icon:"◑",accent:"#4a9eff",accentDim:"rgba(74,158,255,0.1)",accentBorder:"rgba(74,158,255,0.22)",
+    topics:[
+      {label:"VaR & Expected Shortfall",q:"VaR Expected Shortfall modelos risco mercado bancos brasileiros Basileia FRTB"},
+      {label:"FRTB Brasil",q:"FRTB Fundamental Review Trading Book implementação Brasil BCB cronograma bancos"},
+      {label:"IRRBB",q:"IRRBB risco taxa juros banking book bancos brasileiros Resolução BCB NII EVE"},
+      {label:"Derivativos & Hedge",q:"derivativos hedge accounting risco mercado bancos brasileiros IFRS 9 mark-to-market"},
+      {label:"Risco Cambial",q:"risco cambial exposição moeda estrangeira bancos brasileiros limites regulatórios BCB"},
+      {label:"Stress Test Mercado",q:"stress test risco mercado cenários adversos taxas juros câmbio commodities bancos"},
+    ]},
+  liquidez:{label:"Risco de Liquidez",icon:"◎",accent:"#06b6d4",accentDim:"rgba(6,182,212,0.1)",accentBorder:"rgba(6,182,212,0.22)",
+    topics:[
+      {label:"LCR — Índice de Liquidez",q:"LCR Liquidity Coverage Ratio bancos brasileiros Resolução BCB requerimento mínimo monitoramento"},
+      {label:"NSFR",q:"NSFR Net Stable Funding Ratio bancos brasileiros implementação BCB funding estável"},
+      {label:"Plano de Contingência",q:"plano contingência liquidez bancos brasileiros colchão reservas BCB gestão crise"},
+      {label:"Concentração de Funding",q:"concentração funding captação bancos brasileiros risco liquidez depósitos interbancário"},
+      {label:"Stress Test Liquidez",q:"stress test liquidez cenários adversos bancos brasileiros BCB REF saída recursos"},
+      {label:"Intraday & Pagamentos",q:"liquidez intraday sistemas pagamentos SPB PIX risco liquidez bancos BCB"},
+    ]},
+  terceiros:{label:"Risco de Terceiros",icon:"◇",accent:"#e879a0",accentDim:"rgba(232,121,160,0.1)",accentBorder:"rgba(232,121,160,0.22)",
+    topics:[
+      {label:"Gestão de Fornecedores",q:"gestão risco fornecedores terceiros bancos brasileiros due diligence regulação BCB"},
+      {label:"Outsourcing & Cloud",q:"outsourcing terceirização cloud computing bancos regulação BCB Resolução CMN riscos"},
+      {label:"Risco de Concentração",q:"concentração fornecedores críticos bancos brasileiros risco operacional sistêmico"},
+      {label:"TPRM Framework",q:"TPRM third party risk management framework bancos práticas mercado avaliação contínua"},
+      {label:"Cadeia de Suprimentos",q:"cadeia suprimentos fourth party risk bancos brasileiros subcontratados monitoramento"},
+      {label:"Contrato & SLA",q:"contratos SLA fornecedores críticos bancos brasileiros cláusulas risco auditoria direito acesso"},
+    ]}
+};
+
 const SOURCE_COLORS={BCB:"#1a6b3a",ITAU:"#003399",SANB:"#b00000",BB:"#b89500",BTG:"#a07840",NU:"#6a04a0",BIS:"#2c5f8a",CMN:"#3a6a4a",FSB:"#4a3a7a",FEBRABAN:"#1a4060"};
 const REL={alto:{bg:"rgba(255,95,95,0.12)",text:"#ff5f5f",border:"rgba(255,95,95,0.25)"},médio:{bg:"rgba(200,169,110,0.12)",text:"#c8a96e",border:"rgba(200,169,110,0.25)"},baixo:{bg:"rgba(78,203,113,0.12)",text:"#4ecb71",border:"rgba(78,203,113,0.25)"}};
-const SYS=`Você é especialista sênior em gerenciamento de riscos financeiros bancários no Brasil, foco em risco de modelo e IA.\nFONTES: BCB, Itaú, Santander, BB, BTG, Nubank, BIS/BCBS, FSB, FEBRABAN, CMN.\nRetorne APENAS JSON válido sem texto extra:\n{"summary":"análise executiva 2 frases","items":[{"title":"título","body":"análise técnica 2-3 frases com normas e métricas","source":"fonte","sourceCode":"BCB","sourceColor":"#1a6b3a","riskLabel":"Risco de Modelo","date":"2025","relevance":"alto","url":"https://url"}]}\nRegras: 6 itens · relevance: alto médio baixo · sourceCode: BCB ITAU SANB BB BTG NU BIS CMN FSB FEBRABAN · refs reais SR11-7 IFRS9 Basel Pilar3 · APENAS JSON`;
-let theme="modelo",apiKey="",lastQ="",loading=false;
+
+const SYS=`Você é especialista sênior em gerenciamento de riscos financeiros bancários no Brasil, com foco em risco de modelo, IA, operacional, mercado, liquidez e risco de terceiros.
+FONTES: BCB, Itaú, Santander, BB, BTG, Nubank, BIS/BCBS, FSB, FEBRABAN, CMN, CVM.
+Retorne APENAS JSON válido sem texto extra:
+{"summary":"análise executiva 2 frases","items":[{"title":"título","body":"análise técnica 2-3 frases com normas e métricas concretas","source":"fonte","sourceCode":"BCB","sourceColor":"#1a6b3a","riskLabel":"Risco de Modelo","date":"2025","relevance":"alto","url":"https://url"}]}
+Regras: 6 itens · relevance: alto médio baixo · sourceCode: BCB ITAU SANB BB BTG NU BIS CMN FSB FEBRABAN · inclua refs reais (SR11-7, IFRS9, Basileia IV, FRTB, IRRBB, LCR, NSFR, SA-OR, Pilar3, Resoluções BCB) · APENAS JSON`;
+
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+let theme="modelo", apiKey="", lastQ="", loading=false;
+let currentPage="search", libFilter="all";
+let pendingEmailItem=null;
+
+// ══════════════════════════════════════════
+// STORAGE
+// ══════════════════════════════════════════
+function getLibrary(){
+  try{return JSON.parse(localStorage.getItem("ri_library")||"[]");}catch{return[];}
+}
+function saveLibrary(lib){
+  localStorage.setItem("ri_library",JSON.stringify(lib));
+}
+function isItemSaved(item){
+  const lib=getLibrary();
+  return lib.some(s=>s.title===item.title&&s.source===item.source);
+}
+function saveItem(item,themeId){
+  const lib=getLibrary();
+  if(isItemSaved(item))return false;
+  const entry={...item,id:Date.now()+"_"+Math.random().toString(36).slice(2),themeId,savedAt:new Date().toISOString(),rating:null};
+  lib.unshift(entry);
+  saveLibrary(lib);
+  return true;
+}
+function deleteItem(id){
+  const lib=getLibrary().filter(i=>i.id!==id);
+  saveLibrary(lib);
+}
+function rateItem(id,rating){
+  const lib=getLibrary();
+  const idx=lib.findIndex(i=>i.id===id);
+  if(idx>=0){lib[idx].rating=rating;saveLibrary(lib);}
+}
+function getSavedTitles(){
+  return new Set(getLibrary().map(i=>i.title));
+}
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
 function init(){
   apiKey=localStorage.getItem("risk_intel_key")||"";
   if(apiKey&&apiKey.startsWith("sk-")){showApp();}
@@ -163,17 +450,34 @@ function showSettings(){
     document.getElementById("api-key-input").value="";
   }
 }
+
+// ══════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════
+function showPage(p){
+  currentPage=p;
+  document.querySelectorAll(".page").forEach(el=>el.classList.remove("active"));
+  document.querySelectorAll(".nav-btn").forEach(el=>el.classList.remove("active"));
+  document.getElementById("page-"+p).classList.add("active");
+  document.getElementById("nav-"+p).classList.add("active");
+  if(p==="library")renderLibrary();
+  if(p==="bi")renderBI();
+}
+
+// ══════════════════════════════════════════
+// THEME
+// ══════════════════════════════════════════
 function setTheme(id){
   theme=id;const T=THEMES[id];
   document.getElementById("logo-text").style.color=T.accent;
-  ["modelo","ia"].forEach(t=>{
+  Object.keys(THEMES).forEach(t=>{
     const b=document.getElementById("btn-"+t),TT=THEMES[t],a=t===id;
     b.style.border="1px solid "+(a?TT.accent:"#1a1e28");
     b.style.background=a?TT.accentDim:"#0d0f13";
     b.style.color=a?TT.accent:"#2a3040";
   });
-  document.getElementById("search-btn").style.background=T.accent;
-  document.getElementById("search-btn").style.color="#080a0d";
+  const sb=document.getElementById("search-btn");
+  sb.style.background=T.accent;sb.style.color="#080a0d";
   const w=document.getElementById("topics-wrap");w.innerHTML="";
   T.topics.forEach(tp=>{
     const b=document.createElement("button");b.className="topic-pill";b.textContent=tp.label;
@@ -188,15 +492,23 @@ function setTheme(id){
   document.getElementById("search-input").value="";
   document.getElementById("search-input").placeholder="Pesquisar "+T.label+"...";
 }
+
+// ══════════════════════════════════════════
+// SEARCH
+// ══════════════════════════════════════════
 function search(){const q=document.getElementById("search-input").value.trim();if(q)doSearch(q);}
+
 async function doSearch(q){
   if(!q||loading)return;lastQ=q;loading=true;
   const T=THEMES[theme];setLoading(T);
+  // Build exclusion context from saved titles
+  const saved=Array.from(getSavedTitles()).slice(0,20);
+  const exclusion=saved.length>0?"\n\nNÃO retorne achados com títulos similares aos já salvos:\n"+saved.map(t=>"- "+t).join("\n"):"";
   try{
     const res=await fetch("https://api.anthropic.com/v1/messages",{
       method:"POST",
       headers:{"Content-Type":"application/json","x-api-key":apiKey,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
-      body:JSON.stringify({model:"claude-haiku-4-5-20251001",max_tokens:3000,system:SYS,messages:[{role:"user",content:"Tema: "+T.label+"\nConsulta: "+q}]})
+      body:JSON.stringify({model:"claude-haiku-4-5-20251001",max_tokens:3000,system:SYS+exclusion,messages:[{role:"user",content:"Tema: "+T.label+"\nConsulta: "+q}]})
     });
     if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error?.message||"HTTP "+res.status);}
     const data=await res.json();
@@ -214,6 +526,10 @@ async function doSearch(q){
   }catch(err){renderError(err.message,T);}
   loading=false;
 }
+
+// ══════════════════════════════════════════
+// RENDER SEARCH RESULTS
+// ══════════════════════════════════════════
 function setLoading(T){
   document.getElementById("results-area").innerHTML=`<div class="loading-box"><div class="spinner" style="border-top-color:${T.accent}"></div><div class="loading-label">Consultando fontes</div><div class="source-chips">${["BCB","ITAÚ","BB","BTG","NUBANK","BIS","FSB"].map((s,i)=>`<span class="source-chip-load" style="animation:shimmer 1.4s ${i*.15}s infinite">${s}</span>`).join("")}</div></div>`;
 }
@@ -221,20 +537,280 @@ function showWelcome(){
   document.getElementById("results-area").innerHTML=`<div class="welcome-box"><div class="welcome-icon" id="welcome-icon">${THEMES[theme].icon}</div><div class="welcome-title" id="welcome-title">${THEMES[theme].label.toUpperCase()}</div><div class="welcome-sub">Selecione um tópico ou escreva sua consulta para obter análises técnicas das principais fontes do mercado financeiro brasileiro.</div></div>`;
 }
 function renderError(msg,T){
-  document.getElementById("results-area").innerHTML=`<div class="error-box"><div class="error-icon">⚠</div><div class="error-msg">Não foi possível processar a consulta.</div><div class="error-detail"><div class="diag-label" style="color:${T.accent}">Diagnóstico</div><div class="diag-text">${(msg||"Erro desconhecido").replace(/</g,"&lt;")}</div></div><button class="retry-btn" style="border:1px solid ${T.accent};color:${T.accent}" onclick="doSearch(lastQ)">↺ Tentar novamente</button></div>`;
+  document.getElementById("results-area").innerHTML=`<div class="error-box"><div class="error-icon">⚠</div><div class="error-msg">Não foi possível processar a consulta.</div><div class="error-detail"><div class="diag-label" style="color:${T.accent}">Diagnóstico</div><div class="diag-text">${esc(msg||"Erro desconhecido")}</div></div><button class="retry-btn" style="border:1px solid ${T.accent};color:${T.accent}" onclick="doSearch(lastQ)">↺ Tentar novamente</button></div>`;
 }
+
 function renderResults(parsed,T){
   const items=parsed.items||[],summary=parsed.summary||"";
+  const savedTitles=getSavedTitles();
   let html=`<div class="results-count">${items.length} resultados · ${T.label}</div>`;
   if(summary)html+=`<div class="summary-box" style="background:${T.accentDim};border:1px solid ${T.accentBorder}"><div class="summary-label" style="color:${T.accent}">${T.icon} Análise Executiva</div><div class="summary-text">${esc(summary)}</div></div>`;
   items.forEach((item,i)=>{
-    const sc=SOURCE_COLORS[item.sourceCode]||"#1e2430",rs=REL[item.relevance]||REL["médio"];
-    html+=`<div class="card" style="border-left-color:${T.accent};animation-delay:${i*55}ms"><div class="card-top"><div class="card-title">${esc(item.title)}</div><div class="card-badges"><span class="source-badge" style="background:${sc}">${esc(item.sourceCode)}</span>${item.relevance?`<span class="rel-badge" style="background:${rs.bg};color:${rs.text};border:1px solid ${rs.border}">${esc(item.relevance)}</span>`:""}</div></div><div class="card-body">${esc(item.body)}</div><div class="card-footer"><div class="card-meta"><span class="meta-item">${esc(item.source)}</span><span class="meta-item" style="color:#1a1e28">·</span><span class="meta-item">${esc(item.date)}</span></div>${item.url?`<a href="${item.url}" target="_blank" rel="noopener" class="source-link" style="color:${T.accent}">→ Fonte</a>`:""}</div></div>`;
+    const sc=SOURCE_COLORS[item.sourceCode]||"#1e2430";
+    const rs=REL[item.relevance]||REL["médio"];
+    const alreadySaved=savedTitles.has(item.title);
+    const cardId="card_"+i+"_"+Date.now();
+    html+=`
+    <div class="card" id="${cardId}" style="border-left-color:${T.accent};animation-delay:${i*55}ms">
+      <div class="card-top">
+        <div class="card-title">${esc(item.title)}</div>
+        <div class="card-badges">
+          <span class="source-badge" style="background:${sc}">${esc(item.sourceCode)}</span>
+          ${item.relevance?`<span class="rel-badge" style="background:${rs.bg};color:${rs.text};border:1px solid ${rs.border}">${esc(item.relevance)}</span>`:""}
+        </div>
+      </div>
+      <div class="card-body">${esc(item.body)}</div>
+      <div class="card-footer">
+        <div class="card-meta">
+          <span class="meta-item">${esc(item.source)}</span>
+          <span class="meta-item" style="color:#1a1e28">·</span>
+          <span class="meta-item">${esc(item.date)}</span>
+        </div>
+        ${item.url?`<a href="${item.url}" target="_blank" rel="noopener" class="source-link" style="color:${T.accent}">→ Fonte</a>`:""}
+      </div>
+      <div class="card-actions">
+        <button class="action-btn save ${alreadySaved?"saved":""}" id="savebtn_${cardId}" onclick='toggleSave(${JSON.stringify(item).replace(/'/g,"&#39;")}, "${cardId}")'>
+          ${alreadySaved?"✓ Salvo":"＋ Salvar"}
+        </button>
+        <button class="action-btn good" id="good_${cardId}" onclick='rateCard("good","${cardId}")'>👍 Assertivo</button>
+        <button class="action-btn bad" id="bad_${cardId}" onclick='rateCard("bad","${cardId}")'>👎 Não aplicável</button>
+        <button class="action-btn email-btn" onclick='openEmailModal(${JSON.stringify(item).replace(/'/g,"&#39;")})'>✉ E-mail</button>
+      </div>
+    </div>`;
   });
   document.getElementById("results-area").innerHTML=html;
 }
+
+function toggleSave(item,cardId){
+  const saved=isItemSaved(item);
+  if(saved){
+    alert("Este achado já está na sua biblioteca.");return;
+  }
+  const ok=saveItem(item,theme);
+  if(ok){
+    const btn=document.getElementById("savebtn_"+cardId);
+    if(btn){btn.textContent="✓ Salvo";btn.classList.add("saved");}
+  }
+}
+
+function rateCard(rating,cardId){
+  const gBtn=document.getElementById("good_"+cardId);
+  const bBtn=document.getElementById("bad_"+cardId);
+  if(gBtn)gBtn.classList.toggle("rated",rating==="good");
+  if(bBtn)bBtn.classList.toggle("rated",rating==="bad");
+}
+
+// ══════════════════════════════════════════
+// LIBRARY
+// ══════════════════════════════════════════
+function setLibFilter(f,el){
+  libFilter=f;
+  document.querySelectorAll(".lib-filter").forEach(b=>b.classList.remove("active"));
+  el.classList.add("active");
+  renderLibrary();
+}
+
+function renderLibrary(){
+  const lib=getLibrary();
+  const search=(document.getElementById("lib-search")?.value||"").toLowerCase();
+  document.getElementById("lib-count").textContent=lib.length+" achado"+(lib.length!==1?"s":"")+" salvo"+(lib.length!==1?"s":"");
+  let filtered=lib.filter(item=>{
+    if(libFilter==="modelo"&&item.themeId!=="modelo")return false;
+    if(libFilter==="ia"&&item.themeId!=="ia")return false;
+    if(libFilter==="good"&&item.rating!=="good")return false;
+    if(libFilter==="bad"&&item.rating!=="bad")return false;
+    if(search&&!item.title.toLowerCase().includes(search)&&!item.body.toLowerCase().includes(search)&&!item.source.toLowerCase().includes(search))return false;
+    return true;
+  });
+  const el=document.getElementById("lib-content");
+  if(filtered.length===0){
+    el.innerHTML=`<div class="lib-empty"><div class="lib-empty-icon">◫</div>${lib.length===0?"Nenhum achado salvo ainda.<br>Faça uma busca e salve os resultados relevantes.":"Nenhum achado encontrado com os filtros aplicados."}</div>`;
+    return;
+  }
+  el.innerHTML=filtered.map(item=>{
+    const T=THEMES[item.themeId]||THEMES.modelo;
+    const sc=SOURCE_COLORS[item.sourceCode]||"#1e2430";
+    const savedDate=new Date(item.savedAt).toLocaleDateString("pt-BR");
+    const ratingBadge=item.rating==="good"?`<span class="rating-good">✓ ASSERTIVO</span>`:item.rating==="bad"?`<span class="rating-bad">✗ NÃO APLICÁVEL</span>`:"";
+    return `
+    <div class="lib-card" style="border-left-color:${T.accent}">
+      <div class="lib-card-title">${esc(item.title)}</div>
+      <div class="lib-card-body">${esc(item.body)}</div>
+      <div class="lib-card-meta">
+        <div class="lib-meta-tags">
+          <span class="lib-tag" style="border-color:${T.accent};color:${T.accent}">${T.label}</span>
+          <span class="lib-tag" style="background:${sc};border-color:${sc};color:#fff">${esc(item.sourceCode)}</span>
+          <span class="lib-tag">${esc(item.date)}</span>
+          <span class="lib-tag">Salvo ${savedDate}</span>
+          ${ratingBadge}
+        </div>
+        <div class="lib-actions">
+          <button class="action-btn good ${item.rating==="good"?"rated":""}" onclick="rateLibItem('${item.id}','good',this)">👍</button>
+          <button class="action-btn bad ${item.rating==="bad"?"rated":""}" onclick="rateLibItem('${item.id}','bad',this)">👎</button>
+          <button class="action-btn email-btn" onclick='openEmailModal(${JSON.stringify(item).replace(/'/g,"&#39;")})'>✉</button>
+          <button class="lib-del" onclick="delLibItem('${item.id}')">✕</button>
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function rateLibItem(id,rating,btn){
+  const item=getLibrary().find(i=>i.id===id);
+  const newRating=item?.rating===rating?null:rating;
+  rateItem(id,newRating);
+  renderLibrary();
+}
+
+function delLibItem(id){
+  if(confirm("Remover este achado da biblioteca?")){
+    deleteItem(id);renderLibrary();
+  }
+}
+
+function exportLibrary(){
+  const lib=getLibrary();
+  if(!lib.length){alert("Biblioteca vazia.");return;}
+  const lines=["RISK INTEL — Biblioteca de Achados","Exportado em: "+new Date().toLocaleString("pt-BR"),"",""];
+  lib.forEach((item,i)=>{
+    lines.push(`[${i+1}] ${item.title}`);
+    lines.push(`Tema: ${THEMES[item.themeId]?.label||item.themeId} | Fonte: ${item.source} | Data: ${item.date}`);
+    lines.push(`Avaliação: ${item.rating==="good"?"Assertivo":item.rating==="bad"?"Não aplicável":"Não avaliado"}`);
+    lines.push(item.body);
+    if(item.url)lines.push(`Link: ${item.url}`);
+    lines.push("");
+  });
+  const blob=new Blob([lines.join("\n")],{type:"text/plain;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;a.download="risk-intel-biblioteca.txt";
+  document.body.appendChild(a);a.click();
+  document.body.removeChild(a);URL.revokeObjectURL(url);
+}
+
+// ══════════════════════════════════════════
+// EMAIL
+// ══════════════════════════════════════════
+function openEmailModal(item){
+  pendingEmailItem=item;
+  const preview=`ACHADO: ${item.title}\n\nFONTE: ${item.source} | ${item.date}\n\n${item.body}${item.url?"\n\nLINK: "+item.url:""}`;
+  document.getElementById("modal-preview").textContent=preview;
+  document.getElementById("modal-email").value=localStorage.getItem("ri_email")||"";
+  document.getElementById("email-modal").style.display="flex";
+}
+function closeModal(){
+  document.getElementById("email-modal").style.display="none";
+  pendingEmailItem=null;
+}
+function sendEmail(){
+  const email=document.getElementById("modal-email").value.trim();
+  if(!email||!email.includes("@")){alert("Digite um e-mail válido.");return;}
+  localStorage.setItem("ri_email",email);
+  const item=pendingEmailItem;
+  const subject=encodeURIComponent("Risk Intel — "+item.title);
+  const body=encodeURIComponent(
+    "RISK INTEL — Achado de "+THEMES[item.themeId||theme]?.label+"\n\n"+
+    "TÍTULO: "+item.title+"\n\n"+
+    "FONTE: "+item.source+" | "+item.date+"\n\n"+
+    item.body+
+    (item.url?"\n\nLINK: "+item.url:"")+
+    "\n\n---\nEnviado pelo Risk Intel App"
+  );
+  window.open(`mailto:${email}?subject=${subject}&body=${body}`,"_blank");
+  closeModal();
+}
+
+// ══════════════════════════════════════════
+// BI DASHBOARD
+// ══════════════════════════════════════════
+let biCharts=[];
+
+function renderBI(){
+  biCharts.forEach(c=>{try{c.destroy();}catch(_){}});
+  biCharts=[];
+  const lib=getLibrary();
+  const el=document.getElementById("bi-content");
+  if(lib.length===0){
+    el.innerHTML=`<div class="bi-empty"><div class="bi-empty-icon">◻</div>Nenhum dado disponível.<br>Salve achados na Biblioteca para visualizar os gráficos.</div>`;
+    return;
+  }
+
+  // Stats
+  const total=lib.length;
+  const good=lib.filter(i=>i.rating==="good").length;
+  const bad=lib.filter(i=>i.rating==="bad").length;
+
+  // By theme
+  const byTheme={};
+  Object.keys(THEMES).forEach(k=>{byTheme[k]=0;});
+  lib.forEach(i=>{if(i.themeId)byTheme[i.themeId]=(byTheme[i.themeId]||0)+1;});
+
+  // By source
+  const bySrc={};
+  lib.forEach(i=>{bySrc[i.sourceCode]=(bySrc[i.sourceCode]||0)+1;});
+
+  // By relevance
+  const byRel={alto:0,médio:0,baixo:0};
+  lib.forEach(i=>{if(i.relevance)byRel[i.relevance]=(byRel[i.relevance]||0)+1;});
+
+  // By month
+  const byMonth={};
+  lib.forEach(i=>{
+    const m=new Date(i.savedAt).toLocaleDateString("pt-BR",{month:"short",year:"2-digit"});
+    byMonth[m]=(byMonth[m]||0)+1;
+  });
+
+  // By rating
+  const byRating={"Assertivo":good,"Não Aplicável":bad,"Não Avaliado":total-good-bad};
+
+  const chartOpts={responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:"#7a8090",font:{size:10,family:"'DM Mono',monospace"},boxWidth:10}}},scales:{x:{ticks:{color:"#3a4050",font:{size:9}},grid:{color:"#1a1e28"}},y:{ticks:{color:"#3a4050",font:{size:9}},grid:{color:"#1a1e28"}}}};
+  const pieOpts={responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom",labels:{color:"#7a8090",font:{size:10,family:"'DM Mono',monospace"},boxWidth:10,padding:12}}}};
+
+  el.innerHTML=`
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-val" style="color:#4ecb71">${total}</div><div class="stat-label">Total Salvos</div></div>
+      <div class="stat-card"><div class="stat-val" style="color:#4a9eff">${good}</div><div class="stat-label">Assertivos</div></div>
+      <div class="stat-card"><div class="stat-val" style="color:#ff5f5f">${bad}</div><div class="stat-label">Não Aplicáveis</div></div>
+    </div>
+    <div class="chart-card"><div class="chart-title">Volume por Tema</div><div class="chart-wrap"><canvas id="chart-theme"></canvas></div></div>
+    <div class="chart-card"><div class="chart-title">Volume por Fonte</div><div class="chart-wrap"><canvas id="chart-source"></canvas></div></div>
+    <div class="chart-card"><div class="chart-title">Relevância dos Achados</div><div class="chart-wrap"><canvas id="chart-rel"></canvas></div></div>
+    <div class="chart-card"><div class="chart-title">Avaliação (Assertividade)</div><div class="chart-wrap"><canvas id="chart-rating"></canvas></div></div>
+    <div class="chart-card"><div class="chart-title">Achados Salvos por Período</div><div class="chart-wrap"><canvas id="chart-time"></canvas></div></div>
+  `;
+
+  // Theme chart
+  const themeLabels=Object.keys(THEMES).map(k=>THEMES[k].label);
+  const themeData=Object.keys(THEMES).map(k=>byTheme[k]||0);
+  const themeColors=Object.keys(THEMES).map(k=>THEMES[k].accent);
+  biCharts.push(new Chart(document.getElementById("chart-theme"),{type:"doughnut",data:{labels:themeLabels,datasets:[{data:themeData,backgroundColor:themeColors.map(c=>c+"b3"),borderColor:themeColors,borderWidth:1}]},options:pieOpts}));
+
+  // Source chart
+  const srcLabels=Object.keys(bySrc).sort((a,b)=>bySrc[b]-bySrc[a]);
+  const srcColors=srcLabels.map(s=>SOURCE_COLORS[s]||"#3a4050");
+  biCharts.push(new Chart(document.getElementById("chart-source"),{type:"bar",data:{labels:srcLabels,datasets:[{label:"Achados",data:srcLabels.map(s=>bySrc[s]),backgroundColor:srcColors.map(c=>c+"cc"),borderColor:srcColors,borderWidth:1}]},options:{...chartOpts,plugins:{...chartOpts.plugins,legend:{display:false}}}}));
+
+  // Relevance
+  biCharts.push(new Chart(document.getElementById("chart-rel"),{type:"doughnut",data:{labels:["Alto","Médio","Baixo"],datasets:[{data:[byRel.alto,byRel.médio,byRel.baixo],backgroundColor:["rgba(255,95,95,0.7)","rgba(200,169,110,0.7)","rgba(78,203,113,0.7)"],borderColor:["#ff5f5f","#c8a96e","#4ecb71"],borderWidth:1}]},options:pieOpts}));
+
+  // Rating
+  biCharts.push(new Chart(document.getElementById("chart-rating"),{type:"doughnut",data:{labels:["Assertivo","Não Aplicável","Não Avaliado"],datasets:[{data:[byRating["Assertivo"],byRating["Não Aplicável"],byRating["Não Avaliado"]],backgroundColor:["rgba(78,203,113,0.7)","rgba(255,95,95,0.7)","rgba(58,64,80,0.7)"],borderColor:["#4ecb71","#ff5f5f","#3a4050"],borderWidth:1}]},options:pieOpts}));
+
+  // Time series
+  const timeLabels=Object.keys(byMonth).slice(-8);
+  biCharts.push(new Chart(document.getElementById("chart-time"),{type:"line",data:{labels:timeLabels,datasets:[{label:"Achados",data:timeLabels.map(m=>byMonth[m]||0),borderColor:"#c8a96e",backgroundColor:"rgba(200,169,110,0.1)",borderWidth:2,pointBackgroundColor:"#c8a96e",tension:.3,fill:true}]},options:chartOpts}));
+}
+
+// ══════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════
 function esc(s){return(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+
+// ══════════════════════════════════════════
+// START
+// ══════════════════════════════════════════
 init();
 </script>
+
 </body>
 </html>
