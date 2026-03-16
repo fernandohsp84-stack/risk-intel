@@ -1168,7 +1168,261 @@ background: #fff;
 .read-tag { padding:2px 8px; border-radius:5px; font-size:10px; font-weight:600; background:rgba(52,199,89,.08); color:#34c759; border:1px solid rgba(52,199,89,.2); }
 .unread-tag { padding:2px 8px; border-radius:5px; font-size:10px; font-weight:600; background:rgba(0,122,255,.08); color:#007aff; border:1px solid rgba(0,122,255,.2); }
 
+/* ── SAIBA MAIS ── */
+.saiba-hero {
+background: linear-gradient(145deg, #0071e3 0%, #34c759 100%);
+border-radius: 20px;
+padding: 32px 24px 28px;
+margin: 16px 0 24px;
+color: #fff;
+text-align: center;
+position: relative;
+overflow: hidden;
+}
+
+.saiba-hero::before {
+content: ‘’;
+position: absolute;
+inset: 0;
+background: url(“data:image/svg+xml,%3Csvg width=‘400’ height=‘200’ viewBox=‘0 0 400 200’ xmlns=‘http://www.w3.org/2000/svg’%3E%3Ccircle cx=‘350’ cy=‘30’ r=‘80’ fill=‘rgba(255,255,255,0.06)’/%3E%3Ccircle cx=‘50’ cy=‘170’ r=‘60’ fill=‘rgba(255,255,255,0.05)’/%3E%3Ccircle cx=‘200’ cy=‘100’ r=‘120’ fill=‘rgba(255,255,255,0.03)’/%3E%3C/svg%3E”) center/cover;
+pointer-events: none;
+}
+
+.saiba-hero-eyebrow {
+font-size: 11px;
+font-weight: 700;
+letter-spacing: 1.5px;
+text-transform: uppercase;
+opacity: .75;
+margin-bottom: 10px;
+}
+
+.saiba-hero-title {
+font-size: 26px;
+font-weight: 800;
+letter-spacing: -.5px;
+line-height: 1.15;
+margin-bottom: 10px;
+}
+
+.saiba-hero-sub {
+font-size: 14px;
+opacity: .85;
+line-height: 1.65;
+max-width: 320px;
+margin: 0 auto;
+}
+
+.saiba-illustration {
+margin: 0 0 28px;
+border-radius: 16px;
+overflow: hidden;
+box-shadow: var(–shadow);
+background: var(–surface);
+border: 1px solid var(–border);
+}
+
+.saiba-section {
+margin-bottom: 28px;
+}
+
+.saiba-section-title {
+font-size: 18px;
+font-weight: 700;
+color: var(–text);
+letter-spacing: -.2px;
+margin-bottom: 6px;
+}
+
+.saiba-section-lead {
+font-size: 14px;
+color: var(–text-secondary);
+line-height: 1.7;
+margin-bottom: 16px;
+}
+
+.saiba-steps {
+display: flex;
+flex-direction: column;
+gap: 12px;
+}
+
+.saiba-step {
+display: flex;
+gap: 14px;
+align-items: flex-start;
+padding: 16px;
+background: var(–surface);
+border-radius: var(–radius);
+border: 1px solid var(–border);
+box-shadow: var(–shadow-sm);
+}
+
+.saiba-step-num {
+width: 32px;
+height: 32px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 13px;
+font-weight: 800;
+flex-shrink: 0;
+color: #fff;
+}
+
+.saiba-step-title {
+font-size: 13px;
+font-weight: 700;
+color: var(–text);
+margin-bottom: 3px;
+}
+
+.saiba-step-desc {
+font-size: 12px;
+color: var(–text-secondary);
+line-height: 1.65;
+}
+
+.saiba-feature-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 10px;
+}
+
+.saiba-feature {
+background: var(–surface);
+border-radius: var(–radius);
+padding: 16px 14px;
+border: 1px solid var(–border);
+box-shadow: var(–shadow-sm);
+}
+
+.saiba-feature-icon {
+font-size: 22px;
+margin-bottom: 8px;
+}
+
+.saiba-feature-title {
+font-size: 12px;
+font-weight: 700;
+color: var(–text);
+margin-bottom: 4px;
+}
+
+.saiba-feature-desc {
+font-size: 11px;
+color: var(–text-secondary);
+line-height: 1.6;
+}
+
+.saiba-qa {
+display: flex;
+flex-direction: column;
+gap: 10px;
+}
+
+.saiba-qa-item {
+background: var(–surface);
+border-radius: var(–radius);
+border: 1px solid var(–border);
+overflow: hidden;
+box-shadow: var(–shadow-sm);
+}
+
+.saiba-qa-q {
+padding: 14px 16px;
+font-size: 13px;
+font-weight: 600;
+color: var(–text);
+cursor: pointer;
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 10px;
+-webkit-tap-highlight-color: transparent;
+}
+
+.saiba-qa-q::after {
+content: ‘+’;
+font-size: 18px;
+font-weight: 300;
+color: var(–text-tertiary);
+flex-shrink: 0;
+transition: transform .2s;
+}
+
+.saiba-qa-item.open .saiba-qa-q::after {
+transform: rotate(45deg);
+}
+
+.saiba-qa-a {
+display: none;
+padding: 0 16px 14px;
+font-size: 13px;
+color: var(–text-secondary);
+line-height: 1.75;
+border-top: 1px solid var(–border);
+padding-top: 12px;
+}
+
+.saiba-qa-item.open .saiba-qa-a { display: block; }
+
+.saiba-cost-card {
+background: linear-gradient(135deg, rgba(0,113,227,.06) 0%, rgba(52,199,89,.06) 100%);
+border: 1px solid rgba(0,113,227,.15);
+border-radius: var(–radius);
+padding: 20px;
+text-align: center;
+}
+
+.saiba-cost-val {
+font-size: 36px;
+font-weight: 800;
+color: var(–accent);
+letter-spacing: -.5px;
+margin-bottom: 4px;
+}
+
+.saiba-cost-label {
+font-size: 12px;
+color: var(–text-secondary);
+margin-bottom: 12px;
+}
+
+.saiba-cost-detail {
+font-size: 11px;
+color: var(–text-tertiary);
+line-height: 1.8;
+}
+
+.saiba-divider {
+height: 1px;
+background: var(–border);
+margin: 24px 0;
+}
+
+.saiba-tip {
+background: rgba(255,149,0,.07);
+border: 1px solid rgba(255,149,0,.2);
+border-radius: var(–radius);
+padding: 14px 16px;
+display: flex;
+gap: 10px;
+align-items: flex-start;
+}
+
+.saiba-tip-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+.saiba-tip-text {
+font-size: 12px;
+color: var(–text-secondary);
+line-height: 1.7;
+}
+
+.saiba-tip-text strong { color: var(–text); }
 </style>
+
 </head>
 <body>
 
@@ -1262,6 +1516,254 @@ background: #fff;
   <div id="lib-content"></div>
 </div>
 
+
+<!-- ── SAIBA MAIS ── -->
+<div class="page" id="page-saiba">
+
+  <!-- Hero -->
+  <div class="saiba-hero">
+    <div class="saiba-hero-eyebrow">Guia do usuário</div>
+    <div class="saiba-hero-title">Como funciona o Risk Intel</div>
+    <div class="saiba-hero-sub">Uma ferramenta de inteligência de riscos financeiros, pensada para gestores de banco.</div>
+  </div>
+
+  <!-- Illustration SVG -->
+  <div class="saiba-illustration">
+    <svg viewBox="0 0 360 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+      <defs>
+        <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#f0f4ff"/>
+          <stop offset="100%" style="stop-color:#f0fff4"/>
+        </linearGradient>
+        <linearGradient id="arrow-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style="stop-color:#0071e3"/>
+          <stop offset="100%" style="stop-color:#34c759"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Background -->
+      <rect width="360" height="220" fill="url(#bg-grad)"/>
+
+      <!-- Step 1: You -->
+      <rect x="14" y="60" width="68" height="100" rx="12" fill="#fff" stroke="#e0e0e5" stroke-width="1.2"/>
+      <rect x="22" y="70" width="52" height="6" rx="3" fill="#0071e3" opacity=".2"/>
+      <rect x="22" y="82" width="38" height="4" rx="2" fill="#1d1d1f" opacity=".12"/>
+      <rect x="22" y="92" width="44" height="4" rx="2" fill="#1d1d1f" opacity=".08"/>
+      <rect x="22" y="104" width="32" height="28" rx="6" fill="#0071e3" opacity=".08"/>
+      <text x="38" y="122" text-anchor="middle" font-size="16" fill="#0071e3">⌕</text>
+      <text x="48" y="176" text-anchor="middle" font-size="9" fill="#6e6e73" font-family="sans-serif" font-weight="600">VOCÊ</text>
+      <text x="48" y="187" text-anchor="middle" font-size="8" fill="#aeaeb2" font-family="sans-serif">Faz a busca</text>
+
+      <!-- Arrow 1 -->
+      <path d="M86 110 L114 110" stroke="url(#arrow-grad)" stroke-width="2" stroke-linecap="round"/>
+      <polygon points="113,106 120,110 113,114" fill="#0071e3"/>
+      <text x="103" y="106" text-anchor="middle" font-size="7.5" fill="#0071e3" font-family="sans-serif" font-weight="700">consulta</text>
+
+      <!-- Step 2: Claude AI -->
+      <rect x="122" y="48" width="116" height="124" rx="14" fill="#fff" stroke="#e0e0e5" stroke-width="1.2"/>
+      <rect x="134" y="62" width="92" height="28" rx="8" fill="#0071e3" opacity=".07"/>
+      <text x="180" y="81" text-anchor="middle" font-size="22" fill="#0071e3">🤖</text>
+      <text x="180" y="103" text-anchor="middle" font-size="9" fill="#1d1d1f" font-family="sans-serif" font-weight="700">Claude IA</text>
+      <rect x="134" y="110" width="92" height="4" rx="2" fill="#34c759" opacity=".3"/>
+      <rect x="134" y="119" width="70" height="3.5" rx="1.75" fill="#1d1d1f" opacity=".1"/>
+      <rect x="134" y="127" width="84" height="3.5" rx="1.75" fill="#1d1d1f" opacity=".08"/>
+      <rect x="134" y="135" width="60" height="3.5" rx="1.75" fill="#1d1d1f" opacity=".06"/>
+      <text x="180" y="183" text-anchor="middle" font-size="9" fill="#6e6e73" font-family="sans-serif" font-weight="600">MOTOR IA</text>
+      <text x="180" y="194" text-anchor="middle" font-size="8" fill="#aeaeb2" font-family="sans-serif">Analisa fontes</text>
+
+      <!-- Fontes circulando -->
+      <circle cx="146" cy="30" r="13" fill="#1a6b3a" opacity=".85"/>
+      <text x="146" y="34" text-anchor="middle" font-size="7" fill="#fff" font-family="sans-serif" font-weight="800">BCB</text>
+      <circle cx="180" cy="22" r="13" fill="#003399" opacity=".85"/>
+      <text x="180" y="26" text-anchor="middle" font-size="7" fill="#fff" font-family="sans-serif" font-weight="800">ITAÚ</text>
+      <circle cx="214" cy="30" r="13" fill="#2c5f8a" opacity=".85"/>
+      <text x="214" y="34" text-anchor="middle" font-size="7" fill="#fff" font-family="sans-serif" font-weight="800">BIS</text>
+
+      <!-- Dashed lines from badges to AI box -->
+      <line x1="146" y1="43" x2="155" y2="55" stroke="#0071e3" stroke-width="1" stroke-dasharray="3,2" opacity=".4"/>
+      <line x1="180" y1="35" x2="180" y2="48" stroke="#0071e3" stroke-width="1" stroke-dasharray="3,2" opacity=".4"/>
+      <line x1="214" y1="43" x2="205" y2="55" stroke="#0071e3" stroke-width="1" stroke-dasharray="3,2" opacity=".4"/>
+
+      <!-- Arrow 2 -->
+      <path d="M241 110 L269 110" stroke="url(#arrow-grad)" stroke-width="2" stroke-linecap="round"/>
+      <polygon points="268,106 275,110 268,114" fill="#34c759"/>
+      <text x="258" y="106" text-anchor="middle" font-size="7.5" fill="#34c759" font-family="sans-serif" font-weight="700">resposta</text>
+
+      <!-- Step 3: Results -->
+      <rect x="277" y="60" width="68" height="100" rx="12" fill="#fff" stroke="#e0e0e5" stroke-width="1.2"/>
+      <rect x="285" y="71" width="52" height="5" rx="2.5" fill="#34c759" opacity=".3"/>
+      <rect x="285" y="82" width="52" height="36" rx="6" fill="#f5f5f7"/>
+      <rect x="290" y="87" width="30" height="3" rx="1.5" fill="#1d1d1f" opacity=".15"/>
+      <rect x="290" y="94" width="42" height="2.5" rx="1.25" fill="#1d1d1f" opacity=".08"/>
+      <rect x="290" y="100" width="36" height="2.5" rx="1.25" fill="#1d1d1f" opacity=".06"/>
+      <rect x="290" y="108" width="22" height="6" rx="3" fill="#34c759" opacity=".15"/>
+      <text x="301" y="114" text-anchor="middle" font-size="6" fill="#34c759" font-family="sans-serif" font-weight="700">SALVAR</text>
+      <rect x="285" y="122" width="52" height="28" rx="6" fill="#f5f5f7"/>
+      <rect x="290" y="127" width="25" height="3" rx="1.5" fill="#1d1d1f" opacity=".15"/>
+      <rect x="290" y="134" width="40" height="2.5" rx="1.25" fill="#1d1d1f" opacity=".08"/>
+      <rect x="290" y="140" width="32" height="2.5" rx="1.25" fill="#1d1d1f" opacity=".06"/>
+      <text x="311" y="176" text-anchor="middle" font-size="9" fill="#6e6e73" font-family="sans-serif" font-weight="600">RESULTADO</text>
+      <text x="311" y="187" text-anchor="middle" font-size="8" fill="#aeaeb2" font-family="sans-serif">Análises e cards</text>
+    </svg>
+  </div>
+
+  <!-- O que é -->
+  <div class="saiba-section">
+    <div class="saiba-section-title">O que é o Risk Intel?</div>
+    <div class="saiba-section-lead">
+      É um assistente de inteligência financeira que usa uma IA avançada (o Claude, da Anthropic) para buscar, resumir e organizar informações técnicas sobre riscos financeiros — como as publicações do Banco Central, relatórios de grandes bancos e regulações internacionais.
+    </div>
+    <div class="saiba-tip">
+      <div class="saiba-tip-icon">💡</div>
+      <div class="saiba-tip-text"><strong>Pense assim:</strong> é como ter um analista especializado disponível 24 horas, que lê centenas de documentos técnicos e te entrega um resumo executivo na palma da mão.</div>
+    </div>
+  </div>
+
+  <div class="saiba-divider"></div>
+
+  <!-- Como funciona passo a passo -->
+  <div class="saiba-section">
+    <div class="saiba-section-title">Como funciona, passo a passo</div>
+    <div class="saiba-steps">
+      <div class="saiba-step">
+        <div class="saiba-step-num" style="background:#0071e3">1</div>
+        <div>
+          <div class="saiba-step-title">Você escolhe o tema e faz uma busca</div>
+          <div class="saiba-step-desc">Selecione o tipo de risco (Modelo, IA, Operacional, Mercado, Liquidez ou Terceiros) e toque em um tópico rápido ou escreva sua consulta livremente.</div>
+        </div>
+      </div>
+      <div class="saiba-step">
+        <div class="saiba-step-num" style="background:#5856d6">2</div>
+        <div>
+          <div class="saiba-step-title">A IA consulta as fontes e analisa</div>
+          <div class="saiba-step-desc">O Claude processa seu pedido com base em seu treinamento sobre BCB, BIS, Basileia IV, relatórios de Pilar 3, publicações do Itaú, BB, Santander, BTG, Nubank e muito mais.</div>
+        </div>
+      </div>
+      <div class="saiba-step">
+        <div class="saiba-step-num" style="background:#34c759">3</div>
+        <div>
+          <div class="saiba-step-title">Você recebe achados técnicos organizados</div>
+          <div class="saiba-step-desc">São apresentados cards com título, análise técnica, fonte, relevância (alto/médio/baixo) e link. Um resumo executivo aparece no topo.</div>
+        </div>
+      </div>
+      <div class="saiba-step">
+        <div class="saiba-step-num" style="background:#ff9500">4</div>
+        <div>
+          <div class="saiba-step-title">Você avalia, salva e organiza</div>
+          <div class="saiba-step-desc">Marque como lida, salve na Biblioteca, avalie como Assertivo ou Não Aplicável (com motivo) e envie por e-mail para sua equipe.</div>
+        </div>
+      </div>
+      <div class="saiba-step">
+        <div class="saiba-step-num" style="background:#ff3b30">5</div>
+        <div>
+          <div class="saiba-step-title">O app aprende o que você já viu</div>
+          <div class="saiba-step-desc">Notícias lidas ou salvas são excluídas das buscas seguintes. Se tudo já foi lido, o app informa "Sem novas notícias".</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="saiba-divider"></div>
+
+  <!-- Funcionalidades -->
+  <div class="saiba-section">
+    <div class="saiba-section-title">Funcionalidades</div>
+    <div class="saiba-feature-grid">
+      <div class="saiba-feature">
+        <div class="saiba-feature-icon">🔍</div>
+        <div class="saiba-feature-title">Busca inteligente</div>
+        <div class="saiba-feature-desc">Consulta livre ou por tópicos pré-configurados em 6 categorias de risco.</div>
+      </div>
+      <div class="saiba-feature">
+        <div class="saiba-feature-icon">📚</div>
+        <div class="saiba-feature-title">Biblioteca</div>
+        <div class="saiba-feature-desc">Salve achados relevantes, filtre por tema, leitura ou avaliação.</div>
+      </div>
+      <div class="saiba-feature">
+        <div class="saiba-feature-icon">✓ ✗</div>
+        <div class="saiba-feature-title">Avaliação</div>
+        <div class="saiba-feature-desc">Marque achados como assertivos ou não aplicáveis, com motivo detalhado.</div>
+      </div>
+      <div class="saiba-feature">
+        <div class="saiba-feature-icon">◎</div>
+        <div class="saiba-feature-title">Controle de leitura</div>
+        <div class="saiba-feature-desc">Notícias lidas não reaparecem. Ponto azul indica conteúdo novo.</div>
+      </div>
+      <div class="saiba-feature">
+        <div class="saiba-feature-icon">✉</div>
+        <div class="saiba-feature-title">E-mail</div>
+        <div class="saiba-feature-desc">Envie qualquer achado diretamente para colegas com um toque.</div>
+      </div>
+      <div class="saiba-feature">
+        <div class="saiba-feature-icon">📊</div>
+        <div class="saiba-feature-title">Dashboard BI</div>
+        <div class="saiba-feature-desc">Gráficos de volume por tema, fonte, relevância e taxa de leitura.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="saiba-divider"></div>
+
+  <!-- Custo -->
+  <div class="saiba-section">
+    <div class="saiba-section-title">Quanto custa usar?</div>
+    <div class="saiba-cost-card">
+      <div class="saiba-cost-val">~R$ 0,02</div>
+      <div class="saiba-cost-label">por consulta realizada</div>
+      <div class="saiba-cost-detail">
+        Com R$ 25 em créditos (US$ 5 no console da Anthropic)<br>
+        você tem aproximadamente <strong>1.200 consultas</strong> — suficiente para meses de uso profissional intenso.<br><br>
+        Os créditos só são consumidos quando você toca em <strong>Buscar</strong>.
+      </div>
+    </div>
+  </div>
+
+  <div class="saiba-divider"></div>
+
+  <!-- Privacidade -->
+  <div class="saiba-section">
+    <div class="saiba-section-title">Privacidade e segurança</div>
+    <div class="saiba-section-lead">
+      Sua chave de API fica armazenada apenas no seu dispositivo (memória local do navegador). Ela não passa por nenhum servidor externo além da Anthropic, que já recebe suas consultas para processamento — exatamente como qualquer app que usa IA.
+    </div>
+    <div class="saiba-tip">
+      <div class="saiba-tip-icon">🔒</div>
+      <div class="saiba-tip-text"><strong>Boa prática:</strong> não compartilhe seu link com pessoas não autorizadas. Quem acessar o link no mesmo dispositivo poderá usar sua chave de API.</div>
+    </div>
+  </div>
+
+  <div class="saiba-divider"></div>
+
+  <!-- FAQ -->
+  <div class="saiba-section">
+    <div class="saiba-section-title">Perguntas frequentes</div>
+    <div class="saiba-qa">
+      <div class="saiba-qa-item" onclick="toggleQA(this)">
+        <div class="saiba-qa-q">As informações são atualizadas em tempo real?</div>
+        <div class="saiba-qa-a">O Claude tem conhecimento até agosto de 2025. Ele não navega na internet em tempo real, mas seu treinamento inclui um volume imenso de publicações regulatórias, relatórios e normas do setor financeiro. Para eventos muito recentes (últimas semanas), recomenda-se confirmar nas fontes primárias.</div>
+      </div>
+      <div class="saiba-qa-item" onclick="toggleQA(this)">
+        <div class="saiba-qa-q">As notícias retornadas são sempre precisas?</div>
+        <div class="saiba-qa-a">O app usa um modelo de linguagem avançado, mas como toda IA, pode ocasionalmente gerar informações imprecisas — especialmente em datas ou números muito específicos. Sempre verifique informações críticas nas fontes primárias (BCB, relatórios oficiais dos bancos, BIS). Por isso existe o botão "Não aplicável" para registrar esses casos.</div>
+      </div>
+      <div class="saiba-qa-item" onclick="toggleQA(this)">
+        <div class="saiba-qa-q">Por que o app diz "Sem novas notícias"?</div>
+        <div class="saiba-qa-a">Quando todos os achados retornados já foram lidos ou salvos anteriormente, o app reconhece que não há novidade e avisa. Você pode tocar em "Limpar lidas e buscar novamente" para recomeçar, ou tentar um tópico diferente.</div>
+      </div>
+      <div class="saiba-qa-item" onclick="toggleQA(this)">
+        <div class="saiba-qa-q">Posso usar no computador também?</div>
+        <div class="saiba-qa-a">Sim. O app funciona em qualquer navegador — Chrome, Firefox, Edge, Safari — seja no celular ou no computador. Acesse o mesmo link do GitHub Pages em qualquer dispositivo. Lembre-se que a biblioteca e o histórico de leitura ficam salvos por dispositivo.</div>
+      </div>
+      <div class="saiba-qa-item" onclick="toggleQA(this)">
+        <div class="saiba-qa-q">Como adicionar o app à tela inicial do celular?</div>
+        <div class="saiba-qa-a">No iPhone (Safari): toque no ícone de compartilhar → "Adicionar à Tela de Início". No Android (Chrome): toque nos 3 pontinhos → "Adicionar à tela inicial". O app aparecerá como ícone, sem precisar abrir o navegador.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="height:12px"></div>
+</div>
+
 <!-- ── BI ── -->
 <div class="page" id="page-bi">
   <div class="page-header">
@@ -1288,6 +1790,10 @@ background: #fff;
     <button class="nav-btn" id="nav-bi" onclick="showPage('bi')">
       <span class="nav-icon">◈</span>
       <span class="nav-label">Dashboard</span>
+    </button>
+    <button class="nav-btn" id="nav-saiba" onclick="showPage('saiba')">
+      <span class="nav-icon">ℹ</span>
+      <span class="nav-label">Saiba Mais</span>
     </button>
   </div>
 </div>
@@ -2097,6 +2603,13 @@ function closeModal(id) {
 function esc(s) { return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
 
 function jsStr(obj) { return JSON.stringify(obj).replace(/'/g,"&#39;"); }
+
+// ════════════════════════════════════════
+// SAIBA MAIS — FAQ accordion
+// ════════════════════════════════════════
+function toggleQA(el) {
+  el.classList.toggle('open');
+}
 
 // ════════════════════════════════════════
 init();
