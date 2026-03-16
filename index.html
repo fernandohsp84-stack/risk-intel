@@ -159,6 +159,7 @@ transition: background .15s, transform .1s;
 
 .setup-btn:active { transform: scale(.98); }
 .setup-btn:hover { background: var(–accent-hover); }
+.setup-btn:disabled { opacity: 1 !important; cursor: pointer; }
 
 .setup-note {
 margin-top: 16px;
@@ -1622,9 +1623,10 @@ margin-top: 4px;
       Acesse <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>, crie uma conta gratuita e gere uma chave em API Keys.
     </div>
     <label class="setup-label" for="api-key-input">Chave de API</label>
-    <input id="api-key-input" class="setup-input" type="password" placeholder="sk-ant-api03-…" autocomplete="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter')saveKey()"/>
+    <input id="api-key-input" class="setup-input" type="text" placeholder="sk-ant-api03-…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" onkeydown="if(event.key==='Enter')saveKey()" oninput="clearSetupError()"/>
     <button class="setup-btn" onclick="saveKey()">Começar →</button>
     <p class="setup-note">Sua chave é armazenada apenas neste dispositivo e nunca é compartilhada com terceiros.</p>
+    <p class="setup-note" style="margin-top:8px;color:#aeaeb2">Dica: no iPhone, toque no campo e escolha <strong>Colar</strong> para inserir a chave copiada do console.anthropic.com</p>
   </div>
 </div>
 
@@ -2226,7 +2228,8 @@ function getAllSeenTitles() {
 // INIT
 // ════════════════════════════════════════
 function init() {
-  apiKey = localStorage.getItem("ri_key") || "";
+  const rawKey = localStorage.getItem("ri_key") || "";
+  apiKey = rawKey.replace(/[\u200B-\u200D\uFEFF\u00A0\r\n\t]/g, "").trim();
   if (apiKey && apiKey.startsWith("sk-")) { showApp(); }
   else {
     document.getElementById("setup-screen").style.display = "flex";
@@ -2239,11 +2242,39 @@ function init() {
 }
 
 function saveKey() {
-  const k = document.getElementById("api-key-input").value.trim();
-  if (!k || !k.startsWith("sk-")) { alert("Chave inválida. Deve começar com sk-ant…"); return; }
+  // Strip all invisible/non-printable characters including zero-width spaces,
+  // BOM, non-breaking spaces, newlines that Safari may insert on paste
+  const raw = document.getElementById("api-key-input").value;
+  const k = raw.replace(/[\u200B-\u200D\uFEFF\u00A0\r\n\t]/g, "").trim();
+
+  if (!k) {
+    showSetupError("Por favor, cole sua chave de API antes de continuar.");
+    return;
+  }
+  // Accept sk- prefix (Anthropic keys start with sk-ant- but validate loosely)
+  if (!k.startsWith("sk-")) {
+    showSetupError("Chave inválida. A chave deve começar com sk-ant-… — verifique se copiou a chave completa do console.anthropic.com");
+    return;
+  }
   apiKey = k;
   localStorage.setItem("ri_key", k);
   showApp();
+}
+
+function clearSetupError() {
+  const err = document.getElementById("setup-error");
+  if (err) err.textContent = "";
+}
+
+function showSetupError(msg) {
+  let err = document.getElementById("setup-error");
+  if (!err) {
+    err = document.createElement("div");
+    err.id = "setup-error";
+    err.style.cssText = "margin-top:12px;padding:11px 14px;background:rgba(255,59,48,.08);border:1px solid rgba(255,59,48,.25);border-radius:8px;font-size:12px;color:#ff3b30;line-height:1.7;";
+    document.querySelector(".setup-btn").after(err);
+  }
+  err.textContent = msg;
 }
 
 function showApp() {
