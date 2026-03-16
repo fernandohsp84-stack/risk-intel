@@ -146,20 +146,23 @@ box-shadow: 0 0 0 3px rgba(0,113,227,.12);
 .setup-btn {
 width: 100%;
 padding: 14px;
-background: var(–accent);
-color: #fff;
+background: #0071e3;
+color: #ffffff !important;
 border: none;
-border-radius: var(–radius-sm);
-font-family: ‘Inter’, sans-serif;
+border-radius: 8px;
+font-family: ‘Inter’, -apple-system, sans-serif;
 font-weight: 600;
 font-size: 15px;
 cursor: pointer;
-transition: background .15s, transform .1s;
+-webkit-appearance: none;
+appearance: none;
+display: block;
+text-align: center;
+opacity: 1 !important;
+-webkit-opacity: 1 !important;
+touch-action: manipulation;
 }
-
-.setup-btn:active { transform: scale(.98); }
-.setup-btn:hover { background: var(–accent-hover); }
-.setup-btn:disabled { opacity: 1 !important; cursor: pointer; }
+.setup-btn:active { opacity: .85 !important; }
 
 .setup-note {
 margin-top: 16px;
@@ -1623,8 +1626,8 @@ margin-top: 4px;
       Acesse <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>, crie uma conta gratuita e gere uma chave em API Keys.
     </div>
     <label class="setup-label" for="api-key-input">Chave de API</label>
-    <input id="api-key-input" class="setup-input" type="text" placeholder="sk-ant-api03-…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" onkeydown="if(event.key==='Enter')saveKey()" oninput="clearSetupError()"/>
-    <button class="setup-btn" onclick="saveKey()">Começar →</button>
+    <input id="api-key-input" class="setup-input" type="text" placeholder="sk-ant-api03-…" autocomplete="new-password" autocorrect="off" autocapitalize="off" autocomplete="off" spellcheck="false" inputmode="text" onkeydown="if(event.key==='Enter')saveKey()" oninput="clearSetupError()"/>
+    <div class="setup-btn" onclick="saveKey()" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')saveKey()">Começar →</div>
     <p class="setup-note">Sua chave é armazenada apenas neste dispositivo e nunca é compartilhada com terceiros.</p>
     <p class="setup-note" style="margin-top:8px;color:#aeaeb2">Dica: no iPhone, toque no campo e escolha <strong>Colar</strong> para inserir a chave copiada do console.anthropic.com</p>
   </div>
@@ -2229,8 +2232,8 @@ function getAllSeenTitles() {
 // ════════════════════════════════════════
 function init() {
   const rawKey = localStorage.getItem("ri_key") || "";
-  apiKey = rawKey.replace(/[\u200B-\u200D\uFEFF\u00A0\r\n\t]/g, "").trim();
-  if (apiKey && apiKey.startsWith("sk-")) { showApp(); }
+  apiKey = rawKey.replace(/\s/g,"").replace(/[^\x20-\x7E]/g,"").trim();
+  if (apiKey && apiKey.length >= 10) { showApp(); }
   else {
     document.getElementById("setup-screen").style.display = "flex";
     document.getElementById("app-screen").style.display = "none";
@@ -2242,22 +2245,22 @@ function init() {
 }
 
 function saveKey() {
-  // Strip all invisible/non-printable characters including zero-width spaces,
-  // BOM, non-breaking spaces, newlines that Safari may insert on paste
-  const raw = document.getElementById("api-key-input").value;
-  const k = raw.replace(/[\u200B-\u200D\uFEFF\u00A0\r\n\t]/g, "").trim();
+  const raw = document.getElementById("api-key-input").value || "";
+  // Remove all invisible chars iOS/Safari may insert on paste
+  const k = raw.replace(/\s/g,"").replace(/[^\x20-\x7E]/g,"").trim();
 
   if (!k) {
-    showSetupError("Por favor, cole sua chave de API antes de continuar.");
+    showSetupError("Por favor, cole ou digite sua chave de API.");
     return;
   }
-  // Accept sk- prefix (Anthropic keys start with sk-ant- but validate loosely)
-  if (!k.startsWith("sk-")) {
-    showSetupError("Chave inválida. A chave deve começar com sk-ant-… — verifique se copiou a chave completa do console.anthropic.com");
+  if (k.length < 10) {
+    showSetupError("Chave muito curta. Verifique se copiou a chave completa.");
     return;
   }
+  // Store and proceed — we validate against API on first real call
   apiKey = k;
   localStorage.setItem("ri_key", k);
+  clearSetupError();
   showApp();
 }
 
