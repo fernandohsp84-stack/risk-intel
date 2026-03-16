@@ -2238,16 +2238,7 @@ function getAllSeenTitles() {
 // INIT
 // ════════════════════════════════════════
 function init() {
-  apiKey = cleanKey(localStorage.getItem("ri_key") || "");
-  if (apiKey) { showApp(); }
-  else {
-    document.getElementById("setup-screen").style.display = "flex";
-    document.getElementById("app-screen").style.display = "none";
-  }
-  setInterval(() => {
-    document.getElementById("clock").textContent = new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
-  }, 1000);
-  document.getElementById("clock").textContent = new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+  // Handled by bootstrap()
 }
 
 // Clean a key: remove only leading/trailing whitespace and common
@@ -2304,11 +2295,8 @@ function showApp() {
 }
 
 function showSettings() {
-  if (confirm("Deseja trocar a chave de API?")) {
-    localStorage.removeItem("ri_key");
-    document.getElementById("setup-screen").style.display = "flex";
-    document.getElementById("app-screen").style.display = "none";
-    document.getElementById("api-key-input").value = "";
+  if (confirm("Deseja recarregar o aplicativo?")) {
+    location.reload();
   }
 }
 
@@ -3042,12 +3030,8 @@ async function generatePodcast() {
 
   // Build content summary for Claude
   const summary = items.slice(0, 8).map((item, i) =>
-    `Achado ${i+1}: ${item.title}
-Fonte: ${item.source} | Tema: ${THEMES[item.themeId]?.label || item.themeId}
-Conteúdo: ${item.body}`
-  ).join("
-
-");
+    `Achado ${i+1}: ${item.title}\nFonte: ${item.source} | Tema: ${THEMES[item.themeId]?.label || item.themeId}\nConteúdo: ${item.body}`
+  ).join("\n\n");
 
   const today = new Date().toLocaleDateString("pt-BR", { weekday:"long", year:"numeric", month:"long", day:"numeric" });
 
@@ -3306,31 +3290,72 @@ function toggleQA(el) {
 }
 
 // ════════════════════════════════════════
-// BOOTSTRAP — use addEventListener, never rely on inline onclick for iOS
+// BOOTSTRAP
 // ════════════════════════════════════════
 function bootstrap() {
-  // Setup button — touchend + click for maximum iOS compatibility
-  const btn = document.getElementById("setup-submit-btn");
-  if (btn) {
-    const doSave = function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      saveKey();
-    };
-    btn.addEventListener("touchend", doSave, { passive: false });
-    btn.addEventListener("click", doSave);
+  // Start clock
+  setInterval(() => {
+    const el = document.getElementById("clock");
+    if (el) el.textContent = new Date().toLocaleTimeString("pt-BR", { hour:"2-digit", minute:"2-digit" });
+  }, 1000);
+  const el = document.getElementById("clock");
+  if (el) el.textContent = new Date().toLocaleTimeString("pt-BR", { hour:"2-digit", minute:"2-digit" });
+
+  // Check saved key
+  const saved = cleanKey(localStorage.getItem("ri_key") || "");
+  if (saved && saved.length >= 20) {
+    apiKey = saved;
+    showApp();
+    return;
   }
 
-  // Enter key on input
+  // Show setup screen — wire up ALL possible ways to confirm the key
+  const screen = document.getElementById("setup-screen");
+  const app    = document.getElementById("app-screen");
+  if (screen) screen.style.display = "flex";
+  if (app)    app.style.display    = "none";
+
   const inp = document.getElementById("api-key-input");
-  if (inp) {
-    inp.addEventListener("keydown", function(e) {
-      if (e.key === "Enter") { e.preventDefault(); saveKey(); }
-    });
-    inp.addEventListener("input", clearSetupError);
+  const btn = document.getElementById("setup-submit-btn");
+
+  function tryEnter() {
+    const k = cleanKey(inp ? inp.value : "");
+    if (!k || k.length < 20) {
+      showSetupError("Cole a chave completa (começa com sk-ant-)");
+      return;
+    }
+    apiKey = k;
+    localStorage.setItem("ri_key", k);
+    clearSetupError();
+    showApp();
   }
 
-  init();
+  if (inp) {
+    // 1. Blur (leaving the field) — easiest on iOS
+    inp.addEventListener("blur", function() {
+      const k = cleanKey(inp.value);
+      if (k && k.length >= 20) tryEnter();
+    });
+    // 2. Enter key
+    inp.addEventListener("keydown", function(e) {
+      if (e.key === "Enter") { e.preventDefault(); tryEnter(); }
+    });
+    // 3. Input change - auto-submit when key looks complete
+    inp.addEventListener("input", function() {
+      clearSetupError();
+      const k = cleanKey(inp.value);
+      if (k && k.length >= 80) {
+        // Key is long enough - auto submit after short delay
+        setTimeout(tryEnter, 400);
+      }
+    });
+  }
+
+  if (btn) {
+    btn.addEventListener("click",    function(e) { e.preventDefault(); tryEnter(); });
+    btn.addEventListener("touchend", function(e) { e.preventDefault(); tryEnter(); });
+    btn.addEventListener("touchstart", function() {}, { passive: true });
+  }
 }
 
 if (document.readyState === "loading") {
