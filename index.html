@@ -1421,8 +1421,18 @@ line-height: 1.7;
 }
 
 .saiba-tip-text strong { color: var(–text); }
-</style>
 
+.bi-section-label {
+font-size: 11px;
+font-weight: 700;
+color: var(–text-tertiary);
+text-transform: uppercase;
+letter-spacing: .8px;
+margin-bottom: 10px;
+margin-top: 4px;
+}
+
+</style>
 </head>
 <body>
 
@@ -1933,8 +1943,8 @@ const NA_LABELS = {
 const SYS = `Você é especialista sênior em gerenciamento de riscos financeiros bancários no Brasil, com foco em risco de modelo, IA, operacional, mercado, liquidez e risco de terceiros.
 FONTES: BCB, Itaú, Santander, BB, BTG, Nubank, BIS/BCBS, FSB, FEBRABAN, CMN, CVM.
 Retorne APENAS JSON válido sem texto extra:
-{"summary":"análise executiva 2 frases","items":[{"title":"título","body":"análise técnica 2-3 frases com normas e métricas concretas","source":"fonte","sourceCode":"BCB","sourceColor":"#1a6b3a","riskLabel":"label","date":"2025","relevance":"alto","url":"https://url"}]}
-Regras: 6 itens · relevance: alto médio baixo · sourceCode: BCB ITAU SANB BB BTG NU BIS CMN FSB FEBRABAN · inclua refs reais (SR11-7, IFRS9, FRTB, IRRBB, LCR, NSFR, SA-OR, Pilar3, Resoluções BCB) · APENAS JSON`;
+{"summary":"análise executiva 2 frases","items":[{"title":"título","body":"análise técnica 2-3 frases com normas e métricas concretas","source":"fonte","sourceCode":"BCB","sourceColor":"#1a6b3a","riskLabel":"label","date":"2025","relevance":"alto","url":""}]}
+Regras: 6 itens · relevance: alto médio baixo · sourceCode: BCB ITAU SANB BB BTG NU BIS CMN FSB FEBRABAN · inclua refs reais (SR11-7, IFRS9, FRTB, IRRBB, LCR, NSFR, SA-OR, Pilar3, Resoluções BCB) · DEIXE url VAZIO - não invente URLs · APENAS JSON`;
 
 // ════════════════════════════════════════
 // ESTADO
@@ -2192,6 +2202,20 @@ function renderError(msg, T) {
     </div>`;
 }
 
+// Official source homepages — used instead of AI-hallucinated URLs
+const SOURCE_URLS = {
+  BCB:      "https://www.bcb.gov.br",
+  ITAU:     "https://www.itau.com.br/relacoes-com-investidores",
+  SANB:     "https://www.santander.com.br/ri",
+  BB:       "https://ri.bb.com.br",
+  BTG:      "https://www.btgpactual.com/ri",
+  NU:       "https://ir.nu",
+  BIS:      "https://www.bis.org",
+  CMN:      "https://www.bcb.gov.br/estabilidadefinanceira/buscanormas",
+  FSB:      "https://www.fsb.org",
+  FEBRABAN: "https://portal.febraban.org.br",
+};
+
 function renderResults(parsed, T) {
   const items = parsed.items || [], summary = parsed.summary || "";
   const savedTitles = getSavedTitles();
@@ -2246,7 +2270,7 @@ function renderResults(parsed, T) {
           <div class="meta-dot"></div>
           <span class="meta-item">${esc(item.date)}</span>
         </div>
-        ${item.url ? `<a href="${item.url}" target="_blank" rel="noopener" class="source-link">Ver fonte ↗</a>` : ""}
+        <a href="${SOURCE_URLS[item.sourceCode] || 'https://www.bcb.gov.br'}" target="_blank" rel="noopener" class="source-link">Ver fonte ↗</a>
       </div>
       <div class="card-actions">
         <button class="action-btn read-btn ${read?"read-active":""}" id="readbtn_${cid}" onclick='toggleRead(${jsStr(item.title)},"${cid}")'>
@@ -2344,15 +2368,41 @@ function confirmNA() {
   const ctx = pendingNAContext;
 
   if (ctx === "card") {
-    const { cid } = pendingNATarget;
+    const { cid, item } = pendingNATarget;
+
+    // Visual update on card
     document.getElementById("good_" + cid)?.classList.remove("active");
     const badBtn = document.getElementById("bad_" + cid);
-    if (badBtn) {
-      badBtn.classList.add("active");
-      badBtn.title = NA_LABELS[selectedNA];
+    if (badBtn) { badBtn.classList.add("active"); badBtn.title = NA_LABELS[selectedNA]; }
+
+    // Auto-save to library so NA is tracked in BI (if not already saved)
+    if (!isSaved(item)) {
+      addToLib(item, theme);
+      const saveBtn = document.getElementById("savebtn_" + cid);
+      if (saveBtn) { saveBtn.textContent = "✓ Salvo"; saveBtn.classList.add("saved"); }
     }
+    // Rate as NA in library
+    const lib = getLib();
+    const entry = lib.find(i => i.title === item.title && i.source === item.source);
+    if (entry) { rateLibItem(entry.id, "bad", selectedNA); }
+
+    // Also mark as read (read + NA both tracked)
+    markAsRead(item.title);
+    const readBtn = document.getElementById("readbtn_" + cid);
+    const card = document.getElementById(cid);
+    if (readBtn) { readBtn.classList.add("read-active"); readBtn.textContent = "✓ Lida"; }
+    if (card) {
+      card.classList.add("is-read");
+      const dot = card.querySelector(".unread-dot");
+      if (dot) dot.remove();
+    }
+
   } else if (ctx === "lib") {
     rateLibItem(pendingNATarget, "bad", selectedNA);
+    // Also mark as read in read-set
+    const lib = getLib();
+    const entry = lib.find(i => i.id === pendingNATarget);
+    if (entry) markAsRead(entry.title);
     renderLibrary();
   }
 
@@ -2421,6 +2471,7 @@ function renderLibrary() {
           ${ratingTag}
         </div>
         <div class="lib-actions">
+          <a href="${SOURCE_URLS[item.sourceCode] || 'https://www.bcb.gov.br'}" target="_blank" rel="noopener" class="lib-email-btn" style="text-decoration:none">↗</a>
           <button class="lib-rate-btn ${item.rating==="good"?"active-good":""}" onclick="rateLibGood('${item.id}')">👍</button>
           <button class="lib-rate-btn ${item.rating==="bad"?"active-bad":""}" onclick="openNA('lib','${item.id}')">👎</button>
           <button class="lib-email-btn" onclick='openEmailModal(${jsStr(item)})'>✉</button>
@@ -2515,13 +2566,34 @@ function renderBI() {
   const total = lib.length;
   const good = lib.filter(i => i.rating === "good").length;
   const bad = lib.filter(i => i.rating === "bad").length;
-  const readCount = lib.filter(i => getReadSet().has(i.title)).length;
+  // readCount = items in library that are also in the read set
+  const readSet_bi = getReadSet();
+  const readCount = lib.filter(i => readSet_bi.has(i.title)).length;
+  // totalReadEver = all unique titles ever marked as read (including non-saved)
+  const totalReadEver = readSet_bi.size;
+  // Quality score: % of rated items that are assertive (excluding NA)
+  const rated = good + bad;
+  const qualityScore = rated > 0 ? Math.round((good / rated) * 100) : null;
+  // NA rate: % of saved items that are NA
+  const naRate = total > 0 ? Math.round((bad / total) * 100) : 0;
 
   const byTheme = {}; Object.keys(THEMES).forEach(k => { byTheme[k] = 0; });
   lib.forEach(i => { if (i.themeId) byTheme[i.themeId] = (byTheme[i.themeId] || 0) + 1; });
 
+  // NA breakdown by theme
+  const byThemeNA = {}; Object.keys(THEMES).forEach(k => { byThemeNA[k] = 0; });
+  lib.filter(i => i.rating === "bad").forEach(i => {
+    if (i.themeId) byThemeNA[i.themeId] = (byThemeNA[i.themeId] || 0) + 1;
+  });
+
   const bySrc = {};
   lib.forEach(i => { bySrc[i.sourceCode] = (bySrc[i.sourceCode] || 0) + 1; });
+
+  // NA by source
+  const bySrcNA = {};
+  lib.filter(i => i.rating === "bad").forEach(i => {
+    bySrcNA[i.sourceCode] = (bySrcNA[i.sourceCode] || 0) + 1;
+  });
 
   const byRel = { alto:0, médio:0, baixo:0 };
   lib.forEach(i => { if (i.relevance) byRel[i.relevance] = (byRel[i.relevance] || 0) + 1; });
@@ -2536,6 +2608,13 @@ function renderBI() {
   lib.forEach(i => {
     const m = new Date(i.savedAt).toLocaleDateString("pt-BR", { month:"short", year:"2-digit" });
     byMonth[m] = (byMonth[m] || 0) + 1;
+  });
+
+  // Read by month
+  const byMonthRead = {};
+  lib.filter(i => readSet_bi.has(i.title)).forEach(i => {
+    const m = new Date(i.savedAt).toLocaleDateString("pt-BR", { month:"short", year:"2-digit" });
+    byMonthRead[m] = (byMonthRead[m] || 0) + 1;
   });
 
   const lightGrey = "#f5f5f7";
@@ -2556,23 +2635,37 @@ function renderBI() {
     plugins: { legend: { position: "bottom", labels: { color: textColor, font: { size: 11, family: "'Inter',sans-serif" }, boxWidth: 10, padding: 14 } } },
   };
 
+  const qualityColor = qualityScore === null ? "#aeaeb2" : qualityScore >= 70 ? "#34c759" : qualityScore >= 40 ? "#ff9500" : "#ff3b30";
+  const qualityLabel = qualityScore === null ? "—" : qualityScore + "%";
+
   el.innerHTML = `
+    <div class="bi-section-label">Resumo Geral</div>
     <div class="stats-row">
       <div class="stat-card"><div class="stat-val" style="color:#34c759">${total}</div><div class="stat-label">Salvos</div></div>
       <div class="stat-card"><div class="stat-val" style="color:#007aff">${good}</div><div class="stat-label">Assertivos</div></div>
       <div class="stat-card"><div class="stat-val" style="color:#ff3b30">${bad}</div><div class="stat-label">Não Aplic.</div></div>
     </div>
     <div class="stats-row" style="margin-top:-4px">
-      <div class="stat-card"><div class="stat-val" style="color:#007aff">${readCount}</div><div class="stat-label">Lidas</div></div>
-      <div class="stat-card"><div class="stat-val" style="color:#aeaeb2">${total-readCount}</div><div class="stat-label">Não Lidas</div></div>
-      <div class="stat-card"><div class="stat-val" style="color:#6e6e73">${total > 0 ? Math.round(readCount/total*100) : 0}%</div><div class="stat-label">Taxa Leitura</div></div>
+      <div class="stat-card" title="Itens na biblioteca já marcados como lidos"><div class="stat-val" style="color:#5ac8fa">${readCount}</div><div class="stat-label">Lidas (salvas)</div></div>
+      <div class="stat-card" title="Total de títulos únicos marcados como lidos (incluindo não salvos)"><div class="stat-val" style="color:#007aff">${totalReadEver}</div><div class="stat-label">Lidas (total)</div></div>
+      <div class="stat-card" title="Percentual de itens avaliados que são assertivos — indicador de qualidade da IA"><div class="stat-val" style="color:${qualityColor}">${qualityLabel}</div><div class="stat-label">Qualidade IA</div></div>
     </div>
+    <div class="stats-row" style="margin-top:-4px">
+      <div class="stat-card"><div class="stat-val" style="color:#ff3b30">${naRate}%</div><div class="stat-label">Taxa NA</div></div>
+      <div class="stat-card"><div class="stat-val" style="color:#6e6e73">${total > 0 ? Math.round(readCount/total*100) : 0}%</div><div class="stat-label">Taxa Leitura</div></div>
+      <div class="stat-card"><div class="stat-val" style="color:#6e6e73">${total - good - bad}</div><div class="stat-label">Não Avaliados</div></div>
+    </div>
+    <div class="bi-section-label" style="margin-top:8px">Distribuição</div>
     <div class="chart-card"><div class="chart-title">Achados por Tema de Risco</div><div class="chart-wrap"><canvas id="ct-theme"></canvas></div></div>
     <div class="chart-card"><div class="chart-title">Achados por Fonte</div><div class="chart-wrap"><canvas id="ct-src"></canvas></div></div>
     <div class="chart-card"><div class="chart-title">Nível de Relevância</div><div class="chart-wrap"><canvas id="ct-rel"></canvas></div></div>
-    <div class="chart-card"><div class="chart-title">Assertividade</div><div class="chart-wrap"><canvas id="ct-rate"></canvas></div></div>
-    <div class="chart-card"><div class="chart-title">Motivo Não Aplicável</div><div class="chart-wrap"><canvas id="ct-na"></canvas></div></div>
-    <div class="chart-card"><div class="chart-title">Achados Salvos por Período</div><div class="chart-wrap"><canvas id="ct-time"></canvas></div></div>
+    <div class="bi-section-label" style="margin-top:8px">Qualidade & Leitura</div>
+    <div class="chart-card"><div class="chart-title">Assertividade dos Achados</div><div class="chart-wrap"><canvas id="ct-rate"></canvas></div></div>
+    <div class="chart-card"><div class="chart-title">Não Aplicáveis — Motivo</div><div class="chart-wrap"><canvas id="ct-na"></canvas></div></div>
+    <div class="chart-card"><div class="chart-title">Não Aplicáveis por Tema</div><div class="chart-wrap"><canvas id="ct-na-theme"></canvas></div></div>
+    <div class="chart-card"><div class="chart-title">Não Aplicáveis por Fonte</div><div class="chart-wrap"><canvas id="ct-na-src"></canvas></div></div>
+    <div class="bi-section-label" style="margin-top:8px">Evolução Temporal</div>
+    <div class="chart-card"><div class="chart-title">Achados Salvos vs Lidos por Período</div><div class="chart-wrap" style="height:220px"><canvas id="ct-time"></canvas></div></div>
   `;
 
   const themeKeys = Object.keys(THEMES);
@@ -2587,8 +2680,28 @@ function renderBI() {
 
   biCharts.push(new Chart(document.getElementById("ct-na"), { type:"doughnut", data:{ labels:["Conteúdo sem aderência","Link não se aplica","Conteúdo e link","Sem motivo"], datasets:[{ data:[byNA.conteudo,byNA.link,byNA.ambos,byNA.sem_motivo], backgroundColor:["rgba(255,59,48,.7)","rgba(255,149,0,.7)","rgba(88,86,214,.7)","rgba(174,174,178,.5)"], borderColor:["#ff3b30","#ff9500","#5856d6","#aeaeb2"], borderWidth:2 }] }, options:pieOpts }));
 
+  // NA by theme
+  const naThemeKeys = themeKeys.filter(k => byThemeNA[k] > 0);
+  if (naThemeKeys.length > 0) {
+    biCharts.push(new Chart(document.getElementById("ct-na-theme"), { type:"bar", data:{ labels:naThemeKeys.map(k=>THEMES[k].label), datasets:[{ label:"Não Aplicáveis", data:naThemeKeys.map(k=>byThemeNA[k]), backgroundColor:naThemeKeys.map(k=>THEMES[k].accent+"99"), borderColor:naThemeKeys.map(k=>THEMES[k].accent), borderWidth:1.5, borderRadius:4 }] }, options:{ ...baseOpts, plugins:{ legend:{ display:false } } } }));
+  } else {
+    document.getElementById("ct-na-theme").parentElement.parentElement.innerHTML += '<div style="text-align:center;font-size:12px;color:#aeaeb2;padding:20px 0">Sem dados de NA por tema ainda</div>';
+  }
+
+  // NA by source
+  const naSrcKeys = Object.keys(bySrcNA).sort((a,b)=>bySrcNA[b]-bySrcNA[a]);
+  if (naSrcKeys.length > 0) {
+    biCharts.push(new Chart(document.getElementById("ct-na-src"), { type:"bar", data:{ labels:naSrcKeys, datasets:[{ label:"Não Aplicáveis", data:naSrcKeys.map(s=>bySrcNA[s]), backgroundColor:naSrcKeys.map(s=>(SOURCE_COLORS[s]||"#888")+"99"), borderColor:naSrcKeys.map(s=>SOURCE_COLORS[s]||"#888"), borderWidth:1.5, borderRadius:4 }] }, options:{ ...baseOpts, plugins:{ legend:{ display:false } } } }));
+  } else {
+    document.getElementById("ct-na-src").parentElement.parentElement.innerHTML += '<div style="text-align:center;font-size:12px;color:#aeaeb2;padding:20px 0">Sem dados de NA por fonte ainda</div>';
+  }
+
+  // Time chart — saved vs read
   const timeLabels = Object.keys(byMonth).slice(-8);
-  biCharts.push(new Chart(document.getElementById("ct-time"), { type:"line", data:{ labels:timeLabels, datasets:[{ label:"Achados", data:timeLabels.map(m=>byMonth[m]||0), borderColor:"#007aff", backgroundColor:"rgba(0,122,255,.08)", borderWidth:2.5, pointBackgroundColor:"#007aff", pointRadius:4, tension:.35, fill:true }] }, options:baseOpts }));
+  biCharts.push(new Chart(document.getElementById("ct-time"), { type:"line", data:{ labels:timeLabels, datasets:[
+    { label:"Salvos", data:timeLabels.map(m=>byMonth[m]||0), borderColor:"#007aff", backgroundColor:"rgba(0,122,255,.08)", borderWidth:2.5, pointBackgroundColor:"#007aff", pointRadius:4, tension:.35, fill:true },
+    { label:"Lidos", data:timeLabels.map(m=>byMonthRead[m]||0), borderColor:"#34c759", backgroundColor:"rgba(52,199,89,.06)", borderWidth:2, pointBackgroundColor:"#34c759", pointRadius:3, tension:.35, fill:true }
+  ] }, options:baseOpts }));
 }
 
 // ════════════════════════════════════════
