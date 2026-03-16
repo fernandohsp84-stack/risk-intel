@@ -146,23 +146,30 @@ box-shadow: 0 0 0 3px rgba(0,113,227,.12);
 .setup-btn {
 width: 100%;
 padding: 14px;
-background: #0071e3;
+background: #0071e3 !important;
 color: #ffffff !important;
-border: none;
+border: none !important;
 border-radius: 8px;
-font-family: ‘Inter’, -apple-system, sans-serif;
+font-family: -apple-system, ‘Inter’, sans-serif;
 font-weight: 600;
-font-size: 15px;
+font-size: 17px;
 cursor: pointer;
--webkit-appearance: none;
-appearance: none;
+-webkit-appearance: none !important;
+appearance: none !important;
 display: block;
 text-align: center;
 opacity: 1 !important;
 -webkit-opacity: 1 !important;
 touch-action: manipulation;
+box-shadow: none;
+outline: none;
+margin: 0;
+box-sizing: border-box;
+-webkit-tap-highlight-color: rgba(0,0,0,0.1);
+user-select: none;
+-webkit-user-select: none;
 }
-.setup-btn:active { opacity: .85 !important; }
+.setup-btn:active, .setup-btn:focus { background: #005bb5 !important; outline: none; }
 
 .setup-note {
 margin-top: 16px;
@@ -1627,7 +1634,7 @@ margin-top: 4px;
     </div>
     <label class="setup-label" for="api-key-input">Chave de API</label>
     <input id="api-key-input" class="setup-input" type="text" placeholder="sk-ant-api03-…" autocomplete="new-password" autocorrect="off" autocapitalize="off" autocomplete="off" spellcheck="false" inputmode="text" onkeydown="if(event.key==='Enter')saveKey()" oninput="clearSetupError()"/>
-    <div class="setup-btn" onclick="saveKey()" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')saveKey()">Começar →</div>
+    <button class="setup-btn" onclick="saveKey()" type="button">Começar →</button>
     <p class="setup-note">Sua chave é armazenada apenas neste dispositivo e nunca é compartilhada com terceiros.</p>
     <p class="setup-note" style="margin-top:8px;color:#aeaeb2">Dica: no iPhone, toque no campo e escolha <strong>Colar</strong> para inserir a chave copiada do console.anthropic.com</p>
   </div>
