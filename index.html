@@ -2170,11 +2170,67 @@ const NA_LABELS = {
   ambos:    "Conteúdo e link",
 };
 
-const SYS = `Você é especialista sênior em gerenciamento de riscos financeiros bancários no Brasil, com foco em risco de modelo, IA, operacional, mercado, liquidez e risco de terceiros.
-FONTES: BCB, Itaú, Santander, BB, BTG, Nubank, BIS/BCBS, FSB, FEBRABAN, CMN, CVM.
-Retorne APENAS JSON válido sem texto extra:
-{"summary":"análise executiva 2 frases","items":[{"title":"título","body":"análise técnica 2-3 frases com normas e métricas concretas","source":"fonte","sourceCode":"BCB","sourceColor":"#1a6b3a","riskLabel":"label","date":"2025","relevance":"alto","url":""}]}
-Regras: 6 itens · relevance: alto médio baixo · sourceCode: BCB ITAU SANB BB BTG NU BIS CMN FSB FEBRABAN · inclua refs reais (SR11-7, IFRS9, FRTB, IRRBB, LCR, NSFR, SA-OR, Pilar3, Resoluções BCB) · DEIXE url VAZIO - não invente URLs · APENAS JSON`;
+// ══════════════════════════════════════════════════════════════════
+// PROMPTS — 2-layer pipeline: Research → Critical Review
+// ══════════════════════════════════════════════════════════════════
+
+// Layer 1: Deep research prompt — domain-expert structured extraction
+const SYS_RESEARCH = `Você é um especialista em gestão de riscos financeiros com 20 anos de experiência em grandes bancos brasileiros e profundo conhecimento das regulações do BCB, BIS, BCBS, FSB e CMN. Você conhece intimamente os relatórios de Pilar 3, Relatório de Estabilidade Financeira do BCB, documentos do Comitê de Basileia, publicações da FEBRABAN e os relatórios anuais de risco do Itaú, Santander, BB, BTG e Nubank.
+
+INSTRUÇÕES DE PESQUISA:
+Ao receber uma consulta, realize uma análise profunda seguindo estas etapas:
+
+1. IDENTIFICAÇÃO DE FONTES PRIMÁRIAS: Identifique quais documentos oficiais são mais relevantes para o tema (ex: para IRRBB → Resolução BCB 4.557/2017 + BCBS d368; para risco de modelo → SR 11-7 Fed + BCBS princípios 2023; para LCR → Circular BCB 3.749/2015).
+
+2. EXTRAÇÃO DE DADOS CONCRETOS: Para cada achado, extraia:
+   - Número exato da norma/resolução/circular quando aplicável
+   - Métricas numéricas concretas (percentuais, limites, datas de implementação)
+   - Nome do documento/relatório específico (ex: "REF 2º semestre 2024", "Pilar 3 Itaú 2023")
+   - Período de referência preciso
+
+3. CONTEXTUALIZAÇÃO PARA O MERCADO BRASILEIRO: Conecte regulação internacional com implementação local pelo BCB.
+
+4. PROFUNDIDADE ANALÍTICA: Não se limite à superfície — acesse o conteúdo de subseções relevantes de cada fonte (ex: em REF do BCB, vá além do sumário para as seções de estabilidade sistêmica, crédito, liquidez, etc.).
+
+FONTES POR TEMA DE RISCO:
+- Risco de Modelo: SR 11-7 (Fed/OCC), BCBS Working Paper 37, Resolução CMN 4.557/2017, Pilar 3 dos bancos
+- Risco de IA: FSB 2023 AI in Finance, BCBS 2022 Supervisory Principles, BCB Comunicado 33.455
+- Risco Operacional: SA-OR Basileia IV, Circular BCB 3.983/2020, Resoluções BCB 4.557 e 4.968
+- Risco de Mercado: FRTB (BCBS d457), Circular BCB 3.645/2013, IRRBB (BCBS d368), Resolução BCB 4.557
+- Risco de Liquidez: LCR Circular BCB 3.749/2015, NSFR Resolução CMN 4.616/2017, REF BCB
+- Risco de Terceiros: Resolução BCB 4.752/2019, Resolução CMN 4.557, DORA (referência internacional)
+
+Retorne APENAS este JSON válido (sem texto extra, sem markdown):
+{"summary":"síntese executiva precisa de 2 frases com dados concretos","items":[{"title":"título técnico preciso","body":"análise aprofundada com: (1) referência normativa exata, (2) dado ou métrica concreta, (3) implicação prática para o banco. Mínimo 3 frases.","source":"nome completo da fonte","sourceCode":"BCB","riskLabel":"label do risco","date":"período exato (ex: Jan 2025, Q4 2024, 2024)","relevance":"alto","confidence":"alto","normRef":"Res. BCB 4.557/2017 art.3","metric":"ex: LCR mínimo 100%, ou NPL 3,2%, ou capital mínimo 8%"}]}
+
+Regras obrigatórias:
+- confidence: "alto" (dado verificável em fonte primária), "médio" (inferível com base em contexto regulatório), "baixo" (estimativa analítica)
+- relevance: alto médio baixo
+- sourceCode: BCB ITAU SANB BB BTG NU BIS CMN FSB FEBRABAN
+- normRef: referência normativa específica quando existir (deixe vazio se não houver)
+- metric: métrica ou número concreto quando existir (deixe vazio se não houver)
+- url: SEMPRE vazio — não invente URLs
+- Retorne entre 5 e 7 itens
+- APENAS JSON puro`;
+
+// Layer 2: Critical review prompt — fact-check and quality filter
+const SYS_REVIEW = `Você é um revisor crítico especializado em regulação financeira brasileira e internacional. Sua função é revisar um conjunto de achados de pesquisa sobre riscos financeiros e:
+
+1. VERIFICAR PRECISÃO: Confirme se referências normativas (números de resoluções, circulares, datas) estão corretas com base no seu conhecimento.
+2. IDENTIFICAR IMPRECISÕES: Se uma referência normativa estiver incorreta ou imprecisa, corrija ou remova o item.
+3. AVALIAR RELEVÂNCIA: Descarte itens que sejam muito genéricos, óbvios ou sem valor analítico para um gestor nacional de banco.
+4. ENRIQUECER: Quando possível, adicione contexto adicional que aumente o valor do achado.
+5. AJUSTAR CONFIANÇA: Se um item contiver afirmação que você não consegue confirmar, rebaixe confidence para "médio" ou "baixo".
+
+CRITÉRIOS DE QUALIDADE:
+- Alto valor: achado específico, com norma/métrica real, implicação clara para gestão
+- Médio valor: achado relevante mas sem especificidade suficiente
+- Baixo valor (remover): afirmação genérica sem base normativa, repetição óbvia, sem relevância prática
+
+Receba o JSON de pesquisa e retorne um JSON revisado e melhorado no MESMO formato:
+{"summary":"síntese revisada e aprimorada","items":[...itens revisados, corrigidos e filtrados...]}
+
+Regras: mantenha entre 4 e 6 itens (remova os de menor qualidade) · corrija normRef quando incorreto · ajuste confidence adequadamente · APENAS JSON puro`;
 
 // ════════════════════════════════════════
 // ESTADO
@@ -2379,6 +2435,54 @@ function search() {
   if (q) doSearch(q);
 }
 
+// JSON parser — tries multiple strategies
+function parseJSON(text) {
+  const strategies = [
+    () => JSON.parse(text.trim()),
+    () => JSON.parse(text.replace(/^```(?:json)?\s*/i,"").replace(/\s*```\s*$/i,"").trim()),
+    () => {
+      let d=0,s=-1,e=-1;
+      for(let i=0;i<text.length;i++){
+        if(text[i]==="{"){if(d===0)s=i;d++;}
+        else if(text[i]==="}"){d--;if(d===0){e=i;break;}}
+      }
+      if(s<0||e<0)throw new Error("no JSON");
+      return JSON.parse(text.slice(s,e+1));
+    },
+  ];
+  for(const fn of strategies){
+    try{ const r=fn(); if(r?.items?.length) return r; }catch(_){}
+  }
+  return null;
+}
+
+// Single API call helper
+async function callClaude(systemPrompt, userContent, model="claude-haiku-4-5-20251001", maxTokens=4000) {
+  const res = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": apiKey,
+      "anthropic-version": "2023-06-01",
+      "anthropic-dangerous-direct-browser-access": "true"
+    },
+    body: JSON.stringify({
+      model,
+      max_tokens: maxTokens,
+      system: systemPrompt,
+      messages: [{ role: "user", content: userContent }]
+    })
+  });
+  if (!res.ok) {
+    const e = await res.json().catch(() => ({}));
+    throw new Error(e.error?.message || "HTTP " + res.status);
+  }
+  const data = await res.json();
+  if (data.type === "error") throw new Error(data.error?.message || "Erro da API");
+  if (!data.content?.length) throw new Error("Resposta vazia");
+  return data.content.filter(b => b.type === "text").map(b => b.text).join("");
+}
+
 async function doSearch(q) {
   if (!q || loading) return;
   lastQ = q; loading = true;
@@ -2387,32 +2491,42 @@ async function doSearch(q) {
   btn.disabled = true; btn.textContent = "…";
 
   const seen = Array.from(getAllSeenTitles()).slice(0, 30);
-  const excl = seen.length ? "\n\nNÃO retorne títulos similares ou idênticos aos que o usuário já viu ou salvou:\n" + seen.map(t => "- " + t).join("\n") : "";
+  const excl = seen.length ? "\nEVITE títulos similares aos já vistos:\n" + seen.map(t => "- " + t).join("\n") : "";
 
-  setLoading(T);
+  // Show step 1 loading
+  setLoadingStep(T, 1);
 
   try {
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "x-api-key": apiKey, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" },
-      body: JSON.stringify({ model: "claude-haiku-4-5-20251001", max_tokens: 3000, system: SYS + excl, messages: [{ role: "user", content: "Tema: " + T.label + "\nConsulta: " + q }] }),
-    });
+    // ── LAYER 1: Deep Research ──────────────────────────────────
+    const userMsg1 = `Tema de risco: ${T.label}
+Consulta específica: ${q}${excl}
 
-    if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.error?.message || "HTTP " + res.status); }
-    const data = await res.json();
-    if (data.type === "error") throw new Error(data.error?.message || "Erro da API");
-    if (!data.content?.length) throw new Error("Resposta vazia");
+Realizar pesquisa profunda conforme instruções.`;
+    const raw1 = await callClaude(SYS_RESEARCH, userMsg1, "claude-haiku-4-5-20251001", 4000);
+    const parsed1 = parseJSON(raw1);
 
-    const text = data.content.filter(b => b.type === "text").map(b => b.text).join("");
-    let parsed = null;
-    for (const fn of [
-      () => JSON.parse(text.trim()),
-      () => JSON.parse(text.replace(/^```(?:json)?\s*/i, "").replace(/\s*```\s*$/i, "").trim()),
-      () => { let d=0,s=-1,e=-1; for(let i=0;i<text.length;i++){if(text[i]==="{"){if(d===0)s=i;d++;}else if(text[i]==="}"){d--;if(d===0){e=i;break;}}} if(s<0||e<0)throw 0; return JSON.parse(text.slice(s,e+1)); },
-    ]) { try { parsed = fn(); if (parsed?.items?.length) break; } catch(_){} }
+    if (!parsed1?.items?.length) throw new Error("Pesquisa não retornou dados estruturados.");
 
-    if (!parsed?.items?.length) throw new Error("Não foi possível interpretar a resposta.");
-    renderResults(parsed, T);
+    // Show step 2 loading
+    setLoadingStep(T, 2);
+
+    // ── LAYER 2: Critical Review ────────────────────────────────
+    const userMsg2 = `Revise criticamente estes achados sobre "${T.label}" — consulta: "${q}":
+
+${JSON.stringify(parsed1)}`;
+    let finalParsed = parsed1; // fallback if review fails
+    try {
+      const raw2 = await callClaude(SYS_REVIEW, userMsg2, "claude-haiku-4-5-20251001", 3000);
+      const parsed2 = parseJSON(raw2);
+      if (parsed2?.items?.length) {
+        finalParsed = parsed2;
+      }
+    } catch(reviewErr) {
+      console.warn("Review layer failed, using research output:", reviewErr.message);
+    }
+
+    renderResults(finalParsed, T);
+
   } catch (err) {
     renderError(err.message, T);
   }
@@ -2425,11 +2539,23 @@ async function doSearch(q) {
 // ════════════════════════════════════════
 // RENDER RESULTADOS
 // ════════════════════════════════════════
-function setLoading(T) {
+function setLoading(T) { setLoadingStep(T, 1); }
+
+function setLoadingStep(T, step) {
+  const steps = [
+    { label: "Pesquisando fontes primárias", detail: "BCB · BIS · Pilar 3 · Normas" },
+    { label: "Revisão crítica do conteúdo",  detail: "Verificando precisão e relevância" },
+  ];
+  const s = steps[step - 1] || steps[0];
+  const pct = step === 1 ? 40 : 85;
   document.getElementById("results-area").innerHTML = `
     <div class="loading-box">
-      <div class="spinner"></div>
-      <div class="loading-label">Consultando fontes</div>
+      <div class="spinner" style="border-top-color:${T.accent}"></div>
+      <div class="loading-label">${s.label}</div>
+      <div style="font-size:11px;color:var(--text-tertiary);margin-bottom:14px">${s.detail}</div>
+      <div style="width:200px;height:3px;background:var(--border);border-radius:2px;margin:0 auto 14px;overflow:hidden">
+        <div style="height:100%;width:${pct}%;background:${T.accent};border-radius:2px;transition:width 0.5s"></div>
+      </div>
       <div class="source-chips">
         ${["BCB","Itaú","BB","BTG","Nubank","BIS","FSB"].map((s,i)=>`<span class="source-chip-load" style="animation-delay:${i*.15}s">${s}</span>`).join("")}
       </div>
@@ -2510,6 +2636,14 @@ function renderResults(parsed, T) {
     const read = readSet.has(item.title);
     const cid = "c" + i + "_" + Date.now();
 
+    // Confidence badge
+    const confStyle = {
+      alto:  { bg:"rgba(52,199,89,.1)",   text:"#34c759", icon:"✓" },
+      médio: { bg:"rgba(255,149,0,.1)",   text:"#ff9500", icon:"~" },
+      baixo: { bg:"rgba(174,174,178,.1)", text:"#aeaeb2", icon:"?" },
+    };
+    const cf = confStyle[item.confidence] || confStyle["médio"];
+
     html += `
     <div class="card ${read?"is-read":""}" id="${cid}" style="border-top-color:${T.accent};animation-delay:${i*60}ms">
       <div class="card-top">
@@ -2517,9 +2651,15 @@ function renderResults(parsed, T) {
         <div class="card-badges">
           <span class="source-badge" style="background:${sc}">${esc(item.sourceCode)}</span>
           ${item.relevance ? `<span class="rel-badge" style="background:${rs.bg};color:${rs.text};border:1px solid ${rs.border}">${esc(item.relevance)}</span>` : ""}
+          <span style="padding:2px 6px;border-radius:4px;font-size:9px;font-weight:700;background:${cf.bg};color:${cf.text}" title="Confiabilidade do dado: ${item.confidence||'médio'}">${cf.icon} ${esc(item.confidence||"médio")}</span>
         </div>
       </div>
       <div class="card-body">${esc(item.body)}</div>
+      ${(item.normRef||item.metric) ? `
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">
+        ${item.normRef ? `<span style="padding:3px 9px;background:rgba(0,113,227,.07);border:1px solid rgba(0,113,227,.15);border-radius:5px;font-size:10px;font-weight:600;color:#0071e3">📋 ${esc(item.normRef)}</span>` : ""}
+        ${item.metric  ? `<span style="padding:3px 9px;background:rgba(52,199,89,.07);border:1px solid rgba(52,199,89,.15);border-radius:5px;font-size:10px;font-weight:600;color:#34c759">📊 ${esc(item.metric)}</span>`  : ""}
+      </div>` : ""}
       <div class="card-footer">
         <div class="card-meta">
           <span class="meta-item">${esc(item.source)}</span>
