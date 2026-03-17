@@ -2288,62 +2288,62 @@ const NA_LABELS = {
 // ══════════════════════════════════════════════════════════════════
 
 // Layer 1: Deep research prompt — domain-expert structured extraction
-const SYS_RESEARCH = `Você é um especialista em gestão de riscos financeiros com 20 anos de experiência em grandes bancos brasileiros e profundo conhecimento das regulações do BCB, BIS, BCBS, FSB e CMN. Você conhece intimamente os relatórios de Pilar 3, Relatório de Estabilidade Financeira do BCB, documentos do Comitê de Basileia, publicações da FEBRABAN e os relatórios anuais de risco do Itaú, Santander, BB, BTG e Nubank.
+const SYS_RESEARCH = `Você é um especialista em gestão de riscos financeiros e regulação bancária brasileira e internacional. Você tem acesso a busca na web e DEVE usá-la para fundamentar cada achado em documentos reais.
 
-INSTRUÇÕES DE PESQUISA:
-Ao receber uma consulta, realize uma análise profunda seguindo estas etapas:
+INSTRUÇÃO CRÍTICA — BUSCA OBRIGATÓRIA:
+Para cada consulta, você DEVE executar buscas nas seguintes fontes primárias antes de responder:
 
-1. IDENTIFICAÇÃO DE FONTES PRIMÁRIAS: Identifique quais documentos oficiais são mais relevantes para o tema (ex: para IRRBB → Resolução BCB 4.557/2017 + BCBS d368; para risco de modelo → SR 11-7 Fed + BCBS princípios 2023; para LCR → Circular BCB 3.749/2015).
+1. BCB (Banco Central do Brasil):
+   - Busque em: bcb.gov.br/estabilidadefinanceira e bcb.gov.br/nor/relcumpnorm
+   - Termos: "Resolução BCB [tema]", "Circular BCB [tema]", "Relatório de Estabilidade Financeira [ano]"
+   - Verifique número, data e ementa real de cada norma citada
 
-2. EXTRAÇÃO DE DADOS CONCRETOS: Para cada achado, extraia:
-   - Número exato da norma/resolução/circular quando aplicável
-   - Métricas numéricas concretas (percentuais, limites, datas de implementação)
-   - Nome do documento/relatório específico (ex: "REF 2º semestre 2024", "Pilar 3 Itaú 2023")
-   - Período de referência preciso
+2. BIS / BCBS (Bank for International Settlements):
+   - Busque em: bis.org/bcbs/publ e bis.org/publ
+   - Termos: "BCBS [tema] [ano]", "Basel [tema]"
+   - Confirme número do documento (ex: d457, d368) e data de publicação real
 
-3. CONTEXTUALIZAÇÃO PARA O MERCADO BRASILEIRO: Conecte regulação internacional com implementação local pelo BCB.
+3. FSB (Financial Stability Board):
+   - Busque em: fsb.org/publications
+   - Termos: "FSB [tema] [ano]"
 
-4. PROFUNDIDADE ANALÍTICA: Não se limite à superfície — acesse o conteúdo de subseções relevantes de cada fonte (ex: em REF do BCB, vá além do sumário para as seções de estabilidade sistêmica, crédito, liquidez, etc.).
+4. Relatórios dos bancos (Pilar 3):
+   - Busque o Relatório de Gerenciamento de Riscos ou Pilar 3 mais recente de Itaú, Santander, BB, BTG ou Nubank
+   - Use termos: "Itaú Pilar 3 [ano] [tema]" ou "Santander gestão riscos [ano]"
 
-FONTES POR TEMA DE RISCO:
-- Risco de Modelo: SR 11-7 (Fed/OCC), BCBS Working Paper 37, Resolução CMN 4.557/2017, Pilar 3 dos bancos
-- Risco de IA: FSB 2023 AI in Finance, BCBS 2022 Supervisory Principles, BCB Comunicado 33.455
-- Risco Operacional: SA-OR Basileia IV, Circular BCB 3.983/2020, Resoluções BCB 4.557 e 4.968
-- Risco de Mercado: FRTB (BCBS d457), Circular BCB 3.645/2013, IRRBB (BCBS d368), Resolução BCB 4.557
-- Risco de Liquidez: LCR Circular BCB 3.749/2015, NSFR Resolução CMN 4.616/2017, REF BCB
-- Risco de Terceiros: Resolução BCB 4.752/2019, Resolução CMN 4.557, DORA (referência internacional)
+REGRAS DE QUALIDADE:
+- NUNCA cite uma norma que não encontrou nas buscas — se não encontrar, omita a referência
+- NUNCA invente número de resolução, data ou métrica
+- Se encontrar a norma mas não o conteúdo específico, marque confidence como "médio"
+- Se não encontrar nenhuma fonte primária para o item, marque confidence como "baixo" e diga explicitamente no body
+- Inclua a URL REAL encontrada nas buscas no campo url (não invente)
 
-Retorne APENAS este JSON válido (sem texto extra, sem markdown):
-{"summary":"síntese executiva precisa de 2 frases com dados concretos","items":[{"title":"título técnico preciso","body":"análise aprofundada com: (1) referência normativa exata, (2) dado ou métrica concreta, (3) implicação prática para o banco. Mínimo 3 frases.","source":"nome completo da fonte","sourceCode":"BCB","riskLabel":"label do risco","date":"período exato (ex: Jan 2025, Q4 2024, 2024)","relevance":"alto","confidence":"alto","normRef":"Res. BCB 4.557/2017 art.3","metric":"ex: LCR mínimo 100%, ou NPL 3,2%, ou capital mínimo 8%"}]}
+FORMATO DE SAÍDA — retorne APENAS este JSON válido:
+{"summary":"síntese executiva de 2 frases com dados verificados","items":[{"title":"título técnico preciso baseado no documento encontrado","body":"análise com: (1) referência exata encontrada na busca, (2) conteúdo real do documento, (3) implicação prática. Mínimo 3 frases.","source":"nome completo da fonte","sourceCode":"BCB","riskLabel":"label do risco","date":"data real do documento (ex: Nov 2024, Q3 2024)","relevance":"alto","confidence":"alto","normRef":"número e data real da norma (ex: Res. BCB 4.557, 23/fev/2017)","metric":"métrica real encontrada no documento","url":"URL real onde encontrou o documento"}]}
 
-Regras obrigatórias:
-- confidence: "alto" (dado verificável em fonte primária), "médio" (inferível com base em contexto regulatório), "baixo" (estimativa analítica)
-- relevance: alto médio baixo
-- sourceCode: BCB ITAU SANB BB BTG NU BIS CMN FSB FEBRABAN
-- normRef: referência normativa específica quando existir (deixe vazio se não houver)
-- metric: métrica ou número concreto quando existir (deixe vazio se não houver)
-- url: SEMPRE vazio — não invente URLs
-- Retorne entre 5 e 7 itens
-- APENAS JSON puro`;
+- confidence "alto" = URL real encontrada, conteúdo verificado
+- confidence "médio" = norma existe mas conteúdo específico não confirmado
+- confidence "baixo" = baseado em conhecimento geral, sem fonte primária encontrada
+- Retorne 4 a 6 itens
+- APENAS JSON puro na resposta`;
 
 // Layer 2: Critical review prompt — fact-check and quality filter
-const SYS_REVIEW = `Você é um revisor crítico especializado em regulação financeira brasileira e internacional. Sua função é revisar um conjunto de achados de pesquisa sobre riscos financeiros e:
+const SYS_REVIEW = `Você é um revisor especializado em regulação financeira. Recebeu achados de pesquisa e deve verificar cada um criticamente.
 
-1. VERIFICAR PRECISÃO: Confirme se referências normativas (números de resoluções, circulares, datas) estão corretas com base no seu conhecimento.
-2. IDENTIFICAR IMPRECISÕES: Se uma referência normativa estiver incorreta ou imprecisa, corrija ou remova o item.
-3. AVALIAR RELEVÂNCIA: Descarte itens que sejam muito genéricos, óbvios ou sem valor analítico para um gestor nacional de banco.
-4. ENRIQUECER: Quando possível, adicione contexto adicional que aumente o valor do achado.
-5. AJUSTAR CONFIANÇA: Se um item contiver afirmação que você não consegue confirmar, rebaixe confidence para "médio" ou "baixo".
+PARA CADA ITEM:
+1. A URL no campo "url" existe e é de uma fonte confiável? Se sim, confidence pode ser "alto". Se não há URL ou a URL parece inventada, reduza para "médio" ou "baixo".
+2. O normRef (número de norma) está no formato correto e é plausível? Resoluções BCB têm formato "Res. BCB XXXX/AAAA". Circulares BCB têm formato "Circular BCB X.XXX/AAAA". Documentos BCBS têm formato "BCBS dXXX" ou "BCBS WP XX".
+3. O conteúdo do body é específico e verificável, ou é genérico e vago?
 
-CRITÉRIOS DE QUALIDADE:
-- Alto valor: achado específico, com norma/métrica real, implicação clara para gestão
-- Médio valor: achado relevante mas sem especificidade suficiente
-- Baixo valor (remover): afirmação genérica sem base normativa, repetição óbvia, sem relevância prática
+AÇÕES:
+- REMOVA itens cujo body é genérico (ex: "é importante monitorar", "os bancos devem atentar") sem dado concreto
+- REMOVA itens com normRef claramente errado (número fora do padrão, data impossível)
+- MANTENHA e PRIORIZE itens com URL real + normRef verificável + métrica concreta
+- AJUSTE confidence: se há URL real = pode ser alto; sem URL = máximo médio; body vago = baixo
+- ADICIONE aviso no body quando confidence for baixo: "(Nota: não foi possível verificar em fonte primária — confirme antes de usar)"
 
-Receba o JSON de pesquisa e retorne um JSON revisado e melhorado no MESMO formato:
-{"summary":"síntese revisada e aprimorada","items":[...itens revisados, corrigidos e filtrados...]}
-
-Regras: mantenha entre 4 e 6 itens (remova os de menor qualidade) · corrija normRef quando incorreto · ajuste confidence adequadamente · APENAS JSON puro`;
+Retorne o JSON revisado no MESMO formato. Mantenha 3 a 5 itens (qualidade > quantidade).
+APENAS JSON puro.`;
 
 // ════════════════════════════════════════
 // ESTADO
@@ -2569,8 +2569,29 @@ function parseJSON(text) {
   return null;
 }
 
-// Single API call helper
-async function callClaude(systemPrompt, userContent, model="claude-haiku-4-5-20251001", maxTokens=4000) {
+// ── API call with optional web_search tool ───────────────────────
+async function callClaude(systemPrompt, userContent, opts = {}) {
+  const {
+    model    = "claude-sonnet-4-5",
+    maxTokens = 5000,
+    useSearch = false
+  } = opts;
+
+  const body = {
+    model,
+    max_tokens: maxTokens,
+    system: systemPrompt,
+    messages: [{ role: "user", content: userContent }]
+  };
+
+  if (useSearch) {
+    body.tools = [{
+      type: "web_search_20250305",
+      name: "web_search",
+      max_uses: 5
+    }];
+  }
+
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: {
@@ -2579,13 +2600,9 @@ async function callClaude(systemPrompt, userContent, model="claude-haiku-4-5-202
       "anthropic-version": "2023-06-01",
       "anthropic-dangerous-direct-browser-access": "true"
     },
-    body: JSON.stringify({
-      model,
-      max_tokens: maxTokens,
-      system: systemPrompt,
-      messages: [{ role: "user", content: userContent }]
-    })
+    body: JSON.stringify(body)
   });
+
   if (!res.ok) {
     const e = await res.json().catch(() => ({}));
     throw new Error(e.error?.message || "HTTP " + res.status);
@@ -2593,7 +2610,12 @@ async function callClaude(systemPrompt, userContent, model="claude-haiku-4-5-202
   const data = await res.json();
   if (data.type === "error") throw new Error(data.error?.message || "Erro da API");
   if (!data.content?.length) throw new Error("Resposta vazia");
-  return data.content.filter(b => b.type === "text").map(b => b.text).join("");
+
+  // Handle agentic loop: if model used tools, collect all text blocks
+  return data.content
+    .filter(b => b.type === "text")
+    .map(b => b.text)
+    .join("");
 }
 
 async function doSearch(q) {
@@ -2615,7 +2637,11 @@ async function doSearch(q) {
 Consulta específica: ${q}${excl}
 
 Realizar pesquisa profunda conforme instruções.`;
-    const raw1 = await callClaude(SYS_RESEARCH, userMsg1, "claude-haiku-4-5-20251001", 4000);
+    const raw1 = await callClaude(SYS_RESEARCH, userMsg1, {
+      model: "claude-sonnet-4-5",
+      maxTokens: 6000,
+      useSearch: true
+    });
     const parsed1 = parseJSON(raw1);
 
     if (!parsed1?.items?.length) throw new Error("Pesquisa não retornou dados estruturados.");
@@ -2629,7 +2655,11 @@ Realizar pesquisa profunda conforme instruções.`;
 ${JSON.stringify(parsed1)}`;
     let finalParsed = parsed1; // fallback if review fails
     try {
-      const raw2 = await callClaude(SYS_REVIEW, userMsg2, "claude-haiku-4-5-20251001", 3000);
+      const raw2 = await callClaude(SYS_REVIEW, userMsg2, {
+        model: "claude-haiku-4-5-20251001",
+        maxTokens: 3000,
+        useSearch: false
+      });
       const parsed2 = parseJSON(raw2);
       if (parsed2?.items?.length) {
         finalParsed = parsed2;
@@ -2656,8 +2686,8 @@ function setLoading(T) { setLoadingStep(T, 1); }
 
 function setLoadingStep(T, step) {
   const steps = [
-    { label: "Pesquisando fontes primárias", detail: "BCB · BIS · Pilar 3 · Normas" },
-    { label: "Revisão crítica do conteúdo",  detail: "Verificando precisão e relevância" },
+    { label: "Buscando nas fontes reais", detail: "bcb.gov.br · bis.org · fsb.org · Pilar 3" },
+    { label: "Revisão e verificação",     detail: "Validando normas · filtrando imprecisões" },
   ];
   const s = steps[step - 1] || steps[0];
   const pct = step === 1 ? 40 : 85;
