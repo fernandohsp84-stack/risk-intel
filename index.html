@@ -2581,6 +2581,21 @@ function search() {
   if (q) doSearch(q);
 }
 
+// Strip citation tags and XML artifacts from AI responses
+function cleanBody(text) {
+  if (!text) return "";
+  return text
+    // Remove <cite index="...">...</cite> blocks — keep only the inner text
+    .replace(/<cite[^>]*>([\s\S]*?)<\/cite>/gi, "$1")
+    // Remove any remaining XML/HTML tags
+    .replace(/<[^>]+>/g, "")
+    // Remove [N] footnote markers
+    .replace(/\[\d+\]/g, "")
+    // Clean up extra whitespace
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
+
 // JSON parser — tries multiple strategies
 function parseJSON(text) {
   const strategies = [
@@ -2679,6 +2694,15 @@ Realizar pesquisa profunda conforme instruções.`;
 
     if (!parsed1?.items?.length) throw new Error("Pesquisa não retornou dados estruturados.");
 
+    // Clean cite tags and XML artifacts from all body fields
+    if (parsed1.items) {
+      parsed1.items = parsed1.items.map(item => ({
+        ...item,
+        body:  cleanBody(item.body),
+        title: cleanBody(item.title),
+      }));
+    }
+
     // Show step 2 loading
     setLoadingStep(T, 2);
 
@@ -2695,6 +2719,12 @@ ${JSON.stringify(parsed1)}`;
       });
       const parsed2 = parseJSON(raw2);
       if (parsed2?.items?.length) {
+        // Clean after review too
+        parsed2.items = parsed2.items.map(item => ({
+          ...item,
+          body:  cleanBody(item.body),
+          title: cleanBody(item.title),
+        }));
         finalParsed = parsed2;
       }
     } catch(reviewErr) {
@@ -2826,8 +2856,7 @@ function renderResults(parsed, T) {
         <div class="card-title">${read?"":"<span class=\"unread-dot\"></span>"}${esc(item.title)}</div>
         <div class="card-badges">
           <span class="source-badge" style="background:${sc}">${esc(item.sourceCode)}</span>
-          ${item.relevance ? `<span class="rel-badge" style="background:${rs.bg};color:${rs.text};border:1px solid ${rs.border}">${esc(item.relevance)}</span>` : ""}
-          <span style="padding:2px 6px;border-radius:4px;font-size:9px;font-weight:700;background:${cf.bg};color:${cf.text}" title="Confiabilidade do dado: ${item.confidence||'médio'}">${cf.icon} ${esc(item.confidence||"médio")}</span>
+          <span style="padding:2px 7px;border-radius:5px;font-size:9px;font-weight:700;background:${cf.bg};color:${cf.text};border:1px solid ${cf.text}22" title="Confiabilidade: ${item.confidence||'médio'} · Relevância: ${item.relevance||'médio'}">${cf.icon} ${esc(item.confidence||item.relevance||"médio")}</span>
         </div>
       </div>
       <div class="card-body">${esc(item.body)}</div>
@@ -2842,7 +2871,7 @@ function renderResults(parsed, T) {
           <div class="meta-dot"></div>
           <span class="meta-item">${esc(item.date)}</span>
         </div>
-        <a href="${SOURCE_URLS[item.sourceCode] || 'https://www.bcb.gov.br'}" target="_blank" rel="noopener" class="source-link">Ver fonte ↗</a>
+        <a href="${item.url && item.url.startsWith('http') ? item.url : (SOURCE_URLS[item.sourceCode] || 'https://www.bcb.gov.br')}" target="_blank" rel="noopener" class="source-link">Ver fonte ↗</a>
       </div>
       <div class="card-actions">
         <button class="action-btn read-btn ${read?"read-active":""}" id="readbtn_${cid}" onclick='toggleRead(${jsStr(item.title)},"${cid}")'>
@@ -3043,7 +3072,7 @@ function renderLibrary() {
           ${ratingTag}
         </div>
         <div class="lib-actions">
-          <a href="${SOURCE_URLS[item.sourceCode] || 'https://www.bcb.gov.br'}" target="_blank" rel="noopener" class="lib-email-btn" style="text-decoration:none">↗</a>
+          <a href="${item.url && item.url.startsWith('http') ? item.url : (SOURCE_URLS[item.sourceCode] || 'https://www.bcb.gov.br')}" target="_blank" rel="noopener" class="lib-email-btn" style="text-decoration:none">↗</a>
           <button class="lib-rate-btn ${item.rating==="good"?"active-good":""}" onclick="rateLibGood('${item.id}')">👍</button>
           <button class="lib-rate-btn ${item.rating==="bad"?"active-bad":""}" onclick="openNA('lib','${item.id}')">👎</button>
           <button class="lib-email-btn" onclick='openEmailModal(${jsStr(item)})'>✉</button>
