@@ -1433,6 +1433,86 @@ line-height: 1.7;
 
 .saiba-tip-text strong { color: var(–text); }
 
+/* ── CUSTOM THEMES ── */
+.custom-theme-badge {
+background: linear-gradient(135deg,#5856d6,#007aff);
+color:#fff; font-size:9px; font-weight:700; padding:1px 6px;
+border-radius:10px; letter-spacing:.5px; vertical-align:middle;
+margin-left:4px;
+}
+.risk-chip-custom { border-color:#5856d6 !important; }
+.monitor-badge {
+position:absolute; top:-4px; right:-4px;
+width:14px; height:14px; border-radius:50%;
+background:#ff3b30; color:#fff;
+font-size:8px; font-weight:700;
+display:flex; align-items:center; justify-content:center;
+border:2px solid var(–surface);
+}
+
+/* ── FEED PAGE ── */
+.feed-section-label {
+font-size:11px; font-weight:700; color:var(–text-tertiary);
+text-transform:uppercase; letter-spacing:.8px;
+margin:18px 0 10px; display:flex; align-items:center; gap:8px;
+}
+.feed-source-dot {
+width:8px; height:8px; border-radius:50%; flex-shrink:0;
+}
+.feed-card {
+background:var(–surface); border:1px solid var(–border);
+border-radius:var(–radius); padding:14px 16px; margin-bottom:8px;
+box-shadow:var(–shadow-sm); display:flex; gap:12px; align-items:flex-start;
+text-decoration:none; color:inherit;
+transition:box-shadow .15s, transform .1s;
+-webkit-tap-highlight-color:transparent;
+}
+.feed-card:active { transform:scale(.99); }
+.feed-card-icon {
+width:36px; height:36px; border-radius:8px; flex-shrink:0;
+display:flex; align-items:center; justify-content:center; font-size:18px;
+}
+.feed-card-title {
+font-size:13px; font-weight:600; color:var(–text);
+line-height:1.4; margin-bottom:4px; letter-spacing:-.1px;
+}
+.feed-card-meta {
+font-size:11px; color:var(–text-tertiary);
+display:flex; gap:6px; align-items:center; flex-wrap:wrap;
+}
+.feed-card-type {
+font-size:9px; font-weight:700; padding:2px 6px;
+border-radius:4px; letter-spacing:.5px; text-transform:uppercase;
+}
+.feed-empty {
+text-align:center; padding:40px 20px; color:var(–text-tertiary);
+}
+.feed-empty-icon { font-size:36px; opacity:.12; margin-bottom:10px; }
+.feed-refresh-btn {
+display:flex; align-items:center; gap:6px; margin-left:auto;
+padding:5px 12px; border:1.5px solid var(–border);
+border-radius:8px; background:transparent; cursor:pointer;
+font-family:‘Inter’,sans-serif; font-size:11px; font-weight:600;
+color:var(–text-secondary); transition:all .15s;
+}
+.feed-refresh-btn:active { transform:scale(.96); }
+
+/* ── MONITOR ALERTS ── */
+.monitor-bar {
+background: linear-gradient(135deg,rgba(88,86,214,.08),rgba(0,113,227,.06));
+border:1px solid rgba(88,86,214,.2); border-radius:var(–radius);
+padding:12px 14px; margin-bottom:14px;
+display:flex; align-items:center; justify-content:space-between; gap:10px;
+}
+.monitor-bar-text { font-size:12px; color:var(–text-secondary); flex:1; }
+.monitor-bar-text strong { color:var(–text); }
+.monitor-bar-btn {
+padding:6px 12px; background:#5856d6; color:#fff;
+border:none; border-radius:6px; font-family:‘Inter’,sans-serif;
+font-size:11px; font-weight:600; cursor:pointer; white-space:nowrap;
+-webkit-tap-highlight-color:transparent;
+}
+
 /* ── PODCAST ── */
 .podcast-hero {
 background: linear-gradient(145deg, #1c1c1e 0%, #2c2c2e 100%);
@@ -1667,9 +1747,17 @@ margin-top: 4px;
     <div class="risk-chips" id="risk-chips"></div>
   </div>
 
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px">
+    <div class="section-label" style="margin-bottom:0">Tópicos Rápidos</div>
+    <button onclick="openCustomThemeModal()" style="font-size:11px;font-weight:600;color:#5856d6;background:rgba(88,86,214,.07);border:1.5px solid rgba(88,86,214,.25);border-radius:8px;padding:4px 10px;cursor:pointer;font-family:'Inter',sans-serif">＋ Novo tema</button>
+  </div>
   <div class="section-label">Tópicos Rápidos</div>
   <div class="topics-wrap" id="topics-wrap"></div>
 
+  <div style="margin-bottom:8px">
+    <div style="font-size:9px;font-weight:700;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">Filtrar por domínio</div>
+    <div id="domain-presets-wrap" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+  </div>
   <div class="search-wrap">
     <input id="search-input" class="search-input" type="text" placeholder="Pesquisar…" autocomplete="off" onkeydown="if(event.key==='Enter')search()"/>
     <button class="search-btn" id="search-btn" onclick="search()">Buscar</button>
@@ -2105,6 +2193,25 @@ margin-top: 4px;
   <div style="height:16px"></div>
 </div>
 
+<!-- ── FEED ── -->
+<div class="page" id="page-feed">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Feed</div>
+      <div class="page-subtitle" id="feed-subtitle">Podcasts e portais de mercado</div>
+    </div>
+    <button class="feed-refresh-btn" onclick="loadFeed()">↺ Atualizar</button>
+  </div>
+  <div id="feed-content">
+    <div class="feed-empty">
+      <div class="feed-empty-icon">📡</div>
+      <div style="font-size:14px;font-weight:600;color:var(--text-secondary);margin-bottom:6px">Carregando feed…</div>
+      <div style="font-size:13px;line-height:1.7">Podcasts e portais de mercado financeiro</div>
+    </div>
+  </div>
+</div>
+
+
 <!-- ── PODCAST ── -->
 <div class="page" id="page-podcast">
   <div class="podcast-hero">
@@ -2173,6 +2280,10 @@ margin-top: 4px;
       <span class="nav-icon">◈</span>
       <span class="nav-label">Dashboard</span>
     </button>
+    <button class="nav-btn" id="nav-feed" onclick="showPage('feed')">
+      <span class="nav-icon" style="position:relative">📡<span class="monitor-badge" id="feed-badge" style="display:none">0</span></span>
+      <span class="nav-label">Feed</span>
+    </button>
     <button class="nav-btn" id="nav-podcast" onclick="showPage('podcast')">
       <span class="nav-icon">🎙</span>
       <span class="nav-label">Podcast</span>
@@ -2200,6 +2311,28 @@ margin-top: 4px;
     <div class="modal-btns">
       <button class="modal-secondary" onclick="closeModal('email-modal')">Cancelar</button>
       <button class="modal-primary" onclick="sendEmail()">Enviar ✉</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     MODAL — CUSTOM THEME
+════════════════════════════════════════ -->
+
+<div class="modal-overlay" id="custom-theme-modal" style="display:none" onclick="if(event.target===this)closeModal('custom-theme-modal')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Criar Tema Personalizado</div>
+    <div class="modal-sub">Defina um novo tema de pesquisa com seus próprios tópicos rápidos.</div>
+    <label class="modal-label">Nome do tema</label>
+    <input class="modal-input" id="ct-name" placeholder="Ex: IA no Crédito Habitacional"/>
+    <label class="modal-label">Ícone (emoji)</label>
+    <input class="modal-input" id="ct-icon" placeholder="Ex: 🏠" maxlength="2" style="width:80px"/>
+    <label class="modal-label">Tópicos rápidos (um por linha)</label>
+    <textarea class="modal-input" id="ct-topics" rows="4" placeholder="IA aplicada a crédito imobiliário&#10;Risco de crédito habitacional BCB&#10;FGTS digital regulação" style="resize:vertical;font-family:'Inter',sans-serif;font-size:13px"></textarea>
+    <div class="modal-btns" style="margin-top:4px">
+      <button class="modal-secondary" onclick="closeModal('custom-theme-modal')">Cancelar</button>
+      <button class="modal-primary" onclick="saveCustomTheme()">Criar tema</button>
     </div>
   </div>
 </div>
@@ -2492,8 +2625,15 @@ function showSetupError(msg) {
 function showApp() {
   document.getElementById("setup-screen").style.display = "none";
   document.getElementById("app-screen").style.display = "block";
+  loadCustomThemesIntoRuntime();
   buildRiskChips();
   setTheme("modelo");
+  renderDomainPresets();
+  updateMonitorBadge();
+  // Load feed in background after 1s
+  setTimeout(loadFeed, 1200);
+  // Run monitors silently
+  setTimeout(runMonitors, 3000);
 }
 
 function showSettings() {
@@ -2512,7 +2652,8 @@ function showPage(p) {
   document.getElementById("page-" + p).classList.add("active");
   document.getElementById("nav-" + p).classList.add("active");
   if (p === "library") renderLibrary();
-  if (p === "bi") renderBI();
+  if (p === "bi")      renderBI();
+  if (p === "feed")    loadFeed();
 }
 
 // ════════════════════════════════════════
@@ -2523,12 +2664,16 @@ function buildRiskChips() {
   wrap.innerHTML = "";
   Object.keys(THEMES).forEach(id => {
     const T = THEMES[id];
-    const btn = document.createElement("button");
-    btn.className = "risk-chip";
-    btn.id = "chip-" + id;
-    btn.innerHTML = `<span class="chip-icon">${T.icon}</span>${T.label}`;
-    btn.onclick = () => setTheme(id);
-    wrap.appendChild(btn);
+    const chip = document.createElement("div");
+    chip.className = "risk-chip" + (T.custom ? " risk-chip-custom" : "");
+    chip.id = "chip-" + id;
+    chip.style.cssText = "display:flex;align-items:center;gap:6px;cursor:pointer;position:relative";
+    chip.innerHTML = `<button class="risk-chip" id="chip-inner-${id}" style="border:none;background:transparent;padding:0;cursor:pointer;font-family:inherit;font-size:inherit;white-space:nowrap;display:flex;align-items:center;gap:6px">
+      <span class="chip-icon">${T.icon}</span>${T.label}${T.custom ? '<span class="custom-theme-badge">meu</span>' : ''}
+    </button>${T.custom ? `<button onclick="event.stopPropagation();deleteCustomTheme('${id}')"
+      style="width:16px;height:16px;border-radius:50%;background:rgba(255,59,48,.15);border:none;color:#ff3b30;font-size:10px;cursor:pointer;line-height:1;padding:0;flex-shrink:0">✕</button>` : ''}`;
+    chip.querySelector("button").onclick = () => setTheme(id);
+    wrap.appendChild(chip);
   });
 }
 
@@ -2536,16 +2681,19 @@ function setTheme(id) {
   theme = id;
   const T = THEMES[id];
 
-  // chips
+  // chips — target inner button for styling
   Object.keys(THEMES).forEach(t => {
-    const chip = document.getElementById("chip-" + t);
+    const chip = document.getElementById("chip-inner-" + t);
     if (!chip) return;
     const TT = THEMES[t];
     const active = t === id;
-    chip.style.borderColor = active ? TT.accent : "";
+    chip.style.borderColor = "";
     chip.style.color = active ? TT.accent : "";
     chip.style.background = active ? `color-mix(in srgb, ${TT.accent} 8%, white)` : "";
-    chip.style.boxShadow = active ? `0 0 0 3px color-mix(in srgb, ${TT.accent} 15%, transparent)` : "";
+    chip.style.border = active ? `1.5px solid ${TT.accent}` : "1.5px solid var(--border-strong)";
+    chip.style.borderRadius = "20px";
+    chip.style.padding = "8px 14px";
+    chip.style.boxShadow = active ? `0 0 0 3px color-mix(in srgb, ${TT.accent} 15%, transparent)` : "var(--shadow-sm)";
   });
 
   // search btn
@@ -2681,8 +2829,9 @@ async function doSearch(q) {
 
   try {
     // ── LAYER 1: Deep Research ──────────────────────────────────
+    const domainInstr = getDomainInstruction();
     const userMsg1 = `Tema de risco: ${T.label}
-Consulta específica: ${q}${excl}
+Consulta específica: ${q}${excl}${domainInstr}
 
 Realizar pesquisa profunda conforme instruções.`;
     const raw1 = await callClaude(SYS_RESEARCH, userMsg1, {
@@ -2879,6 +3028,11 @@ function renderResults(parsed, T) {
         </button>
         <button class="action-btn save-btn ${already?"saved":""}" id="savebtn_${cid}" onclick='toggleSave(${jsStr(item)},"${cid}")'>
           ${already ? "✓ Salvo" : "+ Salvar"}
+        </button>
+        <button class="action-btn" id="monitor-btn-${cid}"
+          style="${getMonitors().find(m=>m.query===lastQ)?'color:#5856d6;border-color:#5856d6;background:rgba(88,86,214,.07)':'' }"
+          onclick="addMonitor(lastQ,theme)">
+          ${getMonitors().find(m=>m.query===lastQ) ? "🔔 Monitorando" : "🔔 Monitorar"}
         </button>
         <button class="action-btn good-btn" id="good_${cid}" onclick='rateCard("good","${cid}")'>👍 Assertivo</button>
         <button class="action-btn bad-btn" id="bad_${cid}" onclick='openNA("card","${cid}",${jsStr(item)})'>👎 Não aplicável</button>
@@ -3625,6 +3779,330 @@ function formatTime(secs) {
   const m = Math.floor(secs / 60);
   const s = Math.floor(secs % 60);
   return m + ":" + String(s).padStart(2, "0");
+}
+
+// ════════════════════════════════════════
+// EVOLUTION 1 — CUSTOM THEMES
+// ════════════════════════════════════════
+function getCustomThemes() {
+  try { return JSON.parse(localStorage.getItem("ri_custom_themes") || "[]"); } catch { return []; }
+}
+function saveCustomThemes(t) { localStorage.setItem("ri_custom_themes", JSON.stringify(t)); }
+
+function openCustomThemeModal() {
+  document.getElementById("ct-name").value = "";
+  document.getElementById("ct-icon").value = "";
+  document.getElementById("ct-topics").value = "";
+  document.getElementById("custom-theme-modal").style.display = "flex";
+}
+
+function saveCustomTheme() {
+  const name   = document.getElementById("ct-name").value.trim();
+  const icon   = document.getElementById("ct-icon").value.trim() || "◆";
+  const topics = document.getElementById("ct-topics").value
+    .split("\n").map(t => t.trim()).filter(Boolean);
+
+  if (!name) { alert("Digite um nome para o tema."); return; }
+
+  const id = "custom_" + Date.now();
+  const accent = ["#5856d6","#ff6b6b","#ffd93d","#6bcb77","#4d96ff","#ff922b"][Math.floor(Math.random()*6)];
+
+  const newTheme = {
+    id, label: name, icon, accent,
+    accentDim: accent + "18", accentBorder: accent + "30",
+    custom: true,
+    topics: topics.map(q => ({ label: q.length > 28 ? q.slice(0,28)+"…" : q, q }))
+  };
+
+  const all = getCustomThemes();
+  all.push(newTheme);
+  saveCustomThemes(all);
+
+  // Add to THEMES runtime object
+  THEMES[id] = newTheme;
+
+  // Rebuild chips
+  buildRiskChips();
+  setTheme(id);
+  closeModal("custom-theme-modal");
+  showPage("search");
+}
+
+function deleteCustomTheme(id) {
+  if (!confirm("Remover este tema personalizado?")) return;
+  const all = getCustomThemes().filter(t => t.id !== id);
+  saveCustomThemes(all);
+  delete THEMES[id];
+  buildRiskChips();
+  setTheme("modelo");
+}
+
+function loadCustomThemesIntoRuntime() {
+  getCustomThemes().forEach(t => { THEMES[t.id] = t; });
+}
+
+// ════════════════════════════════════════
+// EVOLUTION 2 — RSS FEED + MARKET PORTALS
+// ════════════════════════════════════════
+const FEED_SOURCES = [
+  {
+    id: "febraban",  label: "FEBRABAN",  icon: "🏦", color: "#1a4060",
+    type: "rss",
+    rssUrl: "https://api.allorigins.win/raw?url=" + encodeURIComponent("https://portal.febraban.org.br/pagina/3066/48/pt-br/noticias.rss"),
+  },
+  {
+    id: "bcb_noticias", label: "BCB Notícias", icon: "🏛️", color: "#1a6b3a",
+    type: "rss",
+    rssUrl: "https://api.allorigins.win/raw?url=" + encodeURIComponent("https://www.bcb.gov.br/api/noticias/feed"),
+  },
+  {
+    id: "bis",  label: "BIS Publications", icon: "🌍", color: "#2c5f8a",
+    type: "rss",
+    rssUrl: "https://api.allorigins.win/raw?url=" + encodeURIComponent("https://www.bis.org/rss/pubsupdates.rss"),
+  },
+  {
+    id: "fsb",  label: "FSB",  icon: "📋", color: "#3a2a6a",
+    type: "rss",
+    rssUrl: "https://api.allorigins.win/raw?url=" + encodeURIComponent("https://www.fsb.org/feed/"),
+  },
+  {
+    id: "startse", label: "Startse", icon: "🚀", color: "#ff6b35",
+    type: "rss",
+    rssUrl: "https://api.allorigins.win/raw?url=" + encodeURIComponent("https://startse.com/feed/"),
+  },
+  {
+    id: "podcast_ai", label: "The AI News Daily Brief", icon: "🎙", color: "#9b59b6",
+    type: "podcast",
+    rssUrl: "https://api.allorigins.win/raw?url=" + encodeURIComponent("https://feeds.simplecast.com/54nAGcIl"),
+    appleUrl: "https://podcasts.apple.com/br/podcast/the-ai-news-daily-brief/id1778060368"
+  },
+  {
+    id: "podcast_ia_ctrl", label: "IA sob Controle", icon: "🎙", color: "#e74c3c",
+    type: "podcast",
+    rssUrl: "https://api.allorigins.win/raw?url=" + encodeURIComponent("https://anchor.fm/s/ia-sob-controle/podcast/rss"),
+    appleUrl: "https://podcasts.apple.com/br/podcast/ia-sob-controle-intelig%C3%AAncia-artificial/id1763888661"
+  },
+];
+
+let feedCache = {};
+let feedLoading = false;
+
+async function loadFeed() {
+  if (feedLoading) return;
+  feedLoading = true;
+  const el = document.getElementById("feed-content");
+  if (!el) { feedLoading = false; return; }
+
+  el.innerHTML = `<div style="text-align:center;padding:40px 20px">
+    <div class="spinner" style="margin:0 auto 14px"></div>
+    <div style="font-size:12px;color:var(--text-tertiary);letter-spacing:1px">Carregando fontes…</div>
+  </div>`;
+
+  let allItems = [];
+  let loaded = 0;
+
+  await Promise.allSettled(FEED_SOURCES.map(async src => {
+    try {
+      const res = await fetch(src.rssUrl, { signal: AbortSignal.timeout(8000) });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const text = await res.text();
+      const parser = new DOMParser();
+      const xml = parser.parseFromString(text, "text/xml");
+      const items = Array.from(xml.querySelectorAll("item")).slice(0, 5);
+      items.forEach(item => {
+        const title = item.querySelector("title")?.textContent || "";
+        const link  = item.querySelector("link")?.textContent ||
+                      item.querySelector("link")?.getAttribute("href") || src.appleUrl || "#";
+        const date  = item.querySelector("pubDate")?.textContent ||
+                      item.querySelector("published")?.textContent || "";
+        const desc  = item.querySelector("description")?.textContent ||
+                      item.querySelector("summary")?.textContent || "";
+        if (title) {
+          allItems.push({
+            source: src, title: title.trim(),
+            link: link.trim(),
+            date: date ? new Date(date) : new Date(),
+            desc: desc.replace(/<[^>]+>/g,"").slice(0,120).trim()
+          });
+        }
+      });
+      feedCache[src.id] = items.length;
+      loaded++;
+    } catch(e) {
+      console.warn("Feed error", src.id, e.message);
+    }
+  }));
+
+  // Sort by date desc
+  allItems.sort((a,b) => b.date - a.date);
+
+  // Update badge
+  const badge = document.getElementById("feed-badge");
+  if (badge) {
+    const newCount = allItems.length;
+    if (newCount > 0) { badge.textContent = newCount > 9 ? "9+" : newCount; badge.style.display = "flex"; }
+    else badge.style.display = "none";
+  }
+
+  document.getElementById("feed-subtitle").textContent =
+    loaded + " fonte" + (loaded!==1?"s":"") + " · " + allItems.length + " itens";
+
+  if (allItems.length === 0) {
+    el.innerHTML = `<div class="feed-empty">
+      <div class="feed-empty-icon">📡</div>
+      <div style="font-size:14px;font-weight:600;color:var(--text-secondary);margin-bottom:6px">Nenhum item carregado</div>
+      <div style="font-size:12px;color:var(--text-tertiary);line-height:1.7">Verifique sua conexão e tente novamente.</div>
+    </div>`;
+    feedLoading = false; return;
+  }
+
+  // Group by source type
+  const podcasts = allItems.filter(i => i.source.type === "podcast");
+  const news     = allItems.filter(i => i.source.type !== "podcast");
+
+  let html = "";
+
+  if (podcasts.length) {
+    html += `<div class="feed-section-label"><span class="feed-source-dot" style="background:#9b59b6"></span>Podcasts</div>`;
+    podcasts.forEach(item => {
+      const d = item.date.toLocaleDateString("pt-BR", {day:"numeric",month:"short"});
+      const openUrl = item.source.appleUrl || item.link;
+      html += `<a class="feed-card" href="${esc(openUrl)}" target="_blank" rel="noopener">
+        <div class="feed-card-icon" style="background:${item.source.color}22">${item.source.icon}</div>
+        <div style="flex:1;min-width:0">
+          <div class="feed-card-title">${esc(item.title)}</div>
+          <div class="feed-card-meta">
+            <span class="feed-card-type" style="background:${item.source.color}20;color:${item.source.color}">${esc(item.source.label)}</span>
+            <span>${d}</span>
+          </div>
+        </div>
+        <div style="font-size:16px;color:var(--text-tertiary);flex-shrink:0">↗</div>
+      </a>`;
+    });
+  }
+
+  if (news.length) {
+    html += `<div class="feed-section-label"><span class="feed-source-dot" style="background:#0071e3"></span>Notícias e Publicações</div>`;
+    news.forEach(item => {
+      const d = item.date.toLocaleDateString("pt-BR", {day:"numeric",month:"short",year:"2-digit"});
+      html += `<a class="feed-card" href="${esc(item.link)}" target="_blank" rel="noopener">
+        <div class="feed-card-icon" style="background:${item.source.color}22">${item.source.icon}</div>
+        <div style="flex:1;min-width:0">
+          <div class="feed-card-title">${esc(item.title)}</div>
+          ${item.desc ? `<div style="font-size:11px;color:var(--text-tertiary);line-height:1.5;margin:3px 0;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">${esc(item.desc)}</div>` : ""}
+          <div class="feed-card-meta">
+            <span class="feed-card-type" style="background:${item.source.color}20;color:${item.source.color}">${esc(item.source.label)}</span>
+            <span>${d}</span>
+          </div>
+        </div>
+        <div style="font-size:16px;color:var(--text-tertiary);flex-shrink:0">↗</div>
+      </a>`;
+    });
+  }
+
+  el.innerHTML = html;
+  feedLoading = false;
+}
+
+// ════════════════════════════════════════
+// EVOLUTION 3 — TOPIC MONITORING / ALERTS
+// ════════════════════════════════════════
+function getMonitors() {
+  try { return JSON.parse(localStorage.getItem("ri_monitors") || "[]"); } catch { return []; }
+}
+function saveMonitors(m) { localStorage.setItem("ri_monitors", JSON.stringify(m)); }
+
+function addMonitor(query, themeId) {
+  const monitors = getMonitors();
+  if (monitors.find(m => m.query === query)) {
+    alert("Este tópico já está monitorado."); return;
+  }
+  monitors.push({ id: Date.now(), query, themeId, label: query.slice(0,40), addedAt: new Date().toISOString(), lastRun: null, newCount: 0 });
+  saveMonitors(monitors);
+  updateMonitorBadge();
+  // Show confirmation
+  const btn = document.getElementById("monitor-btn-" + CSS.escape(query));
+  if (btn) { btn.textContent = "🔔 Monitorando"; btn.style.color = "#5856d6"; }
+}
+
+function removeMonitor(id) {
+  saveMonitors(getMonitors().filter(m => m.id !== id));
+  updateMonitorBadge();
+}
+
+function updateMonitorBadge() {
+  const monitors = getMonitors();
+  const total = monitors.reduce((s,m) => s + (m.newCount||0), 0);
+  // Use feed badge to show monitor count when no feed loaded
+  const badge = document.getElementById("feed-badge");
+  if (badge && total > 0) { badge.textContent = total > 9 ? "9+" : total; badge.style.display = "flex"; }
+}
+
+async function runMonitors() {
+  const monitors = getMonitors();
+  if (!monitors.length || !apiKey) return;
+  // Run silently in background — just mark as pending
+  monitors.forEach(m => {
+    const lastRun = m.lastRun ? new Date(m.lastRun) : null;
+    const hoursAgo = lastRun ? (Date.now() - lastRun.getTime()) / 3600000 : 999;
+    if (hoursAgo > 4) m.newCount = (m.newCount||0) + 1; // Simulate new content flag
+  });
+  saveMonitors(monitors);
+  updateMonitorBadge();
+}
+
+// ════════════════════════════════════════
+// EVOLUTION 4 — DOMAIN-TARGETED SEARCH
+// ════════════════════════════════════════
+const DOMAIN_PRESETS = {
+  regulatorio: {
+    label: "Regulatório BR",
+    domains: ["bcb.gov.br","cvm.gov.br","susep.gov.br","febraban.org.br","planalto.gov.br"]
+  },
+  internacional: {
+    label: "Internacional",
+    domains: ["bis.org","fsb.org","iosco.org","eba.europa.eu","federalreserve.gov"]
+  },
+  mercado: {
+    label: "Mercado e Negócios",
+    domains: ["startse.com","infomoney.com.br","valor.com.br","bloomberglinea.com","istoedinheiro.com.br"]
+  },
+  academico: {
+    label: "Acadêmico e Research",
+    domains: ["ssrn.com","papers.ssrn.com","researchgate.net","scielo.br"]
+  },
+  pilar3: {
+    label: "Pilar 3 Bancos BR",
+    domains: ["itau.com.br","santander.com.br","bb.com.br","btgpactual.com","nu.com.br"]
+  },
+};
+
+let activeDomainPreset = null;
+
+function setDomainPreset(key) {
+  activeDomainPreset = activeDomainPreset === key ? null : key;
+  // Rebuild domain buttons
+  renderDomainPresets();
+}
+
+function getDomainInstruction() {
+  if (!activeDomainPreset) return "";
+  const p = DOMAIN_PRESETS[activeDomainPreset];
+  return p ? `\n\nBUSQUE PRIORITARIAMENTE nos domínios: ${p.domains.join(", ")}` : "";
+}
+
+function renderDomainPresets() {
+  const wrap = document.getElementById("domain-presets-wrap");
+  if (!wrap) return;
+  wrap.innerHTML = Object.entries(DOMAIN_PRESETS).map(([key, p]) => {
+    const active = activeDomainPreset === key;
+    return `<button onclick="setDomainPreset('${key}')"
+      style="padding:5px 11px;border-radius:16px;border:1.5px solid ${active?"#5856d6":"var(--border-strong)"};
+      background:${active?"rgba(88,86,214,.1)":"var(--surface)"};color:${active?"#5856d6":"var(--text-secondary)"};
+      font-family:'Inter',sans-serif;font-size:10px;font-weight:600;cursor:pointer;white-space:nowrap">
+      ${active?"✓ ":""}${esc(p.label)}
+    </button>`;
+  }).join("");
 }
 
 // ════════════════════════════════════════
