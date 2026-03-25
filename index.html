@@ -2584,6 +2584,7 @@ REGRAS DE QUALIDADE:
 - Se encontrar a norma mas não o conteúdo específico, marque confidence como "médio"
 - Se não encontrar nenhuma fonte primária para o item, marque confidence como "baixo" e diga explicitamente no body
 - Inclua a URL REAL encontrada nas buscas no campo url (não invente)
+- Para buscas acadêmicas: use scholar.google.com e semanticscholar.org como porta de entrada — eles indexam SSRN e arXiv e são acessíveis. Não tente acessar ssrn.com diretamente pois pode bloquear bots.
 
 FORMATO DE SAÍDA — retorne APENAS este JSON válido:
 {"summary":"síntese executiva de 2 frases com dados verificados","items":[{"title":"título técnico preciso baseado no documento encontrado","body":"análise com: (1) referência exata encontrada na busca, (2) conteúdo real do documento, (3) implicação prática. Mínimo 3 frases.","source":"nome completo da fonte","sourceCode":"BCB","riskLabel":"label do risco","date":"data real do documento (ex: Nov 2024, Q3 2024)","relevance":"alto","confidence":"alto","normRef":"número e data real da norma (ex: Res. BCB 4.557, 23/fev/2017)","metric":"métrica real encontrada no documento","url":"URL real onde encontrou o documento"}]}
@@ -2935,16 +2936,26 @@ async function callClaude(systemPrompt, userContent, opts = {}) {
     }];
   }
 
-  const res = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": apiKey,
-      "anthropic-version": "2023-06-01",
-      "anthropic-dangerous-direct-browser-access": "true"
-    },
-    body: JSON.stringify(body)
-  });
+  // AbortController with 55s timeout — Safari iOS kills long fetch() calls
+  const controller = new AbortController();
+  const timeoutId = setTimeout(function() { controller.abort(); }, 55000);
+
+  let res;
+  try {
+    res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      signal: controller.signal,
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01",
+        "anthropic-dangerous-direct-browser-access": "true"
+      },
+      body: JSON.stringify(body)
+    });
+  } finally {
+    clearTimeout(timeoutId);
+  }
 
   if (!res.ok) {
     const e = await res.json().catch(() => ({}));
@@ -4086,7 +4097,39 @@ const FEED_SOURCES = [
     type: "rss", homeUrl: "https://startse.com",
     rssUrls: makeProxyUrls("https://startse.com/feed/"),
   },
-  // Podcasts — shown as static cards with direct Apple Podcasts links
+  // ── ACADÊMICO — SSRN por categoria ──
+  {
+    id: "ssrn_banking", label: "SSRN · Banking & Risk", icon: "📄", color: "#1a3a5c",
+    type: "academic", homeUrl: "https://papers.ssrn.com/sol3/topten/topTenResults.cfm?groupingId=1529&netorjrnl=net",
+    rssUrls: makeProxyUrls("https://papers.ssrn.com/rss/harg.cfm?per=all&capcode=risk"),
+  },
+  {
+    id: "ssrn_finreg", label: "SSRN · Financial Regulation", icon: "📄", color: "#2a4a6c",
+    type: "academic", homeUrl: "https://papers.ssrn.com/sol3/topten/topTenResults.cfm?groupingId=1390",
+    rssUrls: makeProxyUrls("https://papers.ssrn.com/rss/harg.cfm?per=all&capcode=finreg"),
+  },
+  {
+    id: "ssrn_ai_fin", label: "SSRN · AI in Finance", icon: "📄", color: "#3a5a7c",
+    type: "academic", homeUrl: "https://papers.ssrn.com/sol3/topten/topTenResults.cfm?groupingId=3488493",
+    rssUrls: makeProxyUrls("https://papers.ssrn.com/rss/harg.cfm?per=all&capcode=fintech"),
+  },
+  // ── ACADÊMICO — arXiv q-fin ──
+  {
+    id: "arxiv_risk",    label: "arXiv · Risk Management", icon: "🔬", color: "#b03060",
+    type: "academic", homeUrl: "https://arxiv.org/list/q-fin.RM/recent",
+    rssUrls: makeProxyUrls("https://export.arxiv.org/rss/q-fin.RM"),
+  },
+  {
+    id: "arxiv_mf",      label: "arXiv · Mathematical Finance", icon: "🔬", color: "#c04070",
+    type: "academic", homeUrl: "https://arxiv.org/list/q-fin.MF/recent",
+    rssUrls: makeProxyUrls("https://export.arxiv.org/rss/q-fin.MF"),
+  },
+  {
+    id: "arxiv_cp",      label: "arXiv · Computational Finance", icon: "🔬", color: "#a02050",
+    type: "academic", homeUrl: "https://arxiv.org/list/q-fin.CP/recent",
+    rssUrls: makeProxyUrls("https://export.arxiv.org/rss/q-fin.CP"),
+  },
+  // ── Podcasts — static cards ──
   {
     id: "podcast_ai", label: "The AI News Daily Brief", icon: "🎙", color: "#9b59b6",
     type: "podcast", rssUrls: [],
@@ -4134,7 +4177,7 @@ async function loadFeed() {
   let loaded = 0;
 
   // Load RSS sources
-  const rssSources = FEED_SOURCES.filter(s => s.type !== "podcast");
+  const rssSources = FEED_SOURCES.filter(s => s.type === "rss" || s.type === "academic");
   await Promise.allSettled(rssSources.map(async src => {
     try {
       const text = await fetchRSS(src);
@@ -4188,8 +4231,9 @@ async function loadFeed() {
   }
 
   // Group by source type
-  const podcasts = allItems.filter(i => i.source.type === "podcast");
-  const news     = allItems.filter(i => i.source.type !== "podcast");
+  const podcasts  = allItems.filter(i => i.source.type === "podcast");
+  const academic  = allItems.filter(i => i.source.type === "academic");
+  const news      = allItems.filter(i => i.source.type === "rss");
 
   let html = "";
 
@@ -4226,6 +4270,22 @@ async function loadFeed() {
         </div>
         <div style="font-size:16px;color:var(--text-tertiary);flex-shrink:0">↗</div>
       </a>`;
+    });
+  }
+
+  if (academic.length) {
+    html += '<div class="feed-section-label"><span class="feed-source-dot" style="background:#b03060"></span>Acadêmico — Papers & Working Papers</div>';
+    academic.forEach(function(item) {
+      const d = item.date.toLocaleDateString("pt-BR", {day:"numeric",month:"short",year:"2-digit"});
+      html += '<a class="feed-card" href="' + esc(item.link) + '" target="_blank" rel="noopener">'
+        + '<div class="feed-card-icon" style="background:' + item.source.color + '22;font-size:18px;width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0">' + item.source.icon + '</div>'
+        + '<div style="flex:1;min-width:0">'
+        + '<div class="feed-card-title">' + esc(item.title) + '</div>'
+        + (item.desc ? '<div style="font-size:11px;color:var(--text-tertiary);line-height:1.5;margin:3px 0;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">' + esc(item.desc) + '</div>' : '')
+        + '<div class="feed-card-meta"><span class="feed-card-type" style="background:' + item.source.color + '20;color:' + item.source.color + '">' + esc(item.source.label) + '</span><span>' + d + '</span></div>'
+        + '</div>'
+        + '<div style="font-size:16px;color:var(--text-tertiary);flex-shrink:0">↗</div>'
+        + '</a>';
     });
   }
 
@@ -4317,7 +4377,17 @@ function setDomainPreset(key) {
 function getDomainInstruction() {
   if (!activeDomainPreset) return "";
   const p = DOMAIN_PRESETS[activeDomainPreset];
-  return p ? `\n\nBUSQUE PRIORITARIAMENTE nos domínios: ${p.domains.join(", ")}` : "";
+  if (!p) return "";
+  // Academic preset: SSRN/ResearchGate block bots directly.
+  // Instead guide search to accessible academic aggregators.
+  if (activeDomainPreset === "academico") {
+    return "\n\nFOCO ACADÊMICO: busque artigos e working papers sobre este tema em "
+      + "scholar.google.com, semanticscholar.org, arxiv.org e researchgate.net. "
+      + "Para cada paper encontrado, inclua: título, autores, ano, abstract e DOI ou URL. "
+      + "Priorize papers citados por reguladores (BIS, Fed, BCB) ou com alto número de citações. "
+      + "Inclua também referências de ssrn.com quando encontradas via Google Scholar.";
+  }
+  return "\n\nBUSQUE PRIORITARIAMENTE nos domínios: " + p.domains.join(", ");
 }
 
 function renderDomainPresets() {
