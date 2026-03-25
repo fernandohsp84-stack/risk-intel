@@ -293,6 +293,7 @@ CONTENT
 max-width: 640px;
 margin: 0 auto;
 padding: 0 16px 90px;
+overflow-x: hidden;
 }
 
 .page { display: none; }
@@ -1826,191 +1827,110 @@ margin-top: 4px;
 <!-- ── SAIBA MAIS ── -->
 <div class="page" id="page-saiba">
 
-  <!-- Hero -->
   <div class="saiba-hero">
-    <div class="saiba-hero-eyebrow">Versão 4.0 · Guia completo</div>
-    <div class="saiba-hero-title">Como funciona o Risk Intel</div>
-    <div class="saiba-hero-sub">Busca em fontes reais + revisão crítica por IA. Cada achado é verificado antes de chegar na sua tela.</div>
+    <div class="saiba-hero-eyebrow">Versão 5.0 · Guia completo</div>
+    <div class="saiba-hero-title">Risk Intel</div>
+    <div class="saiba-hero-sub">Inteligência de riscos financeiros com busca real em fontes primárias, revisão crítica por IA e ferramentas de gestão do conhecimento.</div>
   </div>
 
-  <!-- ══ FLUXO OPERACIONAL SVG ATUALIZADO ══ -->
+  <!-- SVG Fluxo -->
   <div class="saiba-illustration" style="background:#0a0c10;border-radius:16px;overflow:hidden;margin-bottom:24px;border:1px solid #1e2430">
-    <svg viewBox="0 0 360 540" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;font-family:-apple-system,sans-serif">
+    <svg viewBox="0 0 360 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;font-family:-apple-system,sans-serif">
+      <rect width="360" height="400" fill="#0a0c10"/>
+      <text x="180" y="18" text-anchor="middle" font-size="7.5" font-weight="700" fill="#3a4050" letter-spacing="2">FLUXO — RISK INTEL v5.0</text>
 
-      <defs>
-        <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" style="stop-color:#0071e3;stop-opacity:1"/>
-          <stop offset="100%" style="stop-color:#34c759;stop-opacity:1"/>
-        </linearGradient>
-        <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" style="stop-color:#34c759;stop-opacity:1"/>
-          <stop offset="100%" style="stop-color:#c8a96e;stop-opacity:1"/>
-        </linearGradient>
-        <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
-          <path d="M0,0 L0,6 L6,3 z" fill="#3a4050"/>
-        </marker>
-        <marker id="arr-blue" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
-          <path d="M0,0 L0,6 L6,3 z" fill="#0071e3"/>
-        </marker>
-        <marker id="arr-green" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
-          <path d="M0,0 L0,6 L6,3 z" fill="#34c759"/>
-        </marker>
-      </defs>
+      <!-- Gestor -->
+      <rect x="120" y="24" width="120" height="36" rx="8" fill="#111418" stroke="#2a3040" stroke-width="1"/>
+      <text x="180" y="38" text-anchor="middle" font-size="9" font-weight="700" fill="#ddd8ce">👤 Gestor de Riscos</text>
+      <text x="180" y="52" text-anchor="middle" font-size="7" fill="#6e6e73">escolhe tema · digita consulta · filtra domínio</text>
+      <line x1="180" y1="60" x2="180" y2="74" stroke="#3a4050" stroke-width="1.5" stroke-dasharray="3,2"/>
+      <polygon points="176,72 180,78 184,72" fill="#3a4050"/>
 
-      <!-- BG -->
-      <rect width="360" height="540" fill="#0a0c10"/>
+      <!-- Camada 1 -->
+      <rect x="12" y="80" width="336" height="72" rx="8" fill="#0d111a" stroke="#0071e3" stroke-width="1.3"/>
+      <rect x="12" y="80" width="336" height="16" rx="8" fill="#0071e3" opacity=".15"/>
+      <rect x="12" y="88" width="336" height="8" fill="#0071e3" opacity=".15"/>
+      <text x="28" y="92" font-size="7.5" font-weight="700" fill="#4a9eff" letter-spacing=".8">🌐 CAMADA 1 — BUSCA REAL (Claude Sonnet + Web Search)</text>
+      <rect x="20" y="102" width="52" height="18" rx="4" fill="#1a6b3a" opacity=".8"/>
+      <text x="46" y="114" text-anchor="middle" font-size="6.5" font-weight="700" fill="#fff">BCB</text>
+      <rect x="78" y="102" width="52" height="18" rx="4" fill="#2c5f8a" opacity=".8"/>
+      <text x="104" y="114" text-anchor="middle" font-size="6.5" font-weight="700" fill="#fff">BIS/BCBS</text>
+      <rect x="136" y="102" width="52" height="18" rx="4" fill="#3a2a6a" opacity=".8"/>
+      <text x="162" y="114" text-anchor="middle" font-size="6.5" font-weight="700" fill="#fff">FSB/CMN</text>
+      <rect x="194" y="102" width="52" height="18" rx="4" fill="#a07840" opacity=".8"/>
+      <text x="220" y="114" text-anchor="middle" font-size="6.5" font-weight="700" fill="#fff">Pilar 3</text>
+      <rect x="252" y="102" width="52" height="18" rx="4" fill="#ff6b35" opacity=".8"/>
+      <text x="278" y="114" text-anchor="middle" font-size="6.5" font-weight="700" fill="#fff">Startse</text>
+      <rect x="310" y="102" width="34" height="18" rx="4" fill="#7a04b0" opacity=".8"/>
+      <text x="327" y="114" text-anchor="middle" font-size="6.5" font-weight="700" fill="#fff">NU/BTG</text>
+      <text x="180" y="142" text-anchor="middle" font-size="6.5" fill="#4a5060" font-style="italic">extrai norma real · URL de origem · métrica concreta</text>
+      <line x1="180" y1="152" x2="180" y2="166" stroke="#3a4050" stroke-width="1.5" stroke-dasharray="3,2"/>
+      <polygon points="176,164 180,170 184,164" fill="#3a4050"/>
 
-      <!-- Header label -->
-      <text x="180" y="20" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4050" letter-spacing="2.5">FLUXO OPERACIONAL — RISK INTEL v4.0</text>
+      <!-- Camada 2 -->
+      <rect x="12" y="172" width="336" height="54" rx="8" fill="#0d1a10" stroke="#34c759" stroke-width="1.3"/>
+      <rect x="12" y="172" width="336" height="16" rx="8" fill="#34c759" opacity=".1"/>
+      <rect x="12" y="180" width="336" height="8" fill="#34c759" opacity=".1"/>
+      <text x="28" y="184" font-size="7.5" font-weight="700" fill="#34c759" letter-spacing=".8">✓ CAMADA 2 — REVISÃO CRÍTICA (Claude Haiku)</text>
+      <rect x="20" y="194" width="96" height="16" rx="4" fill="#0f1a10" stroke="#1a3a20" stroke-width=".8"/>
+      <text x="68" y="205" text-anchor="middle" font-size="6" fill="#4ecb71">🔗 URL verificada</text>
+      <rect x="122" y="194" width="116" height="16" rx="4" fill="#0f1a10" stroke="#1a3a20" stroke-width=".8"/>
+      <text x="180" y="205" text-anchor="middle" font-size="6" fill="#4ecb71">📋 Norma no formato correto</text>
+      <rect x="244" y="194" width="100" height="16" rx="4" fill="#0f1a10" stroke="#1a3a20" stroke-width=".8"/>
+      <text x="294" y="205" text-anchor="middle" font-size="6" fill="#4ecb71">🗑 Remove genéricos</text>
+      <line x1="180" y1="226" x2="180" y2="240" stroke="#3a4050" stroke-width="1.5" stroke-dasharray="3,2"/>
+      <polygon points="176,238 180,244 184,238" fill="#3a4050"/>
 
-      <!-- ─────────────────────────────────
-           BLOCO 0: GESTOR (topo)
-      ───────────────────────────────── -->
-      <rect x="110" y="30" width="140" height="44" rx="10" fill="#111418" stroke="#2a3040" stroke-width="1"/>
-      <text x="180" y="50" text-anchor="middle" font-size="11" font-weight="700" fill="#ddd8ce">👤 Gestor</text>
-      <text x="180" y="65" text-anchor="middle" font-size="8" fill="#6e6e73">Escolhe tema · digita consulta</text>
+      <!-- Cards -->
+      <rect x="12" y="246" width="220" height="60" rx="8" fill="#111418" stroke="#c8a96e" stroke-width="1"/>
+      <rect x="12" y="246" width="220" height="14" rx="8" fill="#c8a96e" opacity=".1"/>
+      <rect x="12" y="252" width="220" height="8" fill="#c8a96e" opacity=".1"/>
+      <text x="28" y="258" font-size="7" font-weight="700" fill="#c8a96e">◈ CARD RESULTADO</text>
+      <rect x="20" y="264" width="28" height="10" rx="3" fill="#0071e3" opacity=".2"/>
+      <text x="34" y="272" text-anchor="middle" font-size="5.5" fill="#4a9eff">BCB</text>
+      <rect x="52" y="264" width="36" height="10" rx="3" fill="#34c759" opacity=".12"/>
+      <text x="70" y="272" text-anchor="middle" font-size="5.5" fill="#34c759">✓ alto</text>
+      <rect x="92" y="264" width="50" height="10" rx="3" fill="#0071e3" opacity=".1"/>
+      <text x="117" y="272" text-anchor="middle" font-size="5.5" fill="#4a9eff">📋 Res. BCB 4.557</text>
+      <rect x="146" y="264" width="44" height="10" rx="3" fill="#34c759" opacity=".1"/>
+      <text x="168" y="272" text-anchor="middle" font-size="5.5" fill="#34c759">📊 LCR 100%</text>
+      <rect x="20" y="278" width="180" height="6" rx="2" fill="#6e6e73" opacity=".2"/>
+      <rect x="20" y="288" width="140" height="6" rx="2" fill="#6e6e73" opacity=".15"/>
 
-      <!-- seta down -->
-      <line x1="180" y1="74" x2="180" y2="92" stroke="#3a4050" stroke-width="1.5" marker-end="url(#arr)"/>
-      <text x="215" y="86" font-size="7" fill="#4a5060" font-style="italic">consulta</text>
+      <!-- Ações -->
+      <rect x="238" y="246" width="110" height="60" rx="8" fill="#111418" stroke="#2a3040" stroke-width=".8"/>
+      <text x="293" y="260" text-anchor="middle" font-size="7" font-weight="700" fill="#ddd8ce">Ações</text>
+      <text x="293" y="273" text-anchor="middle" font-size="6" fill="#6e6e73">✓ Lida  + Salvar</text>
+      <text x="293" y="284" text-anchor="middle" font-size="6" fill="#6e6e73">👍 Assertivo  👎 NA</text>
+      <text x="293" y="295" text-anchor="middle" font-size="6" fill="#6e6e73">🔔 Monitorar  ⚖ Comparar</text>
+      <text x="293" y="306" text-anchor="middle" font-size="6" fill="#6e6e73">✉ E-mail</text>
 
-      <!-- ─────────────────────────────────
-           BLOCO 1: BUSCA WEB REAL
-      ───────────────────────────────── -->
-      <!-- Card principal -->
-      <rect x="14" y="95" width="332" height="118" rx="10" fill="#0d111a" stroke="#0071e3" stroke-width="1.5"/>
-      <!-- faixa topo azul -->
-      <rect x="14" y="95" width="332" height="20" rx="10" fill="#0071e3" opacity=".18"/>
-      <rect x="14" y="105" width="332" height="10" fill="#0071e3" opacity=".18"/>
-      <!-- ícone + label -->
-      <circle cx="30" cy="105" r="7" fill="#0071e3" opacity=".9"/>
-      <text x="30" y="109" text-anchor="middle" font-size="8" fill="#fff">🌐</text>
-      <text x="46" y="109" font-size="8" font-weight="700" fill="#4a9eff" letter-spacing="1">CAMADA 1 — BUSCA NAS FONTES REAIS</text>
-      <text x="46" y="119" font-size="7" fill="#3a4a6a">Web Search ativo · Sonnet IA · até 5 buscas por consulta</text>
+      <!-- Bottom row -->
+      <line x1="90" y1="306" x2="90" y2="320" stroke="#3a4050" stroke-width="1" stroke-dasharray="2,2"/>
+      <line x1="270" y1="306" x2="270" y2="320" stroke="#3a4050" stroke-width="1" stroke-dasharray="2,2"/>
 
-      <!-- sub-boxes fontes -->
-      <!-- BCB -->
-      <rect x="22" y="127" width="72" height="38" rx="6" fill="#0f1a10" stroke="#1a6b3a" stroke-width="1"/>
-      <text x="58" y="141" text-anchor="middle" font-size="8" font-weight="700" fill="#4ecb71">🏦 BCB</text>
-      <text x="58" y="153" text-anchor="middle" font-size="6.5" fill="#6e6e73">bcb.gov.br</text>
-      <text x="58" y="161" text-anchor="middle" font-size="6" fill="#3a5040">Resoluções · REF</text>
+      <rect x="12" y="322" width="100" height="30" rx="6" fill="#111418" stroke="#2a3040" stroke-width=".7"/>
+      <text x="62" y="335" text-anchor="middle" font-size="6.5" font-weight="700" fill="#ddd8ce">📚 Biblioteca</text>
+      <text x="62" y="346" text-anchor="middle" font-size="6" fill="#6e6e73">filtro · export · share</text>
 
-      <!-- BIS/BCBS -->
-      <rect x="100" y="127" width="72" height="38" rx="6" fill="#0f1220" stroke="#2c5f8a" stroke-width="1"/>
-      <text x="136" y="141" text-anchor="middle" font-size="8" font-weight="700" fill="#4a9eff">🌍 BIS</text>
-      <text x="136" y="153" text-anchor="middle" font-size="6.5" fill="#6e6e73">bis.org</text>
-      <text x="136" y="161" text-anchor="middle" font-size="6" fill="#3a4060">BCBS · Papers</text>
+      <rect x="118" y="322" width="100" height="30" rx="6" fill="#111418" stroke="#2a3040" stroke-width=".7"/>
+      <text x="168" y="335" text-anchor="middle" font-size="6.5" font-weight="700" fill="#ddd8ce">📊 Dashboard BI</text>
+      <text x="168" y="346" text-anchor="middle" font-size="6" fill="#6e6e73">qualidade · NA · leitura</text>
 
-      <!-- FSB -->
-      <rect x="178" y="127" width="72" height="38" rx="6" fill="#150f20" stroke="#3a2a6a" stroke-width="1"/>
-      <text x="214" y="141" text-anchor="middle" font-size="8" font-weight="700" fill="#a855f7">📋 FSB</text>
-      <text x="214" y="153" text-anchor="middle" font-size="6.5" fill="#6e6e73">fsb.org</text>
-      <text x="214" y="161" text-anchor="middle" font-size="6" fill="#4a3060">Princípios · AI</text>
+      <rect x="224" y="322" width="72" height="30" rx="6" fill="#111418" stroke="#2a3040" stroke-width=".7"/>
+      <text x="260" y="335" text-anchor="middle" font-size="6.5" font-weight="700" fill="#ddd8ce">🎙 Podcast</text>
+      <text x="260" y="346" text-anchor="middle" font-size="6" fill="#6e6e73">roteiro IA + narração</text>
 
-      <!-- Pilar 3 -->
-      <rect x="256" y="127" width="78" height="38" rx="6" fill="#1a1408" stroke="#a07840" stroke-width="1"/>
-      <text x="295" y="141" text-anchor="middle" font-size="8" font-weight="700" fill="#c8a96e">📊 Pilar 3</text>
-      <text x="295" y="153" text-anchor="middle" font-size="6.5" fill="#6e6e73">Bancos BR</text>
-      <text x="295" y="161" text-anchor="middle" font-size="6" fill="#6a5030">Itaú·BB·BTG·NU</text>
+      <rect x="302" y="322" width="46" height="30" rx="6" fill="#111418" stroke="#2a3040" stroke-width=".7"/>
+      <text x="325" y="335" text-anchor="middle" font-size="6.5" font-weight="700" fill="#ddd8ce">📡 Feed</text>
+      <text x="325" y="346" text-anchor="middle" font-size="6" fill="#6e6e73">RSS · pods</text>
 
-      <!-- Texto dentro do card -->
-      <text x="180" y="200" text-anchor="middle" font-size="7" fill="#4a5060" font-style="italic">Lê os documentos reais · extrai normas · confirma métricas · registra URL de origem</text>
+      <!-- Feedback loop -->
+      <path d="M62,322 Q62,310 180,308 Q298,306 325,322" fill="none" stroke="#ff3b30" stroke-width=".8" stroke-dasharray="3,2" opacity=".5"/>
+      <text x="180" y="306" text-anchor="middle" font-size="5.5" fill="#ff5f5f" opacity=".7">↺ feedback — exclui vistos · melhora qualidade</text>
 
-      <!-- seta down -->
-      <line x1="180" y1="213" x2="180" y2="231" stroke="#3a4050" stroke-width="1.5" marker-end="url(#arr)"/>
-      <text x="215" y="225" font-size="7" fill="#4a5060" font-style="italic">JSON verificado</text>
-
-      <!-- ─────────────────────────────────
-           BLOCO 2: REVISÃO CRÍTICA
-      ───────────────────────────────── -->
-      <rect x="14" y="234" width="332" height="104" rx="10" fill="#0d1a10" stroke="#34c759" stroke-width="1.5"/>
-      <rect x="14" y="234" width="332" height="20" rx="10" fill="#34c759" opacity=".12"/>
-      <rect x="14" y="244" width="332" height="10" fill="#34c759" opacity=".12"/>
-      <circle cx="30" cy="244" r="7" fill="#34c759" opacity=".85"/>
-      <text x="30" y="248" text-anchor="middle" font-size="8" fill="#fff">✓</text>
-      <text x="46" y="248" font-size="8" font-weight="700" fill="#34c759" letter-spacing="1">CAMADA 2 — REVISÃO CRÍTICA</text>
-      <text x="46" y="258" font-size="7" fill="#2a5a3a">Haiku IA · valida URLs · verifica formatos normativos</text>
-
-      <!-- 3 checks -->
-      <rect x="22" y="266" width="94" height="30" rx="6" fill="#0f1a10" stroke="#1a3a20" stroke-width="1"/>
-      <text x="69" y="280" text-anchor="middle" font-size="7" font-weight="600" fill="#4ecb71">🔗 URL existe?</text>
-      <text x="69" y="290" text-anchor="middle" font-size="6.5" fill="#3a5a40">Fonte confiável</text>
-
-      <rect x="123" y="266" width="114" height="30" rx="6" fill="#0f1a10" stroke="#1a3a20" stroke-width="1"/>
-      <text x="180" y="280" text-anchor="middle" font-size="7" font-weight="600" fill="#4ecb71">📋 Norma no formato?</text>
-      <text x="180" y="290" text-anchor="middle" font-size="6.5" fill="#3a5a40">Res. BCB XXXX/AAAA</text>
-
-      <rect x="244" y="266" width="90" height="30" rx="6" fill="#0f1a10" stroke="#1a3a20" stroke-width="1"/>
-      <text x="289" y="280" text-anchor="middle" font-size="7" font-weight="600" fill="#4ecb71">📊 Dado concreto?</text>
-      <text x="289" y="290" text-anchor="middle" font-size="6.5" fill="#3a5a40">Remove genéricos</text>
-
-      <text x="180" y="326" text-anchor="middle" font-size="7" fill="#3a5a40" font-style="italic">Remove imprecisões · ajusta confiança · adiciona aviso quando dado não verificado</text>
-
-      <!-- seta down -->
-      <line x1="180" y1="338" x2="180" y2="356" stroke="#3a4050" stroke-width="1.5" marker-end="url(#arr)"/>
-      <text x="215" y="350" font-size="7" fill="#4a5060" font-style="italic">resultado final</text>
-
-      <!-- ─────────────────────────────────
-           BLOCO 3: CARDS NA TELA
-      ───────────────────────────────── -->
-      <rect x="14" y="359" width="332" height="88" rx="10" fill="#111418" stroke="#c8a96e" stroke-width="1.2"/>
-      <rect x="14" y="359" width="332" height="20" rx="10" fill="#c8a96e" opacity=".1"/>
-      <rect x="14" y="369" width="332" height="10" fill="#c8a96e" opacity=".1"/>
-      <circle cx="30" cy="369" r="7" fill="#c8a96e" opacity=".8"/>
-      <text x="30" y="373" text-anchor="middle" font-size="8" fill="#080a0d">◈</text>
-      <text x="46" y="373" font-size="8" font-weight="700" fill="#c8a96e" letter-spacing="1">RESULTADO — CARD COM BADGES</text>
-
-      <!-- mini card mockup -->
-      <rect x="22" y="383" width="148" height="52" rx="6" fill="#0d0f13" stroke="#2a3040" stroke-width=".8"/>
-      <rect x="22" y="383" width="148" height="5" rx="3" fill="#4a9eff" opacity=".7"/>
-      <rect x="27" y="393" width="90" height="3" rx="1.5" fill="#ddd8ce" opacity=".5"/>
-      <rect x="27" y="400" width="130" height="2.5" rx="1.25" fill="#6e6e73" opacity=".4"/>
-      <rect x="27" y="406" width="115" height="2.5" rx="1.25" fill="#6e6e73" opacity=".3"/>
-      <!-- badges row -->
-      <rect x="27" y="413" width="38" height="12" rx="3" fill="#0071e3" opacity=".2"/>
-      <text x="46" y="422" text-anchor="middle" font-size="6" fill="#4a9eff">📋 Norma</text>
-      <rect x="70" y="413" width="34" height="12" rx="3" fill="#34c759" opacity=".15"/>
-      <text x="87" y="422" text-anchor="middle" font-size="6" fill="#34c759">📊 100%</text>
-      <rect x="109" y="413" width="50" height="12" rx="3" fill="#34c759" opacity=".1"/>
-      <text x="134" y="422" text-anchor="middle" font-size="6.5" font-weight="700" fill="#34c759">✓ alto</text>
-
-      <!-- confidence legend -->
-      <text x="178" y="392" font-size="7" font-weight="700" fill="#6e6e73">Badges de qualidade:</text>
-      <rect x="178" y="397" width="10" height="7" rx="2" fill="#34c759" opacity=".3"/>
-      <text x="192" y="404" font-size="7" fill="#4ecb71">✓ alto — verificado</text>
-      <rect x="178" y="408" width="10" height="7" rx="2" fill="#ff9500" opacity=".3"/>
-      <text x="192" y="415" font-size="7" fill="#ff9500">~ médio — inferível</text>
-      <rect x="178" y="419" width="10" height="7" rx="2" fill="#aeaeb2" opacity=".3"/>
-      <text x="192" y="426" font-size="7" fill="#aeaeb2">? baixo — não confirmado</text>
-      <text x="178" y="437" font-size="6.5" fill="#3a4050" font-style="italic">🔗 URL real do documento</text>
-
-      <!-- seta down -->
-      <line x1="90" y1="447" x2="90" y2="462" stroke="#3a4050" stroke-width="1.5" marker-end="url(#arr)"/>
-      <line x1="270" y1="447" x2="270" y2="462" stroke="#3a4050" stroke-width="1.5" marker-end="url(#arr)"/>
-
-      <!-- ─────────────────────────────────
-           BLOCO 4: AÇÕES DO GESTOR
-      ───────────────────────────────── -->
-      <rect x="14" y="465" width="154" height="58" rx="8" fill="#111418" stroke="#2a3040" stroke-width=".8"/>
-      <text x="91" y="482" text-anchor="middle" font-size="8" font-weight="700" fill="#ddd8ce">📚 Biblioteca</text>
-      <text x="91" y="494" text-anchor="middle" font-size="7" fill="#6e6e73">Salvar · Avaliar · Filtrar</text>
-      <text x="91" y="505" text-anchor="middle" font-size="7" fill="#6e6e73">Assertivo · NA + motivo</text>
-      <text x="91" y="516" text-anchor="middle" font-size="7" fill="#6e6e73">E-mail · Exportar</text>
-
-      <rect x="192" y="465" width="154" height="58" rx="8" fill="#111418" stroke="#2a3040" stroke-width=".8"/>
-      <text x="269" y="482" text-anchor="middle" font-size="8" font-weight="700" fill="#ddd8ce">📊 Dashboard BI</text>
-      <text x="269" y="494" text-anchor="middle" font-size="7" fill="#6e6e73">Qualidade IA · Taxa NA</text>
-      <text x="269" y="505" text-anchor="middle" font-size="7" fill="#6e6e73">Por tema · Por fonte</text>
-      <text x="269" y="516" text-anchor="middle" font-size="7" fill="#6e6e73">Lidas · Assertividade</text>
-
-      <!-- feedback loop -->
-      <path d="M91,465 Q91,448 180,445 Q269,442 269,465" fill="none" stroke="#ff3b30" stroke-width="1" stroke-dasharray="3,2" opacity=".5"/>
-      <text x="180" y="442" text-anchor="middle" font-size="6.5" fill="#ff5f5f" opacity=".8">↺ feedback loop — exclui vistos das próximas buscas</text>
-
-      <!-- 🎙 podcast badge -->
-      <rect x="148" y="475" width="64" height="22" rx="5" fill="#1a1208" stroke="#a07840" stroke-width=".8"/>
-      <text x="180" y="490" text-anchor="middle" font-size="8" fill="#c8a96e">🎙 Podcast</text>
-
+      <!-- Version label -->
+      <text x="180" y="392" text-anchor="middle" font-size="6.5" fill="#2a3040">Risk Intel v5.0 · Pipeline IA 2 camadas · Busca web real</text>
     </svg>
   </div>
 
@@ -2018,111 +1938,61 @@ margin-top: 4px;
   <div class="saiba-section">
     <div class="saiba-section-title">O que é o Risk Intel?</div>
     <div class="saiba-section-lead">
-      É uma plataforma de inteligência de riscos financeiros que usa busca real na web combinada com IA em pipeline de 2 camadas. Diferente de um chatbot que gera texto da memória, o Risk Intel <strong>busca nos sites reais</strong> do BCB, BIS, BCBS e FSB antes de responder — verificando se as normas existem e se os dados são precisos.
+      Plataforma de inteligência de riscos financeiros que usa busca real na web combinada com pipeline de IA em 2 camadas. O modelo <strong>acessa os sites reais</strong> do BCB, BIS, BCBS e FSB antes de responder — verificando normas, confirmando métricas e registrando a URL de origem.
     </div>
     <div class="saiba-tip">
       <div class="saiba-tip-icon">💡</div>
-      <div class="saiba-tip-text"><strong>A diferença que importa:</strong> na versão anterior, a IA gerava referências normativas plausíveis mas frequentemente incorretas. Agora ela <em>busca</em> nas páginas reais, lê o documento e reporta o que encontrou — com a URL de origem.</div>
+      <div class="saiba-tip-text"><strong>Diferencial:</strong> ao contrário de um chatbot, o Risk Intel busca nos documentos reais. Se não encontrar uma fonte primária, informa explicitamente com badge <span style="color:#aeaeb2">? baixo</span> — em vez de inventar.</div>
     </div>
   </div>
 
   <div class="saiba-divider"></div>
 
-  <!-- Pipeline atualizado -->
+  <!-- Como funciona -->
   <div class="saiba-section">
-    <div class="saiba-section-title">O Pipeline Atualizado (v4.0)</div>
+    <div class="saiba-section-title">Como funciona — passo a passo</div>
     <div class="saiba-steps">
-
       <div class="saiba-step">
         <div class="saiba-step-num" style="background:#0071e3">1</div>
         <div>
-          <div class="saiba-step-title">Você faz a consulta</div>
-          <div class="saiba-step-desc">Selecione o tipo de risco e toque em um tópico rápido ou escreva livremente. O app exclui automaticamente temas que você já leu ou salvou.</div>
+          <div class="saiba-step-title">Escolha o tema e a consulta</div>
+          <div class="saiba-step-desc">Selecione um dos 6 temas de risco (ou crie um tema personalizado com <strong>＋ Novo tema</strong>). Toque em um tópico rápido ou escreva sua consulta livremente. Use os filtros de domínio para direcionar a busca: Regulatório BR, Internacional, Mercado e Negócios, Acadêmico ou Pilar 3 Bancos BR.</div>
         </div>
       </div>
-
       <div class="saiba-step">
         <div class="saiba-step-num" style="background:#0071e3">2</div>
         <div>
-          <div class="saiba-step-title">🌐 Busca real nas fontes primárias — Camada 1</div>
-          <div class="saiba-step-desc">O modelo <strong>Claude Sonnet</strong> acessa a internet e busca nas páginas reais:
-            <br>• <strong>bcb.gov.br</strong> — Resoluções, Circulares, REF
-            <br>• <strong>bis.org/bcbs/publ</strong> — Papers do Comitê de Basileia
-            <br>• <strong>fsb.org/publications</strong> — Princípios FSB
-            <br>• Relatórios de Pilar 3 dos bancos brasileiros
-            <br><br>Cada achado retorna com a <strong>URL real</strong> do documento consultado, o número exato da norma e a métrica concreta encontrada.</div>
+          <div class="saiba-step-title">🌐 Camada 1 — Busca real nas fontes</div>
+          <div class="saiba-step-desc">O <strong>Claude Sonnet</strong> acessa a internet com até 5 buscas reais por consulta, priorizando:<br>
+          • <strong>bcb.gov.br</strong> — Resoluções, Circulares, REF<br>
+          • <strong>bis.org/bcbs/publ</strong> — Papers do Comitê de Basileia<br>
+          • <strong>fsb.org/publications</strong> — Princípios FSB<br>
+          • Relatórios de Pilar 3 dos grandes bancos<br><br>
+          Cada achado retorna com URL real, número exato da norma e métrica concreta.</div>
         </div>
       </div>
-
       <div class="saiba-step">
         <div class="saiba-step-num" style="background:#34c759">3</div>
         <div>
-          <div class="saiba-step-title">✓ Revisão crítica — Camada 2</div>
-          <div class="saiba-step-desc">Um segundo modelo verifica cada achado:
-            <br>• A URL existe e é de fonte confiável?
-            <br>• O número da norma está no formato correto?
-            <br>• O conteúdo é específico ou genérico?
-            <br><br>Itens sem fonte verificável são descartados ou marcados com badge <strong style="color:#aeaeb2">? baixo</strong> e aviso explícito: <em>"não foi possível verificar — confirme antes de usar"</em>.</div>
+          <div class="saiba-step-title">✓ Camada 2 — Revisão crítica</div>
+          <div class="saiba-step-desc">O <strong>Claude Haiku</strong> revisa cada achado: verifica se a URL existe, se a norma está no formato correto (Res. BCB XXXX/AAAA, BCBS dXXX), descarta itens genéricos e atribui o badge de confiabilidade:
+          <br>• <strong style="color:#34c759">✓ alto</strong> — dado verificado em fonte primária real
+          <br>• <strong style="color:#ff9500">~ médio</strong> — norma plausível mas não confirmada
+          <br>• <strong style="color:#aeaeb2">? baixo</strong> — estimativa; confirme antes de usar</div>
         </div>
       </div>
-
       <div class="saiba-step">
         <div class="saiba-step-num" style="background:#c8a96e">4</div>
         <div>
-          <div class="saiba-step-title">Cards com badges de qualidade</div>
-          <div class="saiba-step-desc">Cada resultado exibe três indicadores:
-            <br>• <strong style="color:#34c759">✓ alto</strong> — dado encontrado e verificado em fonte primária real
-            <br>• <strong style="color:#ff9500">~ médio</strong> — norma existe mas conteúdo específico não confirmado
-            <br>• <strong style="color:#aeaeb2">? baixo</strong> — estimativa analítica sem fonte primária
-            <br><br>Também mostra: tag 📋 com a norma exata e tag 📊 com a métrica numérica.</div>
+          <div class="saiba-step-title">Avalie e organize os achados</div>
+          <div class="saiba-step-desc">Para cada card: <strong>👍 Assertivo</strong> (dado correto e aplicável) ou <strong>👎 Não aplicável</strong> com motivo. Salve na Biblioteca, marque como lida, monitore com 🔔, compare normas com ⚖, ou envie por ✉ e-mail. Tudo salvo localmente no dispositivo.</div>
         </div>
       </div>
-
       <div class="saiba-step">
-        <div class="saiba-step-num" style="background:#ff9500">5</div>
+        <div class="saiba-step-num" style="background:#ff3b30">5</div>
         <div>
-          <div class="saiba-step-title">Você avalia e o app aprende</div>
-          <div class="saiba-step-desc">Marcar "Não aplicável" com motivo (conteúdo · link · ambos) alimenta o índice de <strong>Qualidade IA</strong> no Dashboard. O app usa esse histórico para excluir padrões ruins das buscas seguintes. Itens lidos ou salvos nunca reaparecem.</div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <div class="saiba-divider"></div>
-
-  <!-- Por que busca real importa -->
-  <div class="saiba-section">
-    <div class="saiba-section-title">Por que a busca real faz diferença?</div>
-    <div class="saiba-section-lead">Sem busca real, modelos de linguagem geram referências normativas <em>plausíveis mas frequentemente incorretas</em> — citam resoluções que não existem, invertem datas, atribuem conteúdo de uma circular a outra. Com busca real:</div>
-
-    <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px">
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start">
-        <div style="font-size:20px;flex-shrink:0">📋</div>
-        <div>
-          <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px">Normas com número real</div>
-          <div style="font-size:12px;color:var(--text-secondary);line-height:1.65">O modelo lê a página do BCB e extrai o número exato da resolução, a data de publicação e a ementa — não inventa.</div>
-        </div>
-      </div>
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start">
-        <div style="font-size:20px;flex-shrink:0">🔗</div>
-        <div>
-          <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px">URL real do documento</div>
-          <div style="font-size:12px;color:var(--text-secondary);line-height:1.65">O botão "Ver fonte" leva ao documento real que o modelo consultou — você pode verificar diretamente.</div>
-        </div>
-      </div>
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start">
-        <div style="font-size:20px;flex-shrink:0">📊</div>
-        <div>
-          <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px">Métricas do documento real</div>
-          <div style="font-size:12px;color:var(--text-secondary);line-height:1.65">Percentuais, limites de capital, prazos de implementação — extraídos do texto real, não estimados.</div>
-        </div>
-      </div>
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start">
-        <div style="font-size:20px;flex-shrink:0">⚠</div>
-        <div>
-          <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px">Transparência quando não encontra</div>
-          <div style="font-size:12px;color:var(--text-secondary);line-height:1.65">Se o modelo não encontrar uma fonte primária, ele informa explicitamente com badge <span style="color:#aeaeb2">? baixo</span> — em vez de inventar.</div>
+          <div class="saiba-step-title">O app aprende e não repete</div>
+          <div class="saiba-step-desc">Achados lidos ou salvos são excluídos automaticamente das próximas buscas. Os pipelines recebem a lista de títulos já vistos como instrução explícita. Se não houver novidade, o app avisa: <em>"Sem novas notícias"</em>.</div>
         </div>
       </div>
     </div>
@@ -2130,56 +2000,165 @@ margin-top: 4px;
 
   <div class="saiba-divider"></div>
 
-  <!-- Fontes por tema -->
+  <!-- Funcionalidades completas -->
   <div class="saiba-section">
-    <div class="saiba-section-title">Onde o App Busca — por Tipo de Risco</div>
+    <div class="saiba-section-title">Todas as funcionalidades</div>
+    <div class="saiba-feature-grid">
+      <div class="saiba-feature"><div class="saiba-feature-icon">🔍</div><div class="saiba-feature-title">Busca em 2 camadas</div><div class="saiba-feature-desc">Web search real + revisão crítica automática.</div></div>
+      <div class="saiba-feature"><div class="saiba-feature-icon">🌐</div><div class="saiba-feature-title">Filtro de domínio</div><div class="saiba-feature-desc">Direcione a busca: Regulatório BR, BIS/FSB, Mercado, Acadêmico ou Pilar 3.</div></div>
+      <div class="saiba-feature"><div class="saiba-feature-icon">＋</div><div class="saiba-feature-title">Temas personalizados</div><div class="saiba-feature-desc">Crie temas com nome, emoji e tópicos rápidos próprios. Salvos no dispositivo.</div></div>
+      <div class="saiba-feature"><div class="saiba-feature-icon">📚</div><div class="saiba-feature-title">Biblioteca</div><div class="saiba-feature-desc">Salve, filtre por tema/avaliação/leitura e pesquise seus achados.</div></div>
+      <div class="saiba-feature"><div class="saiba-feature-icon">⚖</div><div class="saiba-feature-title">Comparativo de normas</div><div class="saiba-feature-desc">Adicione até 4 normas e compare escopo e diferenças com IA.</div></div>
+      <div class="saiba-feature"><div class="saiba-feature-icon">📤</div><div class="saiba-feature-title">Exportação multi-formato</div><div class="saiba-feature-desc">TXT, JSON, CSV (Excel), HTML (relatório), link compartilhável ou importar.</div></div>
+      <div class="saiba-feature"><div class="saiba-feature-icon">🔔</div><div class="saiba-feature-title">Monitoramento</div><div class="saiba-feature-desc">Salve consultas para monitorar. Badge indica novidades na aba Feed.</div></div>
+      <div class="saiba-feature"><div class="saiba-feature-icon">📡</div><div class="saiba-feature-title">Feed RSS</div><div class="saiba-feature-desc">Podcasts e portais: FEBRABAN, BCB, BIS, FSB, Startse, AI Daily Brief, IA sob Controle.</div></div>
+      <div class="saiba-feature"><div class="saiba-feature-icon">🎙</div><div class="saiba-feature-title">Podcast narrado</div><div class="saiba-feature-desc">Roteiro gerado pela IA com seus achados + narração pela voz do dispositivo.</div></div>
+      <div class="saiba-feature"><div class="saiba-feature-icon">🕐</div><div class="saiba-feature-title">Histórico</div><div class="saiba-feature-desc">Todas as consultas registradas. Toque para repetir qualquer busca anterior.</div></div>
+      <div class="saiba-feature"><div class="saiba-feature-icon">📊</div><div class="saiba-feature-title">Dashboard BI</div><div class="saiba-feature-desc">Gráficos e KPIs de qualidade, leitura e distribuição por tema e fonte.</div></div>
+      <div class="saiba-feature"><div class="saiba-feature-icon">✉</div><div class="saiba-feature-title">E-mail</div><div class="saiba-feature-desc">Compartilhe qualquer achado com colegas com um toque.</div></div>
+    </div>
+  </div>
+
+  <div class="saiba-divider"></div>
+
+  <!-- Dashboard BI — métricas explicadas -->
+  <div class="saiba-section">
+    <div class="saiba-section-title">Dashboard BI — o que cada indicador significa</div>
+    <div class="saiba-section-lead">O Dashboard analisa sua Biblioteca de achados salvos. Quanto mais você usa o app, mais preciso ele fica.</div>
+
+    <div style="font-size:11px;font-weight:700;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.8px;margin:14px 0 8px">KPIs principais</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px 16px;border-left:3px solid #34c759">
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px">Salvos</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.65">Total de achados na sua Biblioteca. É a base de cálculo de todos os outros indicadores.</div>
+      </div>
+
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px 16px;border-left:3px solid #007aff">
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px">Assertivos</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.65">Achados que você avaliou como 👍 Assertivo — dado correto, relevante e aplicável à sua realidade. Reflita seu grau de satisfação com o conteúdo gerado.</div>
+      </div>
+
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px 16px;border-left:3px solid #ff3b30">
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px">Não Aplicáveis (NA)</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.65">Achados marcados como 👎 Não aplicável com motivo específico. São automaticamente salvos na Biblioteca para análise. Quanto mais NAs você registra, mais informativo fica o gráfico de qualidade.</div>
+      </div>
+
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px 16px;border-left:3px solid #34c759">
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px">Qualidade IA (%)</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.65"><strong>Fórmula: Assertivos ÷ (Assertivos + NA) × 100</strong><br>Principal indicador de eficácia do pipeline. <span style="color:#34c759">Verde ≥ 70%</span> · <span style="color:#ff9500">Laranja 40–69%</span> · <span style="color:#ff3b30">Vermelho &lt; 40%</span>. Só considera itens avaliados — itens sem avaliação não entram no cálculo.</div>
+      </div>
+
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px 16px;border-left:3px solid #5ac8fa">
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px">Lidas (salvas) vs Lidas (total)</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.65"><strong>Lidas (salvas):</strong> itens na Biblioteca que também foram marcados como lidos.<br><strong>Lidas (total):</strong> todos os títulos únicos que você já marcou como lido, incluindo os não salvos. Juntos mostram seu ritmo de consumo do conteúdo.</div>
+      </div>
+
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px 16px;border-left:3px solid #ff3b30">
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px">Taxa NA (%)</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.65"><strong>Fórmula: NA ÷ Salvos × 100</strong><br>Percentual de achados salvos que foram classificados como não aplicáveis. Alta taxa NA indica que o pipeline está gerando conteúdo menos relevante para o seu contexto — útil para ajustar as consultas.</div>
+      </div>
+
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px 16px;border-left:3px solid #6e6e73">
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px">Taxa Leitura (%)</div>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.65"><strong>Fórmula: Lidas (salvas) ÷ Salvos × 100</strong><br>Proporção da Biblioteca que já foi lida. Útil para identificar acúmulo de achados não processados.</div>
+      </div>
+    </div>
+
+    <div style="font-size:11px;font-weight:700;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.8px;margin:14px 0 8px">Gráficos</div>
     <div style="display:flex;flex-direction:column;gap:8px">
-
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px 14px;border-left:3px solid #34c759">
-        <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px">◈ Risco de Modelo</div>
-        <div style="font-size:11px;color:var(--text-secondary);line-height:1.8">SR 11-7 Fed/OCC · BCBS Working Paper 37 · Resolução CMN 4.557/2017 · Pilar 3 dos grandes bancos</div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px">
+        <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px">Achados por Tema de Risco</div>
+        <div style="font-size:11px;color:var(--text-secondary)">Donut chart mostrando distribuição da sua Biblioteca pelos 6 temas de risco. Revela onde você concentra mais sua atenção regulatória.</div>
       </div>
-
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px 14px;border-left:3px solid #ff9500">
-        <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px">⬡ Risco de IA</div>
-        <div style="font-size:11px;color:var(--text-secondary);line-height:1.8">FSB 2023 AI in Finance · BCBS Supervisory Principles 2022 · BCB Comunicado 33.455 · IOSCO AI reports</div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px">
+        <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px">Achados por Fonte</div>
+        <div style="font-size:11px;color:var(--text-secondary)">Barras horizontais com volume por instituição (BCB, BIS, Itaú, BB, etc.). Mostra quais fontes mais contribuem para sua base de conhecimento.</div>
       </div>
-
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px 14px;border-left:3px solid #af52de">
-        <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px">⚙ Risco Operacional</div>
-        <div style="font-size:11px;color:var(--text-secondary);line-height:1.8">SA-OR Basileia IV (BCBS d355) · Circular BCB 3.983/2020 · Resoluções BCB 4.557 e 4.968</div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px">
+        <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px">Assertividade dos Achados</div>
+        <div style="font-size:11px;color:var(--text-secondary)">Donut com 3 fatias: Assertivo (verde) · Não Aplicável (vermelho) · Não Avaliado (cinza). A fatia cinza representa oportunidade de avaliação pendente.</div>
       </div>
-
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px 14px;border-left:3px solid #007aff">
-        <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px">◑ Risco de Mercado</div>
-        <div style="font-size:11px;color:var(--text-secondary);line-height:1.8">FRTB BCBS d457 · IRRBB BCBS d368 · Circular BCB 3.645/2013 · Resolução BCB 4.557</div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px">
+        <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px">Não Aplicáveis — Motivo, por Tema e por Fonte</div>
+        <div style="font-size:11px;color:var(--text-secondary)">Três gráficos que detalham os NAs: por motivo (Conteúdo · Link · Ambos), por tema de risco e por fonte. Permitem identificar padrões — ex: se BIS tem alta taxa NA, pode significar que os papers são muito genéricos para seu contexto.</div>
       </div>
-
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px 14px;border-left:3px solid #5ac8fa">
-        <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px">◎ Risco de Liquidez</div>
-        <div style="font-size:11px;color:var(--text-secondary);line-height:1.8">LCR Circular BCB 3.749/2015 · NSFR Resolução CMN 4.616/2017 · REF BCB (seção liquidez)</div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px">
+        <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px">Evolução Temporal — Salvos vs Lidos</div>
+        <div style="font-size:11px;color:var(--text-secondary)">Linha dupla mostrando evolução mensal: achados salvos (azul) versus achados lidos (verde). Revela seu ritmo de acúmulo e consumo do conhecimento ao longo do tempo.</div>
       </div>
-
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px 14px;border-left:3px solid #ff2d55">
-        <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px">◇ Risco de Terceiros</div>
-        <div style="font-size:11px;color:var(--text-secondary);line-height:1.8">Resolução BCB 4.752/2019 · Resolução CMN 4.557 · DORA (EU) · Framework TPRM internacional</div>
-      </div>
-
     </div>
   </div>
 
   <div class="saiba-divider"></div>
 
-  <!-- Custo atualizado -->
+  <!-- Podcasts e Feed -->
   <div class="saiba-section">
-    <div class="saiba-section-title">Quanto custa usar?</div>
+    <div class="saiba-section-title">📡 Feed — Podcasts e portais integrados</div>
+    <div class="saiba-section-lead">A aba Feed carrega automaticamente conteúdo de 7 fontes ao abrir o app:</div>
+
+    <div style="font-size:11px;font-weight:700;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.8px;margin:12px 0 8px">🎙 Podcasts</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+      <a href="https://podcasts.apple.com/br/podcast/the-ai-news-daily-brief/id1778060368" target="_blank" rel="noopener" style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px 16px;text-decoration:none;display:flex;align-items:center;gap:12px">
+        <div style="width:40px;height:40px;border-radius:10px;background:#9b59b620;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">🎙</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px">The AI News Daily Brief</div>
+          <div style="font-size:11px;color:var(--text-secondary)">Atualização diária sobre IA — tendências, pesquisas e impactos no mercado financeiro</div>
+          <div style="font-size:10px;color:#9b59b6;margin-top:3px;font-weight:600">Apple Podcasts ↗</div>
+        </div>
+      </a>
+      <a href="https://podcasts.apple.com/br/podcast/ia-sob-controle-intelig%C3%AAncia-artificial/id1763888661" target="_blank" rel="noopener" style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px 16px;text-decoration:none;display:flex;align-items:center;gap:12px">
+        <div style="width:40px;height:40px;border-radius:10px;background:#e74c3c20;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">🎙</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px">IA sob Controle</div>
+          <div style="font-size:11px;color:var(--text-secondary)">IA, ética, regulação e governança aplicada ao contexto brasileiro</div>
+          <div style="font-size:10px;color:#e74c3c;margin-top:3px;font-weight:600">Apple Podcasts ↗</div>
+        </div>
+      </a>
+    </div>
+
+    <div style="font-size:11px;font-weight:700;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.8px;margin:12px 0 8px">📰 Portais e publicações</div>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <a href="https://portal.febraban.org.br" target="_blank" rel="noopener" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px;text-decoration:none;display:flex;align-items:center;gap:10px">
+        <span style="font-size:16px">🏦</span>
+        <div><div style="font-size:12px;font-weight:600;color:var(--text)">FEBRABAN</div><div style="font-size:11px;color:var(--text-secondary)">portal.febraban.org.br</div></div>
+        <span style="margin-left:auto;font-size:14px;color:var(--text-tertiary)">↗</span>
+      </a>
+      <a href="https://www.bcb.gov.br" target="_blank" rel="noopener" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px;text-decoration:none;display:flex;align-items:center;gap:10px">
+        <span style="font-size:16px">🏛️</span>
+        <div><div style="font-size:12px;font-weight:600;color:var(--text)">Banco Central do Brasil</div><div style="font-size:11px;color:var(--text-secondary)">bcb.gov.br</div></div>
+        <span style="margin-left:auto;font-size:14px;color:var(--text-tertiary)">↗</span>
+      </a>
+      <a href="https://www.bis.org/bcbs/publ" target="_blank" rel="noopener" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px;text-decoration:none;display:flex;align-items:center;gap:10px">
+        <span style="font-size:16px">🌍</span>
+        <div><div style="font-size:12px;font-weight:600;color:var(--text)">BIS / BCBS Publications</div><div style="font-size:11px;color:var(--text-secondary)">bis.org/bcbs/publ</div></div>
+        <span style="margin-left:auto;font-size:14px;color:var(--text-tertiary)">↗</span>
+      </a>
+      <a href="https://www.fsb.org/publications" target="_blank" rel="noopener" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px;text-decoration:none;display:flex;align-items:center;gap:10px">
+        <span style="font-size:16px">📋</span>
+        <div><div style="font-size:12px;font-weight:600;color:var(--text)">FSB — Financial Stability Board</div><div style="font-size:11px;color:var(--text-secondary)">fsb.org/publications</div></div>
+        <span style="margin-left:auto;font-size:14px;color:var(--text-tertiary)">↗</span>
+      </a>
+      <a href="https://startse.com" target="_blank" rel="noopener" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px;text-decoration:none;display:flex;align-items:center;gap:10px">
+        <span style="font-size:16px">🚀</span>
+        <div><div style="font-size:12px;font-weight:600;color:var(--text)">Startse</div><div style="font-size:11px;color:var(--text-secondary)">startse.com — inovação e negócios</div></div>
+        <span style="margin-left:auto;font-size:14px;color:var(--text-tertiary)">↗</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="saiba-divider"></div>
+
+  <!-- Custo -->
+  <div class="saiba-section">
+    <div class="saiba-section-title">Custo por uso</div>
     <div class="saiba-cost-card">
       <div class="saiba-cost-val">~R$ 0,10–0,20</div>
-      <div class="saiba-cost-label">por consulta com busca real na web</div>
+      <div class="saiba-cost-label">por consulta (Sonnet + web search + revisão)</div>
       <div class="saiba-cost-detail">
-        O custo maior em relação à versão anterior se deve ao uso do <strong>Claude Sonnet</strong> (modelo mais capaz) e às <strong>buscas reais na internet</strong> (até 5 por consulta).<br><br>
-        Com US$ 4,90 de saldo você tem aproximadamente <strong>120 a 250 consultas</strong>.<br><br>
-        <strong>Vale o custo:</strong> normas verificadas · URLs reais · sem invenção de referências.
+        Cada busca usa <strong>Claude Sonnet</strong> com até 5 buscas web reais (Camada 1) e <strong>Claude Haiku</strong> para revisão (Camada 2).<br><br>
+        Com US$ 5,00 de créditos: aprox. <strong>120–250 consultas</strong>.<br><br>
+        O custo maior é compensado pela qualidade: normas verificadas, URLs reais, sem alucinação de referências.
       </div>
     </div>
   </div>
@@ -2192,23 +2171,28 @@ margin-top: 4px;
     <div class="saiba-qa">
 
       <div class="saiba-qa-item" onclick="toggleQA(this)">
-        <div class="saiba-qa-q">O badge "baixo" significa que o dado está errado?</div>
-        <div class="saiba-qa-a">Não necessariamente — significa que o modelo não encontrou uma fonte primária verificável durante a busca. O dado pode ser correto, mas como não foi verificado em documento real, não deve ser usado em relatórios sem confirmação adicional. O app indica explicitamente no texto do card.</div>
+        <div class="saiba-qa-q">Posso pesquisar temas fora dos 6 padrões?</div>
+        <div class="saiba-qa-a">Sim! O campo de busca aceita qualquer consulta. Exemplos: <em>"IA aplicada ao crédito habitacional"</em>, <em>"ESG bancário regulação BCB"</em>, <em>"Open Finance dados compartilhamento riscos"</em>. Para tornar o tema fixo, use <strong>＋ Novo tema</strong> e defina seu próprio conjunto de tópicos rápidos.</div>
       </div>
 
       <div class="saiba-qa-item" onclick="toggleQA(this)">
-        <div class="saiba-qa-q">O link "Ver fonte" sempre leva ao documento exato?</div>
-        <div class="saiba-qa-a">Com a busca web ativa, o link aponta para a URL real que o modelo encontrou durante a pesquisa — geralmente a página de publicação no BCB, BIS ou FSB. Em alguns casos pode apontar para a página de buscas da instituição, não ao PDF específico. Sempre verifique o conteúdo da página antes de citar.</div>
+        <div class="saiba-qa-q">O que significa o badge de confiabilidade?</div>
+        <div class="saiba-qa-a"><strong style="color:#34c759">✓ alto:</strong> URL real encontrada e conteúdo verificado na fonte primária.<br><strong style="color:#ff9500">~ médio:</strong> norma existe e é plausível, mas o conteúdo específico não foi confirmado em documento real.<br><strong style="color:#aeaeb2">? baixo:</strong> baseado em conhecimento geral — confirme na fonte antes de usar em relatórios ou apresentações.</div>
       </div>
 
       <div class="saiba-qa-item" onclick="toggleQA(this)">
-        <div class="saiba-qa-q">Por que algumas buscas demoram mais?</div>
-        <div class="saiba-qa-a">Consultas que ativam muitas buscas web (até 5 por consulta) levam entre 20 e 45 segundos. A barra de progresso mostra as duas etapas: "Buscando nas fontes reais" e "Revisão e verificação". Esse tempo é o custo da precisão — o modelo está efetivamente navegando nas páginas antes de responder.</div>
+        <div class="saiba-qa-q">Por que a Qualidade IA pode ser baixa?</div>
+        <div class="saiba-qa-a">O índice de Qualidade IA é calculado apenas com base nos itens que você avaliou. Se você marcou muitos NAs, o índice cai — isso é correto, pois reflete o desempenho real. Para melhorar: refine suas consultas sendo mais específico, mude o filtro de domínio ou experimente outros tópicos rápidos.</div>
       </div>
 
       <div class="saiba-qa-item" onclick="toggleQA(this)">
-        <div class="saiba-qa-q">Como adicionar o app à tela inicial?</div>
-        <div class="saiba-qa-a"><strong>iPhone (Safari):</strong> toque no ícone de compartilhar → "Adicionar à Tela de Início". <strong>Android (Chrome):</strong> toque nos 3 pontinhos → "Adicionar à tela inicial". O app abre sem barra de navegador, como um app nativo.</div>
+        <div class="saiba-qa-q">Como funciona o compartilhamento de biblioteca?</div>
+        <div class="saiba-qa-a">Em Biblioteca → Exportar → Compartilhar link, o app gera uma URL com sua biblioteca codificada em Base64. Quem abrir o link verá uma confirmação para importar os achados. Para bibliotecas grandes (mais de 50 itens), o app sugere exportar como JSON e enviar o arquivo diretamente.</div>
+      </div>
+
+      <div class="saiba-qa-item" onclick="toggleQA(this)">
+        <div class="saiba-qa-q">Como adicionar à tela inicial do iPhone?</div>
+        <div class="saiba-qa-a">No Safari: toque no ícone de compartilhar (quadrado com seta) → <strong>"Adicionar à Tela de Início"</strong>. O app abre sem barra de navegador, como um app nativo. No Android (Chrome): toque nos 3 pontinhos → "Adicionar à tela inicial".</div>
       </div>
 
     </div>
@@ -2216,25 +2200,6 @@ margin-top: 4px;
 
   <div style="height:16px"></div>
 </div>
-
-<!-- ── FEED ── -->
-<div class="page" id="page-feed">
-  <div class="page-header">
-    <div>
-      <div class="page-title">Feed</div>
-      <div class="page-subtitle" id="feed-subtitle">Podcasts e portais de mercado</div>
-    </div>
-    <button class="feed-refresh-btn" onclick="loadFeed()">↺ Atualizar</button>
-  </div>
-  <div id="feed-content">
-    <div class="feed-empty">
-      <div class="feed-empty-icon">📡</div>
-      <div style="font-size:14px;font-weight:600;color:var(--text-secondary);margin-bottom:6px">Carregando feed…</div>
-      <div style="font-size:13px;line-height:1.7">Podcasts e portais de mercado financeiro</div>
-    </div>
-  </div>
-</div>
-
 
 <!-- ── PODCAST ── -->
 <div class="page" id="page-podcast">
@@ -2765,8 +2730,13 @@ function cleanBody(text) {
     .replace(/<cite[^>]*>([\s\S]*?)<\/cite>/gi, "$1")
     // Remove any remaining XML/HTML tags
     .replace(/<[^>]+>/g, "")
+    // Remove markdown code fences (``` and ~~~ variants)
+    .replace(/^```[\w]*\n?/gm, "").replace(/\n?```$/gm, "")
+    .replace(/^~~~[\w]*\n?/gm, "").replace(/^~~~/gm, "")
     // Remove [N] footnote markers
     .replace(/\[\d+\]/g, "")
+    // Remove standalone backticks
+    .replace(/`{1,3}/g, "")
     // Clean up extra whitespace
     .replace(/\s{2,}/g, " ")
     .trim();
@@ -3007,9 +2977,10 @@ function renderResults(parsed, T) {
   let html = `<div class="results-count">${displayItems.length} resultado${displayItems.length!==1?"s":""} · ${T.label}</div>`;
 
   if (summary) {
+    const cleanSummary = cleanBody(summary);
     html += `<div class="summary-box" style="background:color-mix(in srgb,${T.accent} 7%,white);border:1px solid color-mix(in srgb,${T.accent} 20%,transparent)">
       <div class="summary-eyebrow" style="color:${T.accent}">${T.icon} Análise Executiva</div>
-      <div class="summary-text">${esc(summary)}</div>
+      <div class="summary-text">${esc(cleanSummary)}</div>
     </div>`;
   }
 
