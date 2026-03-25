@@ -1708,6 +1708,53 @@ animation: pulse 1.2s infinite;
 .podcast-loading-title { font-size: 16px; font-weight: 700; color: var(–text); margin-bottom: 6px; }
 .podcast-loading-sub { font-size: 13px; color: var(–text-secondary); line-height: 1.7; }
 
+/* ── PODCAST ITEM PICKER ── */
+.podcast-picker-section {
+background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+border-radius: 10px; padding: 12px 14px; margin-bottom: 12px;
+}
+.podcast-picker-label {
+font-size: 9px; font-weight: 700; letter-spacing: 1.2px;
+text-transform: uppercase; opacity: .55; margin-bottom: 8px;
+}
+.podcast-item-grid {
+display: flex; flex-direction: column; gap: 6px;
+max-height: 260px; overflow-y: auto; -webkit-overflow-scrolling: touch;
+}
+.podcast-item-row {
+display: flex; align-items: center; gap: 10px;
+padding: 8px 10px; border-radius: 8px;
+background: rgba(255,255,255,.05); cursor: pointer;
+transition: background .12s; -webkit-tap-highlight-color: transparent;
+border: 1.5px solid transparent;
+}
+.podcast-item-row.selected {
+background: rgba(255,149,0,.15); border-color: rgba(255,149,0,.4);
+}
+.podcast-item-check {
+width: 18px; height: 18px; border-radius: 5px; flex-shrink: 0;
+border: 1.5px solid rgba(255,255,255,.3); display: flex;
+align-items: center; justify-content: center; font-size: 11px;
+font-weight: 700; color: #ff9500;
+}
+.podcast-item-row.selected .podcast-item-check {
+background: #ff9500; border-color: #ff9500; color: #fff;
+}
+.podcast-item-title {
+font-size: 12px; font-weight: 500; color: rgba(255,255,255,.85);
+line-height: 1.3; flex: 1; min-width: 0;
+overflow: hidden; display: -webkit-box;
+-webkit-line-clamp: 2; -webkit-box-orient: vertical;
+}
+.podcast-item-badge {
+font-size: 9px; font-weight: 700; padding: 2px 6px;
+border-radius: 4px; flex-shrink: 0; opacity: .8;
+}
+.podcast-sel-info {
+font-size: 11px; color: rgba(255,149,0,.85);
+text-align: center; margin-top: 6px; font-weight: 600;
+}
+
 /* Voice warning */
 .voice-warning {
 background: rgba(255,149,0,.07); border: 1px solid rgba(255,149,0,.2);
@@ -1841,6 +1888,24 @@ margin-top: 4px;
   <div id="lib-content"></div>
 </div>
 
+
+<!-- ── FEED ── -->
+<div class="page" id="page-feed">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Feed</div>
+      <div class="page-subtitle" id="feed-subtitle">Podcasts e portais de mercado</div>
+    </div>
+    <button class="feed-refresh-btn" onclick="loadFeed()">↺ Atualizar</button>
+  </div>
+  <div id="feed-content">
+    <div class="feed-empty">
+      <div class="feed-empty-icon">📡</div>
+      <div style="font-size:14px;font-weight:600;color:var(--text-secondary);margin-bottom:6px">Carregando feed…</div>
+      <div style="font-size:13px;line-height:1.7">Podcasts e portais do mercado financeiro</div>
+    </div>
+  </div>
+</div>
 
 <!-- ── HISTÓRICO ── -->
 <div class="page" id="page-history">
@@ -2238,21 +2303,33 @@ margin-top: 4px;
       <div class="podcast-mic-icon">🎙</div>
       <div>
         <div class="podcast-hero-title">Risk Intel Podcast</div>
-        <div class="podcast-hero-sub">Resumo narrado das principais notícias da sua Biblioteca</div>
+        <div class="podcast-hero-sub">Selecione o tema e os achados para o episódio</div>
       </div>
     </div>
 
-    <div class="podcast-source-select">
-      <div class="podcast-source-label">Selecione as fontes</div>
-      <div class="podcast-source-opts" id="podcast-src-opts">
-        <button class="podcast-source-opt sel" data-src="all" onclick="togglePodcastSrc('all',this)">Todas</button>
-        <button class="podcast-source-opt" data-src="modelo" onclick="togglePodcastSrc('modelo',this)">Modelo</button>
-        <button class="podcast-source-opt" data-src="ia" onclick="togglePodcastSrc('ia',this)">IA</button>
-        <button class="podcast-source-opt" data-src="operacional" onclick="togglePodcastSrc('operacional',this)">Operacional</button>
-        <button class="podcast-source-opt" data-src="mercado" onclick="togglePodcastSrc('mercado',this)">Mercado</button>
-        <button class="podcast-source-opt" data-src="liquidez" onclick="togglePodcastSrc('liquidez',this)">Liquidez</button>
-        <button class="podcast-source-opt" data-src="terceiros" onclick="togglePodcastSrc('terceiros',this)">Terceiros</button>
+    <!-- Filtro por tema -->
+    <div class="podcast-picker-section">
+      <div class="podcast-picker-label">1. Filtrar por tema de risco</div>
+      <div class="podcast-source-opts" id="podcast-src-opts" style="flex-wrap:wrap;gap:6px">
+        <button class="podcast-source-opt sel" data-src="all" onclick="togglePodcastSrc('all',this)">Todos</button>
+        <button class="podcast-source-opt" data-src="modelo" onclick="togglePodcastSrc('modelo',this)">◈ Modelo</button>
+        <button class="podcast-source-opt" data-src="ia" onclick="togglePodcastSrc('ia',this)">⬡ IA</button>
+        <button class="podcast-source-opt" data-src="operacional" onclick="togglePodcastSrc('operacional',this)">⚙ Operacional</button>
+        <button class="podcast-source-opt" data-src="mercado" onclick="togglePodcastSrc('mercado',this)">◑ Mercado</button>
+        <button class="podcast-source-opt" data-src="liquidez" onclick="togglePodcastSrc('liquidez',this)">◎ Liquidez</button>
+        <button class="podcast-source-opt" data-src="terceiros" onclick="togglePodcastSrc('terceiros',this)">◇ Terceiros</button>
       </div>
+    </div>
+
+    <!-- Seleção individual de achados -->
+    <div class="podcast-picker-section">
+      <div class="podcast-picker-label">2. Selecione os achados para narrar</div>
+      <div class="podcast-item-grid" id="podcast-item-grid">
+        <div style="text-align:center;padding:16px;font-size:12px;opacity:.5">
+          Salve achados na Biblioteca para selecioná-los aqui
+        </div>
+      </div>
+      <div class="podcast-sel-info" id="podcast-sel-info"></div>
     </div>
 
     <button class="podcast-gen-btn" id="podcast-gen-btn" onclick="generatePodcast()">
@@ -2262,12 +2339,7 @@ margin-top: 4px;
 
   <div id="podcast-main">
     <div class="voice-warning">
-      <strong>Como funciona:</strong> A IA gera um roteiro profissional em português com base nos achados salvos na sua Biblioteca. A narração usa a síntese de voz nativa do seu dispositivo — sem custo adicional e sem necessidade de internet para o áudio.
-    </div>
-    <div style="text-align:center;padding:40px 20px;color:var(--text-tertiary)">
-      <div style="font-size:48px;opacity:.12;margin-bottom:12px">🎙</div>
-      <div style="font-size:15px;font-weight:600;color:var(--text-secondary);margin-bottom:6px">Nenhum episódio gerado</div>
-      <div style="font-size:13px;line-height:1.7">Salve achados na Biblioteca e toque em<br><strong>Gerar Podcast</strong> para criar seu episódio.</div>
+      <strong>Como funciona:</strong> Filtre por tema, selecione até 8 achados e toque em Gerar Podcast. A IA cria um roteiro profissional e a narração usa a voz nativa do seu iPhone — sem custo extra.
     </div>
   </div>
 </div>
@@ -2400,6 +2472,12 @@ margin-top: 4px;
 </div>
 
 <script>
+// ════════════════════════════════════════
+// UTILS — defined first so all functions can use them
+// ════════════════════════════════════════
+function esc(s) { return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+
 // ════════════════════════════════════════
 // DADOS
 // ════════════════════════════════════════
@@ -2705,6 +2783,7 @@ function showPage(p) {
   if (p === "bi")      renderBI();
   if (p === "feed")    loadFeed();
   if (p === "history") renderHistory();
+  if (p === "podcast") renderPodcastPicker();
 }
 
 // ════════════════════════════════════════
@@ -2724,7 +2803,7 @@ function buildRiskChips() {
     innerBtn.className = "risk-chip";
     innerBtn.id = "chip-inner-" + id;
     innerBtn.style.cssText = "border:none;background:transparent;padding:0;cursor:pointer;font-family:inherit;font-size:inherit;white-space:nowrap;display:flex;align-items:center;gap:6px";
-    innerBtn.innerHTML = "<span class='chip-icon'>" + T.icon + "</span>" + esc(T.label)
+    innerBtn.innerHTML = "<span class='chip-icon'>" + (T.icon||"") + "</span>" + (T.label||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
       + (T.custom ? " <span class='custom-theme-badge'>meu</span>" : "");
     innerBtn.onclick = function() { setTheme(id); };
     chip.appendChild(innerBtn);
@@ -3520,8 +3599,6 @@ function closeModal(id) {
   if (id === "na-modal") { pendingNATarget = null; pendingNAContext = null; selectedNA = null; }
 }
 
-function esc(s) { return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
-
 function jsStr(obj) { return JSON.stringify(obj).replace(/'/g,"&#39;"); }
 
 
@@ -3538,6 +3615,7 @@ let podcastWords = [];
 let podcastStartTime = 0;
 let podcastElapsed = 0;
 let podcastTimer = null;
+let podcastSelectedIds = new Set(); // IDs of library items selected for podcast
 
 const PODCAST_SYS = `Você é um apresentador de podcast financeiro profissional, com linguagem clara, dinâmica e executiva — similar ao estilo de podcasts da série "How I Built This" ou "The Daily", mas com conteúdo 100% sobre risco financeiro bancário brasileiro.
 
@@ -3555,16 +3633,93 @@ function togglePodcastSrc(src, btn) {
   podcastSrcFilter = src;
   document.querySelectorAll(".podcast-source-opt").forEach(b => b.classList.remove("sel"));
   btn.classList.add("sel");
+  podcastSelectedIds.clear();
+  renderPodcastPicker();
+}
+
+function renderPodcastPicker() {
+  const grid = document.getElementById("podcast-item-grid");
+  const info = document.getElementById("podcast-sel-info");
+  if (!grid) return;
+
+  const lib = getLib();
+  const filtered = podcastSrcFilter === "all"
+    ? lib.filter(i => i.rating !== "bad")
+    : lib.filter(i => i.themeId === podcastSrcFilter && i.rating !== "bad");
+
+  if (!filtered.length) {
+    grid.innerHTML = '<div style="text-align:center;padding:16px;font-size:12px;opacity:.5">'
+      + (lib.length ? "Nenhum achado assertivo neste tema" : "Salve achados na Biblioteca primeiro")
+      + "</div>";
+    if (info) info.textContent = "";
+    return;
+  }
+
+  grid.innerHTML = filtered.map(function(item) {
+    const T = THEMES[item.themeId] || THEMES.modelo;
+    const sel = podcastSelectedIds.has(item.id);
+    const safeId = JSON.stringify(item.id);
+    const rowClass = "podcast-item-row" + (sel ? " selected" : "");
+    const themeShort = esc(T.label.split(" ").pop());
+    return "<div class='" + rowClass + "' onclick='togglePodcastItem(" + safeId + ")' id='prow-" + item.id + "'>"
+      + "<div class='podcast-item-check'>" + (sel ? "&#10003;" : "") + "</div>"
+      + "<div class='podcast-item-title'>" + esc(item.title) + "</div>"
+      + "<span class='podcast-item-badge' style='background:" + T.accent + "22;color:" + T.accent + "'>"
+      + themeShort + "</span>"
+      + "</div>";
+  }).join("")
+
+  updatePodcastSelInfo();
+}
+
+function togglePodcastItem(id) {
+  if (podcastSelectedIds.has(id)) {
+    podcastSelectedIds.delete(id);
+  } else {
+    if (podcastSelectedIds.size >= 8) {
+      // visual shake - just update info
+      updatePodcastSelInfo();
+      return;
+    }
+    podcastSelectedIds.add(id);
+  }
+  const row = document.getElementById("prow-" + id);
+  if (row) {
+    row.classList.toggle("selected", podcastSelectedIds.has(id));
+    const check = row.querySelector(".podcast-item-check");
+    if (check) check.textContent = podcastSelectedIds.has(id) ? "✓" : "";
+  }
+  updatePodcastSelInfo();
+}
+
+function updatePodcastSelInfo() {
+  const info = document.getElementById("podcast-sel-info");
+  if (!info) return;
+  const n = podcastSelectedIds.size;
+  if (n === 0) {
+    info.textContent = "Toque para selecionar achados (máx. 8)";
+  } else if (n >= 8) {
+    info.textContent = "✓ " + n + " selecionados (máximo atingido)";
+  } else {
+    info.textContent = "✓ " + n + " selecionado" + (n > 1 ? "s" : "") + " · toque para adicionar mais";
+  }
 }
 
 async function generatePodcast() {
   const lib = getLib();
-  const items = podcastSrcFilter === "all"
-    ? lib.filter(i => i.rating !== "bad")
-    : lib.filter(i => i.themeId === podcastSrcFilter && i.rating !== "bad");
+
+  // If user explicitly selected items, use those; otherwise use all filtered
+  let items;
+  if (podcastSelectedIds.size > 0) {
+    items = lib.filter(i => podcastSelectedIds.has(i.id));
+  } else {
+    items = podcastSrcFilter === "all"
+      ? lib.filter(i => i.rating !== "bad")
+      : lib.filter(i => i.themeId === podcastSrcFilter && i.rating !== "bad");
+  }
 
   if (items.length === 0) {
-    alert("Nenhum achado encontrado para os filtros selecionados. Salve achados assertivos na Biblioteca primeiro.");
+    alert("Selecione ao menos 1 achado ou salve achados assertivos na Biblioteca.");
     return;
   }
 
@@ -3896,45 +4051,70 @@ function loadCustomThemesIntoRuntime() {
 // ════════════════════════════════════════
 // EVOLUTION 2 — RSS FEED + MARKET PORTALS
 // ════════════════════════════════════════
+// RSS proxy options — tries multiple CORS proxies in sequence
+function makeProxyUrls(originalUrl) {
+  return [
+    "https://corsproxy.io/?" + encodeURIComponent(originalUrl),
+    "https://api.allorigins.win/raw?url=" + encodeURIComponent(originalUrl),
+    "https://cors-anywhere.herokuapp.com/" + originalUrl,
+  ];
+}
+
 const FEED_SOURCES = [
   {
-    id: "febraban",  label: "FEBRABAN",  icon: "🏦", color: "#1a4060",
-    type: "rss",
-    rssUrl: "https://api.allorigins.win/raw?url=" + encodeURIComponent("https://portal.febraban.org.br/pagina/3066/48/pt-br/noticias.rss"),
-  },
-  {
     id: "bcb_noticias", label: "BCB Notícias", icon: "🏛️", color: "#1a6b3a",
-    type: "rss",
-    rssUrl: "https://api.allorigins.win/raw?url=" + encodeURIComponent("https://www.bcb.gov.br/api/noticias/feed"),
+    type: "rss", homeUrl: "https://www.bcb.gov.br/noticiaseinformacoes",
+    rssUrls: makeProxyUrls("https://www.bcb.gov.br/api/noticias/feed"),
   },
   {
-    id: "bis",  label: "BIS Publications", icon: "🌍", color: "#2c5f8a",
-    type: "rss",
-    rssUrl: "https://api.allorigins.win/raw?url=" + encodeURIComponent("https://www.bis.org/rss/pubsupdates.rss"),
+    id: "bis", label: "BIS Publications", icon: "🌍", color: "#2c5f8a",
+    type: "rss", homeUrl: "https://www.bis.org/bcbs/publ",
+    rssUrls: makeProxyUrls("https://www.bis.org/rss/pubsupdates.rss"),
   },
   {
-    id: "fsb",  label: "FSB",  icon: "📋", color: "#3a2a6a",
-    type: "rss",
-    rssUrl: "https://api.allorigins.win/raw?url=" + encodeURIComponent("https://www.fsb.org/feed/"),
+    id: "fsb", label: "FSB", icon: "📋", color: "#3a2a6a",
+    type: "rss", homeUrl: "https://www.fsb.org/publications",
+    rssUrls: makeProxyUrls("https://www.fsb.org/feed/"),
+  },
+  {
+    id: "febraban", label: "FEBRABAN", icon: "🏦", color: "#1a4060",
+    type: "rss", homeUrl: "https://portal.febraban.org.br",
+    rssUrls: makeProxyUrls("https://portal.febraban.org.br/pagina/3066/48/pt-br/noticias.rss"),
   },
   {
     id: "startse", label: "Startse", icon: "🚀", color: "#ff6b35",
-    type: "rss",
-    rssUrl: "https://api.allorigins.win/raw?url=" + encodeURIComponent("https://startse.com/feed/"),
+    type: "rss", homeUrl: "https://startse.com",
+    rssUrls: makeProxyUrls("https://startse.com/feed/"),
   },
+  // Podcasts — shown as static cards with direct Apple Podcasts links
   {
     id: "podcast_ai", label: "The AI News Daily Brief", icon: "🎙", color: "#9b59b6",
-    type: "podcast",
-    rssUrl: "https://api.allorigins.win/raw?url=" + encodeURIComponent("https://feeds.simplecast.com/54nAGcIl"),
-    appleUrl: "https://podcasts.apple.com/br/podcast/the-ai-news-daily-brief/id1778060368"
+    type: "podcast", rssUrls: [],
+    appleUrl: "https://podcasts.apple.com/br/podcast/the-ai-news-daily-brief/id1778060368",
+    desc: "Atualização diária sobre IA — tendências, pesquisas e impacto no mercado financeiro",
   },
   {
     id: "podcast_ia_ctrl", label: "IA sob Controle", icon: "🎙", color: "#e74c3c",
-    type: "podcast",
-    rssUrl: "https://api.allorigins.win/raw?url=" + encodeURIComponent("https://anchor.fm/s/ia-sob-controle/podcast/rss"),
-    appleUrl: "https://podcasts.apple.com/br/podcast/ia-sob-controle-intelig%C3%AAncia-artificial/id1763888661"
+    type: "podcast", rssUrls: [],
+    appleUrl: "https://podcasts.apple.com/br/podcast/ia-sob-controle-intelig%C3%AAncia-artificial/id1763888661",
+    desc: "IA, ética, regulação e governança aplicada ao contexto brasileiro",
   },
 ];
+
+// Fetch a single RSS source, trying each proxy URL in sequence
+async function fetchRSS(src) {
+  const urls = src.rssUrls || [];
+  for (const url of urls) {
+    try {
+      const res = await fetch(url, { signal: AbortSignal.timeout(6000) });
+      if (!res.ok) continue;
+      const text = await res.text();
+      if (!text || text.length < 50) continue;
+      return text;
+    } catch(_) { continue; }
+  }
+  return null;
+}
 
 let feedCache = {};
 let feedLoading = false;
@@ -3945,36 +4125,35 @@ async function loadFeed() {
   const el = document.getElementById("feed-content");
   if (!el) { feedLoading = false; return; }
 
-  el.innerHTML = `<div style="text-align:center;padding:40px 20px">
-    <div class="spinner" style="margin:0 auto 14px"></div>
-    <div style="font-size:12px;color:var(--text-tertiary);letter-spacing:1px">Carregando fontes…</div>
-  </div>`;
+  el.innerHTML = '<div style="text-align:center;padding:40px 20px">'
+    + '<div class="spinner" style="margin:0 auto 14px"></div>'
+    + '<div style="font-size:12px;color:var(--text-tertiary);letter-spacing:1px">Carregando fontes…</div>'
+    + '</div>';
 
   let allItems = [];
   let loaded = 0;
 
-  await Promise.allSettled(FEED_SOURCES.map(async src => {
+  // Load RSS sources
+  const rssSources = FEED_SOURCES.filter(s => s.type !== "podcast");
+  await Promise.allSettled(rssSources.map(async src => {
     try {
-      const res = await fetch(src.rssUrl, { signal: AbortSignal.timeout(8000) });
-      if (!res.ok) throw new Error("HTTP " + res.status);
-      const text = await res.text();
+      const text = await fetchRSS(src);
+      if (!text) throw new Error("Sem resposta");
       const parser = new DOMParser();
       const xml = parser.parseFromString(text, "text/xml");
-      const items = Array.from(xml.querySelectorAll("item")).slice(0, 5);
-      items.forEach(item => {
+      const items = Array.from(xml.querySelectorAll("item, entry")).slice(0, 5);
+      items.forEach(function(item) {
         const title = item.querySelector("title")?.textContent || "";
-        const link  = item.querySelector("link")?.textContent ||
-                      item.querySelector("link")?.getAttribute("href") || src.appleUrl || "#";
-        const date  = item.querySelector("pubDate")?.textContent ||
-                      item.querySelector("published")?.textContent || "";
-        const desc  = item.querySelector("description")?.textContent ||
-                      item.querySelector("summary")?.textContent || "";
-        if (title) {
+        const linkEl = item.querySelector("link");
+        const link = linkEl?.textContent?.trim() || linkEl?.getAttribute("href") || src.homeUrl || "#";
+        const date  = item.querySelector("pubDate,published,updated")?.textContent || "";
+        const desc  = item.querySelector("description,summary,content")?.textContent || "";
+        if (title && title.length > 2) {
           allItems.push({
             source: src, title: title.trim(),
             link: link.trim(),
             date: date ? new Date(date) : new Date(),
-            desc: desc.replace(/<[^>]+>/g,"").slice(0,120).trim()
+            desc: desc.replace(/<[^>]+>/g,"").slice(0,140).trim()
           });
         }
       });
@@ -4014,22 +4193,20 @@ async function loadFeed() {
 
   let html = "";
 
-  if (podcasts.length) {
-    html += `<div class="feed-section-label"><span class="feed-source-dot" style="background:#9b59b6"></span>Podcasts</div>`;
-    podcasts.forEach(item => {
-      const d = item.date.toLocaleDateString("pt-BR", {day:"numeric",month:"short"});
-      const openUrl = item.source.appleUrl || item.link;
-      html += `<a class="feed-card" href="${esc(openUrl)}" target="_blank" rel="noopener">
-        <div class="feed-card-icon" style="background:${item.source.color}22">${item.source.icon}</div>
-        <div style="flex:1;min-width:0">
-          <div class="feed-card-title">${esc(item.title)}</div>
-          <div class="feed-card-meta">
-            <span class="feed-card-type" style="background:${item.source.color}20;color:${item.source.color}">${esc(item.source.label)}</span>
-            <span>${d}</span>
-          </div>
-        </div>
-        <div style="font-size:16px;color:var(--text-tertiary);flex-shrink:0">↗</div>
-      </a>`;
+  // Always show podcast cards (static — no RSS needed)
+  const podcastSrcs = FEED_SOURCES.filter(s => s.type === "podcast");
+  if (podcastSrcs.length) {
+    html += '<div class="feed-section-label"><span class="feed-source-dot" style="background:#9b59b6"></span>Podcasts</div>';
+    podcastSrcs.forEach(function(src) {
+      html += '<a class="feed-card" href="' + esc(src.appleUrl) + '" target="_blank" rel="noopener">'
+        + '<div class="feed-card-icon" style="background:' + src.color + '22;font-size:22px;width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">' + src.icon + '</div>'
+        + '<div style="flex:1;min-width:0">'
+        + '<div class="feed-card-title">' + esc(src.label) + '</div>'
+        + '<div style="font-size:11px;color:var(--text-tertiary);line-height:1.5;margin:3px 0">' + esc(src.desc||"") + '</div>'
+        + '<div class="feed-card-meta"><span class="feed-card-type" style="background:' + src.color + '20;color:' + src.color + '">Apple Podcasts</span></div>'
+        + '</div>'
+        + '<div style="font-size:16px;color:var(--text-tertiary);flex-shrink:0">↗</div>'
+        + '</a>';
     });
   }
 
