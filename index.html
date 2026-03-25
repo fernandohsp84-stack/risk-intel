@@ -1752,7 +1752,7 @@ margin-top: 4px;
     <div class="section-label" style="margin-bottom:0">Tópicos Rápidos</div>
     <button onclick="openCustomThemeModal()" style="font-size:11px;font-weight:600;color:#5856d6;background:rgba(88,86,214,.07);border:1.5px solid rgba(88,86,214,.25);border-radius:8px;padding:4px 10px;cursor:pointer;font-family:'Inter',sans-serif">＋ Novo tema</button>
   </div>
-  <div class="section-label">Tópicos Rápidos</div>
+  
   <div class="topics-wrap" id="topics-wrap"></div>
 
   <div style="margin-bottom:8px">
@@ -2655,21 +2655,33 @@ function showPage(p) {
 function buildRiskChips() {
   const wrap = document.getElementById("risk-chips");
   wrap.innerHTML = "";
-  Object.keys(THEMES).forEach(id => {
+  Object.keys(THEMES).forEach(function(id) {
     const T = THEMES[id];
     const chip = document.createElement("div");
     chip.className = "risk-chip" + (T.custom ? " risk-chip-custom" : "");
     chip.id = "chip-" + id;
     chip.style.cssText = "display:flex;align-items:center;gap:6px;cursor:pointer;position:relative";
-    chip.innerHTML = `<button class="risk-chip" id="chip-inner-${id}" style="border:none;background:transparent;padding:0;cursor:pointer;font-family:inherit;font-size:inherit;white-space:nowrap;display:flex;align-items:center;gap:6px">
-      <span class="chip-icon">${T.icon}</span>${T.label}${T.custom ? '<span class="custom-theme-badge">meu</span>' : ''}
-    </button>${T.custom ? `<button onclick="event.stopPropagation();deleteCustomTheme('${id}')"
-      style="width:16px;height:16px;border-radius:50%;background:rgba(255,59,48,.15);border:none;color:#ff3b30;font-size:10px;cursor:pointer;line-height:1;padding:0;flex-shrink:0">✕</button>` : ''}`;
-    chip.querySelector("button").onclick = () => setTheme(id);
+
+    const innerBtn = document.createElement("button");
+    innerBtn.className = "risk-chip";
+    innerBtn.id = "chip-inner-" + id;
+    innerBtn.style.cssText = "border:none;background:transparent;padding:0;cursor:pointer;font-family:inherit;font-size:inherit;white-space:nowrap;display:flex;align-items:center;gap:6px";
+    innerBtn.innerHTML = "<span class='chip-icon'>" + T.icon + "</span>" + esc(T.label)
+      + (T.custom ? " <span class='custom-theme-badge'>meu</span>" : "");
+    innerBtn.onclick = function() { setTheme(id); };
+    chip.appendChild(innerBtn);
+
+    if (T.custom) {
+      const delBtn = document.createElement("button");
+      delBtn.style.cssText = "width:16px;height:16px;border-radius:50%;background:rgba(255,59,48,.15);border:none;color:#ff3b30;font-size:10px;cursor:pointer;line-height:1;padding:0;flex-shrink:0";
+      delBtn.textContent = "✕";
+      delBtn.onclick = function(e) { e.stopPropagation(); deleteCustomTheme(id); };
+      chip.appendChild(delBtn);
+    }
+
     wrap.appendChild(chip);
   });
 }
-
 function setTheme(id) {
   theme = id;
   const T = THEMES[id];
