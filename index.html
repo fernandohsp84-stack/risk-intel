@@ -2938,7 +2938,7 @@ async function callClaude(systemPrompt, userContent, opts = {}) {
 
   // AbortController with 55s timeout — Safari iOS kills long fetch() calls
   const controller = new AbortController();
-  const timeoutId = setTimeout(function() { controller.abort(); }, 55000);
+  const timeoutId = setTimeout(function() { controller.abort(); }, 120000);
 
   let res;
   try {
@@ -3038,10 +3038,12 @@ ${JSON.stringify(parsed1)}`;
       console.warn("Review layer failed, using research output:", reviewErr.message);
     }
 
+    if (window._loadingTimer) { clearInterval(window._loadingTimer); window._loadingTimer = null; }
     addToHistory(q, theme, finalParsed.items?.length || 0);
     renderResults(finalParsed, T);
 
   } catch (err) {
+    if (window._loadingTimer) { clearInterval(window._loadingTimer); window._loadingTimer = null; }
     renderError(err.message, T);
   }
 
@@ -3062,18 +3064,40 @@ function setLoadingStep(T, step) {
   ];
   const s = steps[step - 1] || steps[0];
   const pct = step === 1 ? 40 : 85;
-  document.getElementById("results-area").innerHTML = `
-    <div class="loading-box">
-      <div class="spinner" style="border-top-color:${T.accent}"></div>
-      <div class="loading-label">${s.label}</div>
-      <div style="font-size:11px;color:var(--text-tertiary);margin-bottom:14px">${s.detail}</div>
-      <div style="width:200px;height:3px;background:var(--border);border-radius:2px;margin:0 auto 14px;overflow:hidden">
-        <div style="height:100%;width:${pct}%;background:${T.accent};border-radius:2px;transition:width 0.5s"></div>
-      </div>
-      <div class="source-chips">
-        ${["BCB","Itaú","BB","BTG","Nubank","BIS","FSB"].map((s,i)=>`<span class="source-chip-load" style="animation-delay:${i*.15}s">${s}</span>`).join("")}
-      </div>
-    </div>`;
+
+  // Clear any existing timer
+  if (window._loadingTimer) clearInterval(window._loadingTimer);
+
+  // Render loading box with live counter
+  document.getElementById("results-area").innerHTML =
+    '<div class="loading-box">'
+    + '<div class="spinner" style="border-top-color:' + T.accent + '"></div>'
+    + '<div class="loading-label">' + s.label + '</div>'
+    + '<div style="font-size:11px;color:var(--text-tertiary);margin-bottom:6px">' + s.detail + '</div>'
+    + '<div id="loading-timer" style="font-size:11px;color:var(--text-tertiary);margin-bottom:12px;font-variant-numeric:tabular-nums">⏱ 0s — buscas em andamento…</div>'
+    + '<div style="width:200px;height:3px;background:var(--border);border-radius:2px;margin:0 auto 14px;overflow:hidden">'
+    + '<div style="height:100%;width:' + pct + '%;background:' + T.accent + ';border-radius:2px;transition:width 0.5s"></div>'
+    + '</div>'
+    + '<div class="source-chips">'
+    + ["BCB","Itaú","BB","BTG","Nubank","BIS","FSB"].map(function(src,i){
+        return '<span class="source-chip-load" style="animation-delay:' + (i*0.15) + 's">' + src + '</span>';
+      }).join("")
+    + '</div>'
+    + '</div>';
+
+  // Start elapsed timer
+  const t0 = Date.now();
+  window._loadingTimer = setInterval(function() {
+    const el = document.getElementById("loading-timer");
+    if (!el) { clearInterval(window._loadingTimer); return; }
+    const secs = Math.round((Date.now() - t0) / 1000);
+    const msg = secs < 15 ? "buscas em andamento…"
+               : secs < 30 ? "lendo documentos…"
+               : secs < 50 ? "analisando conteúdo…"
+               : secs < 80 ? "quase pronto…"
+               : "finalizando (consulta complexa)…";
+    el.textContent = "⏱ " + secs + "s — " + msg;
+  }, 1000);
 }
 
 function showWelcome() {
@@ -3086,16 +3110,25 @@ function showWelcome() {
 }
 
 function renderError(msg, T) {
-  document.getElementById("results-area").innerHTML = `
-    <div class="error-box">
-      <div class="error-icon">⚠</div>
-      <div class="error-msg">Não foi possível processar a consulta.</div>
-      <div class="error-detail">
-        <div class="diag-label" style="color:${T.accent}">Diagnóstico</div>
-        <div class="diag-text">${esc(msg || "Erro desconhecido")}</div>
-      </div>
-      <button class="retry-btn" style="border:1.5px solid ${T.accent};color:${T.accent}" onclick="doSearch(lastQ)">↺ Tentar novamente</button>
-    </div>`;
+  const isTimeout = msg && (msg.includes("abort") || msg.includes("Abort") || msg.includes("timeout") || msg.includes("Load failed"));
+  const userMsg = isTimeout
+    ? "A consulta demorou mais que o esperado. Buscas acadêmicas ou com web search podem levar até 2 minutos."
+    : "Não foi possível processar a consulta.";
+  const hint = isTimeout
+    ? '<div style="font-size:11px;color:var(--text-tertiary);margin-top:8px;line-height:1.6">💡 Dica: tente sem o filtro de domínio selecionado, ou aguarde alguns segundos e tente novamente.</div>'
+    : "";
+
+  document.getElementById("results-area").innerHTML =
+    '<div class="error-box">'
+    + '<div class="error-icon">⚠</div>'
+    + '<div class="error-msg">' + userMsg + '</div>'
+    + '<div class="error-detail">'
+    + '<div class="diag-label" style="color:' + T.accent + '">Diagnóstico</div>'
+    + '<div class="diag-text">' + esc(msg || "Erro desconhecido") + '</div>'
+    + hint
+    + '</div>'
+    + '<button class="retry-btn" style="border:1.5px solid ' + T.accent + ';color:' + T.accent + '" onclick="doSearch(lastQ)">↺ Tentar novamente</button>'
+    + '</div>';
 }
 
 // Official source homepages — used instead of AI-hallucinated URLs
