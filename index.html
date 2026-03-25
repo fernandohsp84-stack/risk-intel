@@ -1763,6 +1763,7 @@ margin-top: 4px;
     <button class="search-btn" id="search-btn" onclick="search()">Buscar</button>
   </div>
 
+  <div id="compare-strip-area"></div>
   <div id="results-area">
     <div class="welcome-box">
       <div class="welcome-icon" id="welcome-icon">◈</div>
@@ -1779,7 +1780,18 @@ margin-top: 4px;
       <div class="page-title">Biblioteca</div>
       <div class="page-subtitle" id="lib-count">0 achados salvos</div>
     </div>
-    <button class="export-btn" onclick="exportLibrary()">Exportar</button>
+    <div class="export-btn-wrap" id="export-wrap">
+      <button class="export-btn" onclick="toggleExportMenu()">Exportar ▾</button>
+      <div class="export-menu" id="export-menu" style="display:none">
+        <button class="export-menu-item" onclick="exportFormat('txt')"><span class="export-menu-icon">📄</span>Texto (.txt)</button>
+        <button class="export-menu-item" onclick="exportFormat('json')"><span class="export-menu-icon">📦</span>JSON (backup)</button>
+        <button class="export-menu-item" onclick="exportFormat('csv')"><span class="export-menu-icon">📊</span>Planilha (.csv)</button>
+        <button class="export-menu-item" onclick="exportFormat('html')"><span class="export-menu-icon">📋</span>Relatório HTML</button>
+        <button class="export-menu-item" onclick="shareLibrary()"><span class="export-menu-icon">🔗</span>Compartilhar link</button>
+        <button class="export-menu-item" onclick="triggerImport()"><span class="export-menu-icon">📥</span>Importar JSON</button>
+      </div>
+      <input type="file" id="import-file-input" accept=".json" style="display:none" onchange="importLibrary(event)"/>
+    </div>
   </div>
   <input class="lib-search" id="lib-search" placeholder="Buscar na biblioteca…" oninput="renderLibrary()"/>
   <div class="lib-filters" id="lib-filters">
@@ -1798,6 +1810,18 @@ margin-top: 4px;
   <div id="lib-content"></div>
 </div>
 
+
+<!-- ── HISTÓRICO ── -->
+<div class="page" id="page-history">
+  <div class="history-page-header" style="display:flex;align-items:flex-end;justify-content:space-between">
+    <div>
+      <div class="history-title">Histórico</div>
+      <div class="history-subtitle" id="history-subtitle">Consultas realizadas</div>
+    </div>
+    <button class="history-clear-btn" onclick="clearHistory()">Limpar</button>
+  </div>
+  <div id="history-content"></div>
+</div>
 
 <!-- ── SAIBA MAIS ── -->
 <div class="page" id="page-saiba">
@@ -2288,6 +2312,10 @@ margin-top: 4px;
       <span class="nav-icon">🎙</span>
       <span class="nav-label">Podcast</span>
     </button>
+    <button class="nav-btn" id="nav-history" onclick="showPage('history')">
+      <span class="nav-icon">🕐</span>
+      <span class="nav-label">Histórico</span>
+    </button>
     <button class="nav-btn" id="nav-saiba" onclick="showPage('saiba')">
       <span class="nav-icon">ℹ</span>
       <span class="nav-label">Saiba Mais</span>
@@ -2630,10 +2658,9 @@ function showApp() {
   setTheme("modelo");
   renderDomainPresets();
   updateMonitorBadge();
-  // Load feed in background after 1s
-  setTimeout(loadFeed, 1200);
-  // Run monitors silently
-  setTimeout(runMonitors, 3000);
+  checkUrlImport();            // Evo 7: check shared library in URL
+  setTimeout(loadFeed, 1200); // Evo 2: load RSS feed
+  setTimeout(runMonitors, 3000); // Evo 3: run monitors
 }
 
 function showSettings() {
@@ -2654,6 +2681,7 @@ function showPage(p) {
   if (p === "library") renderLibrary();
   if (p === "bi")      renderBI();
   if (p === "feed")    loadFeed();
+  if (p === "history") renderHistory();
 }
 
 // ════════════════════════════════════════
@@ -2880,6 +2908,7 @@ ${JSON.stringify(parsed1)}`;
       console.warn("Review layer failed, using research output:", reviewErr.message);
     }
 
+    addToHistory(q, theme, finalParsed.items?.length || 0);
     renderResults(finalParsed, T);
 
   } catch (err) {
@@ -3034,6 +3063,7 @@ function renderResults(parsed, T) {
           onclick="addMonitor(lastQ,theme)">
           ${getMonitors().find(m=>m.query===lastQ) ? "🔔 Monitorando" : "🔔 Monitorar"}
         </button>
+        ${item.normRef ? `<button class="action-btn" style="color:#5856d6;border-color:rgba(88,86,214,.3);background:rgba(88,86,214,.06)" onclick="addToCompare(${jsStr(item)})">⚖ Comparar</button>` : ""}
         <button class="action-btn good-btn" id="good_${cid}" onclick='rateCard("good","${cid}")'>👍 Assertivo</button>
         <button class="action-btn bad-btn" id="bad_${cid}" onclick='openNA("card","${cid}",${jsStr(item)})'>👎 Não aplicável</button>
         <button class="action-btn email-btn" onclick='openEmailModal(${jsStr(item)})'>✉ E-mail</button>
@@ -3247,27 +3277,8 @@ function delLib(id) {
   if (confirm("Remover este achado da Biblioteca?")) { removeFromLib(id); renderLibrary(); }
 }
 
-function exportLibrary() {
-  const lib = getLib();
-  if (!lib.length) { alert("Biblioteca vazia."); return; }
-  const lines = ["RISK INTEL — Biblioteca de Achados", "Exportado em: " + new Date().toLocaleString("pt-BR"), "", ""];
-  lib.forEach((item, i) => {
-    lines.push(`[${i+1}] ${item.title}`);
-    lines.push(`Tema: ${THEMES[item.themeId]?.label||item.themeId} | Fonte: ${item.source} | Data: ${item.date}`);
-    const ratingText = item.rating === "good" ? "Assertivo" : item.rating === "bad" ? "Não aplicável — " + (NA_LABELS[item.naReason] || item.naReason || "") : "Não avaliado";
-    const readStatus = getReadSet().has(item.title) ? "Lida" : "Não lida";
-    lines.push(`Avaliação: ${ratingText} | Leitura: ${readStatus}`);
-    lines.push(item.body);
-    if (item.url) lines.push(`Link: ${item.url}`);
-    lines.push("");
-  });
-  const blob = new Blob([lines.join("\n")], { type: "text/plain;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url; a.download = "risk-intel-biblioteca.txt";
-  document.body.appendChild(a); a.click();
-  document.body.removeChild(a); URL.revokeObjectURL(url);
-}
+// exportLibrary is replaced by exportFormat(fmt) — kept as alias
+function exportLibrary() { exportFormat("txt"); }
 
 // ════════════════════════════════════════
 // E-MAIL
@@ -4103,6 +4114,373 @@ function renderDomainPresets() {
       ${active?"✓ ":""}${esc(p.label)}
     </button>`;
   }).join("");
+}
+
+// ════════════════════════════════════════
+// EVOLUTION 5 — NORM COMPARISON
+// ════════════════════════════════════════
+let compareQueue = [];
+
+function addToCompare(item) {
+  if (compareQueue.length >= 4) {
+    alert("Máximo 4 normas para comparar.");
+    return;
+  }
+  if (compareQueue.find(i => i.normRef === item.normRef)) {
+    alert("Esta norma já está na comparação.");
+    return;
+  }
+  compareQueue.push(item);
+  renderCompareStrip();
+}
+
+function removeFromCompare(normRef) {
+  compareQueue = compareQueue.filter(i => i.normRef !== normRef);
+  renderCompareStrip();
+}
+
+function renderCompareStrip() {
+  const area = document.getElementById("compare-strip-area");
+  if (!area) return;
+  if (!compareQueue.length) { area.innerHTML = ""; return; }
+
+  const tags = compareQueue.map(i =>
+    `<span class="compare-tag">📋 ${esc(i.normRef)}
+      <span class="remove-tag" onclick="removeFromCompare('${esc(i.normRef)}')">✕</span>
+    </span>`
+  ).join("");
+
+  area.innerHTML = `
+    <div class="compare-strip">
+      <span class="compare-strip-label">⚖ Comparar</span>
+      ${tags}
+      ${compareQueue.length >= 2
+        ? `<button class="compare-add-btn" style="background:#5856d6;color:#fff;border-style:solid" onclick="runComparison()">Comparar agora</button>`
+        : `<span style="font-size:11px;color:var(--text-tertiary)">+ adicione outra norma</span>`
+      }
+      <button class="compare-add-btn" onclick="compareQueue=[];renderCompareStrip()">✕ Limpar</button>
+    </div>`;
+}
+
+async function runComparison() {
+  if (compareQueue.length < 2) return;
+  const area = document.getElementById("compare-strip-area");
+  const T = THEMES[theme];
+
+  area.innerHTML = `<div class="compare-strip" style="justify-content:center">
+    <div class="spinner" style="border-top-color:#5856d6;width:20px;height:20px"></div>
+    <span style="font-size:12px;color:var(--text-secondary)">Comparando normas…</span>
+  </div>`;
+
+  const normList = compareQueue.map(i => `• ${i.normRef}: ${i.title} — ${i.body.slice(0,200)}`).join("\n");
+
+  const compSys = "Você é especialista em regulação financeira. Compare as normas fornecidas de forma estruturada. Para cada par de normas, identifique: (1) o que cada uma regula, (2) principais diferenças de escopo ou requisito, (3) qual é mais recente/prevalente. Retorne JSON: {\"comparisons\":[{\"title\":\"Norma A vs Norma B\",\"normA\":\"ref\",\"normB\":\"ref\",\"bodyA\":\"o que A regula\",\"bodyB\":\"o que B regula\",\"diff\":\"principal diferença\",\"note\":\"contexto adicional\"}]} APENAS JSON puro.";
+
+  try {
+    const raw = await callClaude(compSys,
+      `Compare estas normas sobre ${T.label}:
+${normList}`,
+      { model: "claude-haiku-4-5-20251001", maxTokens: 2000, useSearch: false }
+    );
+    let parsed = null;
+    try { parsed = JSON.parse(raw.trim()); } catch(_) {
+      const m = raw.match(/\{[\s\S]*\}/);
+      if (m) parsed = JSON.parse(m[0]);
+    }
+
+    if (!parsed?.comparisons?.length) throw new Error("Sem dados");
+
+    const colors = ["#5856d6","#007aff","#34c759","#ff9500"];
+    const html = parsed.comparisons.map((c, idx) => `
+      <div class="compare-result-card" style="animation-delay:${idx*80}ms">
+        <div class="compare-result-title">⚖ ${esc(c.title)}</div>
+        <div class="compare-norm-row">
+          <span class="compare-norm-badge" style="background:${colors[0]}20;color:${colors[0]}">${esc(c.normA)}</span>
+          <div class="compare-norm-text">${esc(c.bodyA)}</div>
+        </div>
+        <div class="compare-norm-row">
+          <span class="compare-norm-badge" style="background:${colors[1]}20;color:${colors[1]}">${esc(c.normB)}</span>
+          <div class="compare-norm-text">${esc(c.bodyB)}</div>
+        </div>
+        <div class="compare-diff-bar">
+          <div class="compare-diff-label">↔ Diferença principal</div>
+          ${esc(c.diff)}
+          ${c.note ? `<div style="margin-top:6px;opacity:.7">${esc(c.note)}</div>` : ""}
+        </div>
+      </div>`).join("");
+
+    area.innerHTML = `
+      <div class="compare-strip" style="flex-wrap:wrap">
+        <span class="compare-strip-label">⚖ Resultado da comparação</span>
+        <button class="compare-add-btn" onclick="compareQueue=[];renderCompareStrip()" style="margin-left:auto">✕ Fechar</button>
+      </div>
+      ${html}`;
+
+  } catch(err) {
+    area.innerHTML = `<div class="compare-strip">
+      <span style="font-size:12px;color:var(--red)">Erro na comparação: ${esc(err.message)}</span>
+      <button class="compare-add-btn" onclick="renderCompareStrip()">Tentar novamente</button>
+    </div>`;
+  }
+}
+
+// ════════════════════════════════════════
+// EVOLUTION 6 — MULTI-FORMAT EXPORT
+// ════════════════════════════════════════
+function toggleExportMenu() {
+  const menu = document.getElementById("export-menu");
+  if (!menu) return;
+  const isOpen = menu.style.display !== "none";
+  menu.style.display = isOpen ? "none" : "block";
+  if (!isOpen) {
+    // Close on outside click
+    setTimeout(() => {
+      document.addEventListener("click", function closeMenu(e) {
+        const wrap = document.getElementById("export-wrap");
+        if (wrap && !wrap.contains(e.target)) {
+          menu.style.display = "none";
+          document.removeEventListener("click", closeMenu);
+        }
+      });
+    }, 50);
+  }
+}
+
+function exportFormat(fmt) {
+  const menu = document.getElementById("export-menu");
+  if (menu) menu.style.display = "none";
+  const lib = getLib();
+  if (!lib.length) { alert("Biblioteca vazia."); return; }
+
+  const dateStr = new Date().toLocaleDateString("pt-BR");
+  let content, filename, mime;
+
+  if (fmt === "txt") {
+    const lines = ["RISK INTEL — Biblioteca de Achados", "Exportado em: " + dateStr, "", ""];
+    lib.forEach((item, i) => {
+      lines.push(`[${i+1}] ${item.title}`);
+      lines.push(`Tema: ${THEMES[item.themeId]?.label||item.themeId} | Fonte: ${item.source} | Data: ${item.date}`);
+      const rt = item.rating === "good" ? "Assertivo" : item.rating === "bad" ? "Não aplicável — " + (NA_LABELS[item.naReason]||"") : "Não avaliado";
+      lines.push(`Avaliação: ${rt} | Leitura: ${getReadSet().has(item.title)?"Lida":"Não lida"}`);
+      if (item.normRef) lines.push(`Norma: ${item.normRef}`);
+      if (item.metric)  lines.push(`Métrica: ${item.metric}`);
+      lines.push(item.body);
+      if (item.url) lines.push(`Link: ${item.url}`);
+      lines.push("");
+    });
+    content = lines.join("\n"); filename = "risk-intel-biblioteca.txt"; mime = "text/plain";
+
+  } else if (fmt === "json") {
+    content = JSON.stringify({ exportedAt: new Date().toISOString(), version: "4.0", items: lib }, null, 2);
+    filename = "risk-intel-backup.json"; mime = "application/json";
+
+  } else if (fmt === "csv") {
+    const headers = ["Título","Tema","Fonte","Data","Avaliação","Confiança","Norma","Métrica","Lida","Salvo em","Link"];
+    const rows = lib.map(item => [
+      item.title, THEMES[item.themeId]?.label||item.themeId, item.source, item.date,
+      item.rating==="good"?"Assertivo":item.rating==="bad"?"Não aplicável":"Não avaliado",
+      item.confidence||"", item.normRef||"", item.metric||"",
+      getReadSet().has(item.title)?"Sim":"Não",
+      new Date(item.savedAt).toLocaleDateString("pt-BR"),
+      item.url||""
+    ].map(v => `"${String(v).replace(/"/g,'""')}"`).join(","));
+    content = [headers.join(","), ...rows].join("\n");
+    filename = "risk-intel-biblioteca.csv"; mime = "text/csv";
+
+  } else if (fmt === "html") {
+    const cards = lib.map(item => {
+      const T = THEMES[item.themeId] || THEMES.modelo;
+      const rt = item.rating==="good"?"✓ Assertivo":item.rating==="bad"?"✗ Não aplicável":"—";
+      return `<div style="border:1px solid #e0e0e5;border-left:3px solid ${T.accent};border-radius:8px;padding:14px 16px;margin-bottom:12px;font-family:sans-serif">
+        <div style="font-size:15px;font-weight:700;color:#1d1d1f;margin-bottom:6px">${item.title}</div>
+        <div style="font-size:12px;color:#6e6e73;margin-bottom:8px">${item.body}</div>
+        <div style="font-size:11px;color:#aeaeb2">${T.label} · ${item.source} · ${item.date} · ${rt}${item.normRef?" · "+item.normRef:""}</div>
+        ${item.url?`<div style="margin-top:6px"><a href="${item.url}" style="font-size:11px;color:#0071e3">Ver fonte ↗</a></div>`:""}
+      </div>`;
+    }).join("");
+    content = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Risk Intel — Biblioteca</title></head>
+<body style="max-width:720px;margin:40px auto;padding:0 20px;background:#f5f5f7;font-family:sans-serif">
+  <h1 style="font-size:24px;font-weight:700;color:#1d1d1f;margin-bottom:4px">Risk Intel — Biblioteca</h1>
+  <p style="color:#6e6e73;margin-bottom:24px">Exportado em ${dateStr} · ${lib.length} achados</p>
+  ${cards}
+</body></html>`;
+    filename = "risk-intel-relatorio.html"; mime = "text/html";
+  }
+
+  const blob = new Blob([content], { type: mime + ";charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
+}
+
+// ════════════════════════════════════════
+// EVOLUTION 7 — SHARE & IMPORT LIBRARY
+// ════════════════════════════════════════
+function shareLibrary() {
+  const menu = document.getElementById("export-menu");
+  if (menu) menu.style.display = "none";
+  const lib = getLib();
+  if (!lib.length) { alert("Biblioteca vazia."); return; }
+
+  // Encode as base64 JSON for URL sharing (small libraries only)
+  const data = { v: "4.0", ts: new Date().toISOString(), items: lib };
+  const json = JSON.stringify(data);
+
+  if (json.length > 50000) {
+    // Too large for URL — export JSON instead
+    alert("Biblioteca grande demais para link. Use Exportar → JSON e envie o arquivo.");
+    exportFormat("json");
+    return;
+  }
+
+  const b64 = btoa(encodeURIComponent(json));
+  const shareUrl = window.location.href.split("?")[0] + "?lib=" + b64;
+
+  if (navigator.share) {
+    navigator.share({ title: "Risk Intel — Biblioteca", text: "Minha biblioteca Risk Intel (" + lib.length + " achados)", url: shareUrl })
+      .catch(() => copyToClipboard(shareUrl));
+  } else {
+    copyToClipboard(shareUrl);
+    alert("Link copiado para a área de transferência!\n\nQuem abrir este link verá sua biblioteca automaticamente importada.");
+  }
+}
+
+function copyToClipboard(text) {
+  if (navigator.clipboard) { navigator.clipboard.writeText(text); return; }
+  const ta = document.createElement("textarea");
+  ta.value = text; document.body.appendChild(ta);
+  ta.select(); document.execCommand("copy");
+  document.body.removeChild(ta);
+}
+
+function triggerImport() {
+  const menu = document.getElementById("export-menu");
+  if (menu) menu.style.display = "none";
+  document.getElementById("import-file-input")?.click();
+}
+
+function importLibrary(event) {
+  const file = event.target.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const data = JSON.parse(e.target.result);
+      const items = data.items || (Array.isArray(data) ? data : []);
+      if (!items.length) { alert("Arquivo inválido ou vazio."); return; }
+      const current = getLib();
+      const currentIds = new Set(current.map(i => i.title + i.source));
+      const toAdd = items.filter(i => !currentIds.has(i.title + i.source));
+      if (!toAdd.length) { alert("Todos os achados já existem na sua biblioteca."); return; }
+      saveLib([...toAdd, ...current]);
+      alert(toAdd.length + " achado(s) importado(s) com sucesso!");
+      renderLibrary();
+    } catch(err) {
+      alert("Erro ao importar: " + err.message);
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = "";
+}
+
+function checkUrlImport() {
+  const params = new URLSearchParams(window.location.search);
+  const libParam = params.get("lib");
+  if (!libParam) return;
+  try {
+    const json = decodeURIComponent(atob(libParam));
+    const data = JSON.parse(json);
+    const items = data.items || [];
+    if (!items.length) return;
+    if (confirm(`Importar ${items.length} achado(s) de uma biblioteca compartilhada?`)) {
+      const current = getLib();
+      const ids = new Set(current.map(i => i.title + i.source));
+      const toAdd = items.filter(i => !ids.has(i.title + i.source));
+      saveLib([...toAdd, ...current]);
+      // Clean URL
+      window.history.replaceState({}, "", window.location.pathname);
+    }
+  } catch(_) {}
+}
+
+// ════════════════════════════════════════
+// EVOLUTION 8 — SEARCH HISTORY
+// ════════════════════════════════════════
+function getHistory() {
+  try { return JSON.parse(localStorage.getItem("ri_history") || "[]"); } catch { return []; }
+}
+function saveHistory(h) { localStorage.setItem("ri_history", JSON.stringify(h)); }
+
+function addToHistory(q, themeId, resultCount) {
+  if (!q) return;
+  const h = getHistory().filter(i => i.query !== q); // dedup
+  h.unshift({
+    id: Date.now(),
+    query: q,
+    themeId,
+    resultCount,
+    date: new Date().toISOString()
+  });
+  saveHistory(h.slice(0, 100)); // keep last 100
+}
+
+function clearHistory() {
+  if (confirm("Limpar todo o histórico de buscas?")) {
+    localStorage.removeItem("ri_history");
+    renderHistory();
+  }
+}
+
+function renderHistory() {
+  const h = getHistory();
+  const el = document.getElementById("history-content");
+  if (!el) return;
+
+  document.getElementById("history-subtitle").textContent =
+    h.length + " consulta" + (h.length !== 1 ? "s" : "");
+
+  if (!h.length) {
+    el.innerHTML = `<div class="history-empty">
+      <div class="history-empty-icon">🕐</div>
+      <div style="font-size:14px;font-weight:600;color:var(--text-secondary);margin-bottom:4px">Nenhuma busca ainda</div>
+      <div style="font-size:12px;color:var(--text-tertiary)">Suas consultas aparecerão aqui.</div>
+    </div>`;
+    return;
+  }
+
+  // Group by date
+  const groups = {};
+  h.forEach(item => {
+    const d = new Date(item.date).toLocaleDateString("pt-BR", {weekday:"short",day:"numeric",month:"short"});
+    if (!groups[d]) groups[d] = [];
+    groups[d].push(item);
+  });
+
+  el.innerHTML = Object.entries(groups).map(([date, items]) => `
+    <div style="font-size:10px;font-weight:700;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.8px;margin:14px 0 8px">${date}</div>
+    ${items.map(item => {
+      const T = THEMES[item.themeId] || THEMES.modelo;
+      const time = new Date(item.date).toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
+      return `<div class="history-item" onclick="rerunSearch('${esc(item.query)}','${item.themeId}')">
+        <div class="history-theme-dot" style="background:${T.accent}"></div>
+        <div style="flex:1;min-width:0">
+          <div class="history-item-q">${esc(item.query)}</div>
+          <div class="history-item-meta">${T.label} · ${time}${item.resultCount?" · "+item.resultCount+" resultado"+(item.resultCount!==1?"s":""):""}</div>
+        </div>
+        <div class="history-item-arrow">→</div>
+      </div>`;
+    }).join("")}
+  `).join("");
+}
+
+function rerunSearch(q, themeId) {
+  if (themeId && THEMES[themeId]) setTheme(themeId);
+  showPage("search");
+  const inp = document.getElementById("search-input");
+  if (inp) inp.value = q;
+  doSearch(q);
 }
 
 // ════════════════════════════════════════
