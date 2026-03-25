@@ -1764,7 +1764,7 @@ margin-top: 4px;
     </div>
     <div class="header-right">
       <span class="clock" id="clock"></span>
-      <button class="settings-btn-header" onclick="showSettings()">⚙</button>
+      <button class="settings-btn-header" onclick="showSettings()" title="Configurações">⚙</button>
     </div>
   </div>
 
@@ -2659,8 +2659,36 @@ function showApp() {
 }
 
 function showSettings() {
-  if (confirm("Deseja recarregar o aplicativo?")) {
-    location.reload();
+  const action = prompt(
+    "Risk Intel — Configurações\n\n" +
+    "1. Trocar chave de API\n" +
+    "2. Limpar biblioteca (apagar todos os achados)\n" +
+    "3. Limpar histórico de leitura\n" +
+    "4. Cancelar\n\n" +
+    "Digite o número da opção:"
+  );
+  if (action === "1") {
+    const newKey = prompt("Cole sua nova chave de API (começa com sk-ant-):");
+    if (!newKey) return;
+    const k = cleanKey(newKey);
+    if (!k || k.length < 20) {
+      alert("Chave inválida. Verifique e tente novamente.");
+      return;
+    }
+    apiKey = k;
+    localStorage.setItem("ri_key", k);
+    alert("✓ Chave atualizada com sucesso! A próxima consulta usará a nova chave.");
+  } else if (action === "2") {
+    if (confirm("Apagar TODOS os achados da biblioteca? Esta ação não pode ser desfeita.")) {
+      localStorage.removeItem("ri_lib");
+      alert("Biblioteca apagada.");
+      renderLibrary();
+    }
+  } else if (action === "3") {
+    if (confirm("Limpar histórico de leitura? Os achados salvos serão mantidos.")) {
+      localStorage.removeItem("ri_read");
+      alert("Histórico de leitura limpo.");
+    }
   }
 }
 
