@@ -2398,14 +2398,15 @@ margin-top: 4px;
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title">Enviar por e-mail</div>
-    <div class="modal-sub">O app de e-mail abrirá com o conteúdo do achado já preenchido.</div>
+    <div class="modal-sub">Escolha o app para envio. O Outlook requer que esteja instalado no dispositivo.</div>
     <label class="modal-label">Endereço de e-mail</label>
     <input class="modal-input" id="modal-email" type="email" placeholder="seu@email.com"/>
     <label class="modal-label">Conteúdo</label>
     <div class="modal-preview" id="modal-preview"></div>
-    <div class="modal-btns">
+    <div class="modal-btns" style="flex-direction:column;gap:8px">
+      <button class="modal-primary" style="background:#0078d4" onclick="sendEmail('outlook')">📧 Abrir no Outlook</button>
+      <button class="modal-primary" onclick="sendEmail('default')">✉ App de e-mail padrão</button>
       <button class="modal-secondary" onclick="closeModal('email-modal')">Cancelar</button>
-      <button class="modal-primary" onclick="sendEmail()">Enviar ✉</button>
     </div>
   </div>
 </div>
@@ -3456,24 +3457,58 @@ function openEmailModal(item) {
   document.getElementById("email-modal").style.display = "flex";
 }
 
-function sendEmail() {
+function sendEmail(client) {
   const email = document.getElementById("modal-email").value.trim();
   if (!email || !email.includes("@")) { alert("Digite um e-mail válido."); return; }
   localStorage.setItem("ri_email", email);
+
   const item = pendingEmailItem;
   const T = THEMES[item.themeId || theme];
   const naLine = item.naReason ? "\nMotivo Não Aplicável: " + NA_LABELS[item.naReason] : "";
-  const subject = encodeURIComponent("Risk Intel — " + item.title);
-  const body = encodeURIComponent(
+
+  const subjectRaw = "Risk Intel — " + item.title;
+  const bodyRaw =
     "RISK INTEL — " + (T?.label || "Achado") + "\n\n" +
     "TÍTULO: " + item.title + "\n\n" +
     "FONTE: " + item.source + " | " + item.date + "\n\n" +
     item.body +
-    (item.url ? "\n\nLINK: " + item.url : "") +
+    (item.normRef ? "\n\nNORMA: " + item.normRef : "") +
+    (item.metric  ? "\nMÉTRICA: " + item.metric   : "") +
+    (item.url     ? "\n\nLINK: " + item.url        : "") +
     naLine +
-    "\n\n—\nEnviado pelo Risk Intel App"
-  );
-  window.open(`mailto:${email}?subject=${subject}&body=${body}`, "_blank");
+    "\n\n—\nEnviado pelo Risk Intel App";
+
+  const subject = encodeURIComponent(subjectRaw);
+  const body    = encodeURIComponent(bodyRaw);
+
+  let url;
+  if (client === "outlook") {
+    // Outlook deep link — works on iOS and Android with Outlook installed
+    // ms-outlook:// scheme for native app, fallback to mailto:
+    url = "ms-outlook://compose?to=" + encodeURIComponent(email)
+        + "&subject=" + subject
+        + "&body=" + body;
+
+    // Try Outlook deep link; if app not installed, fall back to mailto
+    const a = document.createElement("a");
+    a.href = url;
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    // Fallback after 1.5s — if Outlook didn't open, try mailto
+    setTimeout(function() {
+      window.open("mailto:" + encodeURIComponent(email)
+        + "?subject=" + subject + "&body=" + body, "_blank");
+    }, 1500);
+
+  } else {
+    // Default mail app via mailto
+    window.open("mailto:" + encodeURIComponent(email)
+      + "?subject=" + subject + "&body=" + body, "_blank");
+  }
+
   closeModal("email-modal");
 }
 
