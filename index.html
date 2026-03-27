@@ -2536,7 +2536,7 @@ const THEMES = {
 const SOURCE_COLORS = {
   BCB:"#1a6b3a",ITAU:"#003399",SANB:"#c00",BB:"#a07800",
   BTG:"#7a5c28",NU:"#7a04b0",BIS:"#1a4a7a",CMN:"#2a5a3a",
-  FSB:"#3a2a6a",FEBRABAN:"#0a3050",
+  FSB:"#3a2a6a",FEBRABAN:"#0a3050",SERASA:"#e30513",
 };
 
 const REL = {
@@ -2566,7 +2566,12 @@ Para cada consulta, você DEVE executar buscas nas seguintes fontes primárias a
    - Termos: "Resolução BCB [tema]", "Circular BCB [tema]", "Relatório de Estabilidade Financeira [ano]"
    - Verifique número, data e ementa real de cada norma citada
 
-2. BIS / BCBS (Bank for International Settlements):
+2. SERASA EXPERIAN (quando relevante para crédito, inadimplência, fraude):
+   - Busque em: serasaexperian.com.br/sala-de-imprensa/indicadores e serasaexperian.com.br/conteudos/estudos-e-pesquisas
+   - Termos: "Serasa Experian inadimplência [ano]", "Serasa demanda crédito", "Serasa falências recuperação judicial"
+   - Publicações relevantes: Boletim Econômico mensal, Indicadores de Crédito, Atividade Comercial, Recuperação de Dívidas
+
+3. BIS / BCBS (Bank for International Settlements):
    - Busque em: bis.org/bcbs/publ e bis.org/publ
    - Termos: "BCBS [tema] [ano]", "Basel [tema]"
    - Confirme número do documento (ex: d457, d368) e data de publicação real
@@ -3144,6 +3149,7 @@ const SOURCE_URLS = {
   CMN:      "https://www.bcb.gov.br/estabilidadefinanceira/buscanormas",
   FSB:      "https://www.fsb.org",
   FEBRABAN: "https://portal.febraban.org.br",
+  SERASA:   "https://www.serasaexperian.com.br/sala-de-imprensa/indicadores/",
 };
 
 function renderResults(parsed, T) {
@@ -4197,6 +4203,25 @@ const FEED_SOURCES = [
     type: "academic", homeUrl: "https://arxiv.org/list/q-fin.CP/recent",
     rssUrls: makeProxyUrls("https://export.arxiv.org/rss/q-fin.CP"),
   },
+  // ── SERASA EXPERIAN — portal estático + busca direcionada ──
+  {
+    id: "serasa_indicadores", label: "Serasa · Indicadores Econômicos", icon: "📈", color: "#e30513",
+    type: "portal",
+    homeUrl: "https://www.serasaexperian.com.br/conteudos/indicadores-economicos/",
+    desc: "Demanda por crédito, inadimplência, falências, recuperações judiciais e atividade comercial",
+  },
+  {
+    id: "serasa_estudos", label: "Serasa · Boletim Econômico", icon: "📊", color: "#c0040f",
+    type: "portal",
+    homeUrl: "https://www.serasaexperian.com.br/conteudos/estudos-e-pesquisas/",
+    desc: "Boletim mensal com análise de varejo, indústria, serviços, crédito e inadimplência no Brasil",
+  },
+  {
+    id: "serasa_imprensa", label: "Serasa · Sala de Imprensa", icon: "📰", color: "#a0030c",
+    type: "portal",
+    homeUrl: "https://www.serasaexperian.com.br/sala-de-imprensa/indicadores/",
+    desc: "Comunicados e indicadores mais recentes sobre crédito, fraude e economia brasileira",
+  },
   // ── Podcasts — static cards ──
   {
     id: "podcast_ai", label: "The AI News Daily Brief", icon: "🎙", color: "#9b59b6",
@@ -4341,6 +4366,23 @@ async function loadFeed() {
     });
   }
 
+  // Portal sources (Serasa, etc.) — always shown as static cards
+  const portals = FEED_SOURCES.filter(function(s) { return s.type === "portal"; });
+  if (portals.length) {
+    html += '<div class="feed-section-label"><span class="feed-source-dot" style="background:#e30513"></span>Serasa Experian — Indicadores & Estudos</div>';
+    portals.forEach(function(src) {
+      html += '<a class="feed-card" href="' + esc(src.homeUrl) + '" target="_blank" rel="noopener">'
+        + '<div style="width:44px;height:44px;border-radius:10px;background:' + src.color + '18;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">' + src.icon + '</div>'
+        + '<div style="flex:1;min-width:0">'
+        + '<div class="feed-card-title">' + esc(src.label) + '</div>'
+        + '<div style="font-size:11px;color:var(--text-tertiary);line-height:1.5;margin:3px 0">' + esc(src.desc || "") + '</div>'
+        + '<div class="feed-card-meta"><span class="feed-card-type" style="background:' + src.color + '18;color:' + src.color + '">serasaexperian.com.br</span></div>'
+        + '</div>'
+        + '<div style="font-size:16px;color:var(--text-tertiary);flex-shrink:0">↗</div>'
+        + '</a>';
+    });
+  }
+
   if (academic.length) {
     html += '<div class="feed-section-label"><span class="feed-source-dot" style="background:#b03060"></span>Acadêmico — Papers & Working Papers</div>';
     academic.forEach(function(item) {
@@ -4422,7 +4464,7 @@ const DOMAIN_PRESETS = {
   },
   mercado: {
     label: "Mercado e Negócios",
-    domains: ["startse.com","infomoney.com.br","valor.com.br","bloomberglinea.com","istoedinheiro.com.br"]
+    domains: ["startse.com","infomoney.com.br","valor.com.br","bloomberglinea.com","istoedinheiro.com.br","serasaexperian.com.br"]
   },
   academico: {
     label: "Acadêmico e Research",
