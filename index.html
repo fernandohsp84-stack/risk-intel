@@ -5164,27 +5164,31 @@ function rerunSearch(q, themeId) {
 let agentHistory = [];   // {role, content} for API context
 let agentBusy = false;
 
-const AGENT_SYS = `Você é o Assistente Risk Intel, especialista sênior em gestão de riscos financeiros e regulação bancária brasileira (BCB, CMN, BIS/BCBS, FSB) e internacional. Você apoia um gestor de riscos de um grande banco brasileiro.
+const AGENT_SYS = `Você é o Assistente Risk Intel, executor especializado em gestão de riscos financeiros e regulação bancária brasileira (BCB, CMN, BIS/BCBS, FSB). Você apoia um gestor de riscos de um grande banco brasileiro.
 
-Você conversa de forma clara, técnica e objetiva em português brasileiro. Pode explicar normas, tirar dúvidas, comparar conceitos e — quando fizer sentido — GERAR ARTEFATOS estruturados.
+Você é um EXECUTOR DE TAREFAS, não apenas um chat. Quando o usuário pede um artefato (card, relatório, análise, comparativo), você DEVE produzi-lo completo no campo "artefato" — nunca apenas descrever que ele existe ou dizer onde encontrá-lo.
 
-ARTEFATOS que você pode gerar (só quando o usuário pedir ou for claramente útil):
-- "card": card visual resumido de um tema (título + 3-5 pontos-chave)
-- "relatorio": relatório executivo estruturado (contexto, achados, riscos, recomendações)
-- "analise": análise aprofundada de um achado específico (implicações, precedentes, ações)
-- "comparativo": comparação entre múltiplos achados/normas
+REGRA CRÍTICA DE FORMATO: você responde SEMPRE e APENAS com um objeto JSON válido, sem markdown, sem crases, sem texto antes ou depois. Estrutura obrigatória:
 
-FORMATO DE RESPOSTA — retorne SEMPRE um JSON válido, sem markdown:
-{"fala":"sua resposta conversacional em texto","artefato":null}
+{"fala": "resposta conversacional curta em texto", "artefato": null, "acao": null}
 
-OU quando gerar um artefato:
-{"fala":"texto curto introduzindo o artefato","artefato":{"tipo":"card|relatorio|analise|comparativo","titulo":"título","conteudo":"conteúdo completo do artefato em texto estruturado com quebras de linha \\n","pontos":["ponto 1","ponto 2"]}}
+Quando gerar um artefato, preencha "artefato":
+{"fala": "Aqui está o relatório executivo.", "artefato": {"tipo": "relatorio", "titulo": "título claro", "conteudo": "TEXTO COMPLETO E ESTRUTURADO do artefato, com seções separadas por \\n\\n. Este é o entregável final — escreva-o por inteiro aqui.", "pontos": ["ponto-chave 1", "ponto-chave 2", "ponto-chave 3"]}, "acao": null}
 
-Regras:
-- Baseie-se em normas e fatos reais; se não tiver certeza, diga.
-- Para artefatos, o campo "conteudo" deve ser completo e pronto para exportar.
-- Nunca invente número de resolução ou métrica.
-- Seja conciso na "fala" quando houver artefato.`;
+TIPOS de artefato:
+- "card": resumo visual de um tema — use "pontos" (3-6 itens) e "conteudo" curto
+- "relatorio": relatório executivo — "conteudo" com seções: Contexto, Principais Achados, Riscos Identificados, Recomendações
+- "analise": análise aprofundada de um achado — "conteudo" com: Situação, Implicações, Precedentes/Normas, Ações Recomendadas
+- "comparativo": comparação — "conteudo" com as diferenças estruturadas item a item
+
+AÇÕES que você pode sugerir (campo "acao"), quando o usuário pedir para VER dados:
+- {"tipo": "mostrar_biblioteca"} — exibe os achados salvos em tela
+- {"tipo": "mostrar_feed"} — exibe as fontes do feed
+- {"tipo": "abrir_pagina", "pagina": "library|feed|bi|podcast|search|history"} — navega para uma aba
+
+Ao gerar relatórios/análises/comparativos, USE os achados salvos fornecidos no contexto. Baseie-se em normas e fatos reais; nunca invente número de resolução ou métrica. Se não houver achados salvos suficientes, diga na "fala" e gere o melhor artefato possível com seu conhecimento.
+
+Mantenha a "fala" curta e natural. O valor está no artefato, não em explicar o que você fez.`;
 
 function openAgent() {
   const panel = document.getElementById("agent-panel");
@@ -5204,21 +5208,18 @@ function closeAgent() {
 
 function renderAgentWelcome() {
   const msgs = document.getElementById("agent-messages");
-  const lib = getLib();
-  const savedCount = lib.filter(function(i){ return i.rating !== "bad"; }).length;
+  const lib = getLib().filter(function(i){ return i.rating !== "bad"; });
+  const n = lib.length;
   msgs.innerHTML = '<div class="agent-msg bot">'
-    + 'Olá! Sou seu assistente especializado em riscos financeiros. Posso:<br><br>'
-    + '• Explicar normas e conceitos (Basileia, FRTB, IRRBB, LCR…)<br>'
-    + '• Analisar seus <strong>' + savedCount + ' achados salvos</strong><br>'
-    + '• Gerar <strong>cards</strong>, <strong>relatórios executivos</strong>, <strong>análises</strong> e <strong>comparativos</strong><br><br>'
-    + 'Como posso ajudar?'
+    + 'Olá! Sou seu assistente e executor de tarefas em riscos financeiros.<br><br>'
+    + 'Posso <strong>gerar relatórios, cards, análises e comparativos</strong> a partir dos seus '
+    + '<strong>' + n + ' achados salvos</strong> — e mostrar sua biblioteca e o feed aqui mesmo.<br><br>'
+    + 'O que vamos fazer?'
     + '</div>';
-  renderAgentSuggestions([
-    "Gerar relatório executivo dos meus achados",
-    "Explicar o FRTB",
-    "Card resumo sobre risco de liquidez",
-    "Comparar LCR e NSFR"
-  ]);
+  const sugg = n > 0
+    ? ["📋 Relatório executivo dos meus achados", "📚 Ver meus achados salvos", "⚖ Comparar meus achados", "📡 Ver fontes do Feed"]
+    : ["Explicar o FRTB", "Card sobre risco de liquidez", "📡 Ver fontes do Feed", "Comparar LCR e NSFR"];
+  renderAgentSuggestions(sugg);
 }
 
 function renderAgentSuggestions(list) {
@@ -5258,9 +5259,8 @@ async function sendAgentMsg() {
 
   agentBusy = true;
   document.getElementById("agent-send").disabled = true;
-  document.getElementById("agent-status").textContent = "Pensando…";
+  document.getElementById("agent-status").textContent = "Trabalhando…";
 
-  // Typing indicator
   const msgs = document.getElementById("agent-messages");
   const typing = document.createElement("div");
   typing.className = "agent-typing";
@@ -5268,45 +5268,51 @@ async function sendAgentMsg() {
   msgs.appendChild(typing);
   msgs.scrollTop = msgs.scrollHeight;
 
-  // Build library context (assertive items only, compact)
+  // Compact library context — assertive items only
   const lib = getLib().filter(function(i){ return i.rating !== "bad"; });
   const libContext = lib.slice(0, 20).map(function(i, n) {
     return (n+1) + ". [" + ((THEMES[i.themeId]||{}).label || "?") + "] " + i.title
       + (i.normRef ? " (" + i.normRef + ")" : "")
-      + " — " + (i.body || "").slice(0, 150);
+      + (i.metric ? " [métrica: " + i.metric + "]" : "")
+      + " — " + (i.body || "").slice(0, 180);
   }).join("\n");
 
-  const userWithContext = "ACHADOS SALVOS DO USUÁRIO (para referência quando pedir artefatos ou análises):\n"
+  const userWithContext =
+    "CONTEXTO — ACHADOS SALVOS DO USUÁRIO (" + lib.length + " itens assertivos):\n"
     + (libContext || "(nenhum achado salvo ainda)")
-    + "\n\nMENSAGEM DO USUÁRIO:\n" + text;
+    + "\n\nMENSAGEM DO USUÁRIO:\n" + text
+    + "\n\nResponda APENAS com JSON válido no formato especificado.";
 
   agentHistory.push({ role: "user", content: userWithContext });
 
   try {
-    const raw = await callClaude(AGENT_SYS, agentHistory.slice(-6), {
+    const raw = await callClaude(AGENT_SYS, agentHistory.slice(-8), {
       model: "claude-sonnet-4-5",
-      maxTokens: 2500,
+      maxTokens: 3000,
       useSearch: false,
       isConversation: true
     });
 
     typing.remove();
 
-    let parsed = null;
-    try { parsed = JSON.parse(raw.trim()); }
-    catch(_) {
-      const m = raw.match(/\{[\s\S]*\}/);
-      if (m) { try { parsed = JSON.parse(m[0]); } catch(__){} }
-    }
+    const parsed = parseAgentJSON(raw);
 
     if (!parsed) {
-      // Fallback: show raw text
-      appendAgentMsg("bot", esc(cleanBody(raw)));
-      agentHistory.push({ role: "assistant", content: raw });
+      // Model returned prose — show it, but keep history clean with a normalized entry
+      const clean = cleanBody(raw);
+      appendAgentMsg("bot", esc(clean).replace(/\n/g, "<br>"));
+      agentHistory.push({ role: "assistant", content: JSON.stringify({ fala: clean.slice(0, 500), artefato: null, acao: null }) });
     } else {
-      if (parsed.fala) appendAgentMsg("bot", esc(parsed.fala).replace(/\n/g,"<br>"));
-      if (parsed.artefato) renderAgentArtifact(parsed.artefato);
-      agentHistory.push({ role: "assistant", content: JSON.stringify(parsed) });
+      if (parsed.fala) appendAgentMsg("bot", esc(parsed.fala).replace(/\n/g, "<br>"));
+      if (parsed.artefato && parsed.artefato.tipo) renderAgentArtifact(parsed.artefato);
+      if (parsed.acao) handleAgentAction(parsed.acao);
+      // Store a COMPACT version in history to avoid context bloat & format drift
+      const compact = {
+        fala: parsed.fala || "",
+        artefato: parsed.artefato ? { tipo: parsed.artefato.tipo, titulo: parsed.artefato.titulo } : null,
+        acao: parsed.acao || null
+      };
+      agentHistory.push({ role: "assistant", content: JSON.stringify(compact) });
     }
 
   } catch(err) {
@@ -5318,6 +5324,102 @@ async function sendAgentMsg() {
   document.getElementById("agent-send").disabled = false;
   document.getElementById("agent-status").textContent = "Especialista em riscos financeiros";
 }
+
+// Robust JSON extraction for agent responses
+function parseAgentJSON(raw) {
+  if (!raw) return null;
+  let t = raw.trim();
+  // Strip markdown code fences if present
+  t = t.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "").trim();
+  // Direct parse
+  try { return JSON.parse(t); } catch(_) {}
+  // Extract first balanced {...} block
+  const start = t.indexOf("{");
+  if (start < 0) return null;
+  let depth = 0, inStr = false, esc2 = false;
+  for (let i = start; i < t.length; i++) {
+    const ch = t[i];
+    if (inStr) {
+      if (esc2) { esc2 = false; }
+      else if (ch === "\\") { esc2 = true; }
+      else if (ch === '"') { inStr = false; }
+    } else {
+      if (ch === '"') inStr = true;
+      else if (ch === "{") depth++;
+      else if (ch === "}") { depth--; if (depth === 0) {
+        const candidate = t.slice(start, i + 1);
+        try { return JSON.parse(candidate); } catch(_) { return null; }
+      }}
+    }
+  }
+  return null;
+}
+
+// Execute agent actions (show data in-panel or navigate)
+function handleAgentAction(acao) {
+  if (!acao || !acao.tipo) return;
+
+  if (acao.tipo === "mostrar_biblioteca") {
+    const lib = getLib().filter(function(i){ return i.rating !== "bad"; });
+    renderAgentDataList("📚 Seus achados salvos", lib.map(function(i) {
+      return { title: i.title, sub: ((THEMES[i.themeId]||{}).label || "") + (i.normRef ? " · " + i.normRef : ""), id: i.id };
+    }), "biblioteca");
+
+  } else if (acao.tipo === "mostrar_feed") {
+    const srcs = (typeof FEED_SOURCES !== "undefined") ? FEED_SOURCES : [];
+    renderAgentDataList("📡 Fontes do Feed", srcs.map(function(s) {
+      return { title: s.label, sub: s.type === "podcast" ? "Podcast" : s.type === "academic" ? "Acadêmico" : s.type === "portal" ? "Portal" : "Notícias", url: s.homeUrl || s.appleUrl };
+    }), "feed");
+
+  } else if (acao.tipo === "abrir_pagina" && acao.pagina) {
+    appendAgentMsg("bot", "Abrindo " + esc(acao.pagina) + "…");
+    setTimeout(function() { closeAgent(); showPage(acao.pagina); }, 500);
+  }
+}
+
+// Render a selectable list of items (library/feed) inside the chat
+function renderAgentDataList(title, items, kind) {
+  const msgs = document.getElementById("agent-messages");
+  const wrap = document.createElement("div");
+  wrap.className = "agent-artifact";
+
+  if (!items.length) {
+    wrap.innerHTML = '<div class="agent-artifact-head">' + esc(title) + '</div>'
+      + '<div class="agent-artifact-body" style="opacity:.6">Nenhum item disponível.</div>';
+    msgs.appendChild(wrap);
+    msgs.scrollTop = msgs.scrollHeight;
+    return;
+  }
+
+  const rows = items.map(function(it, i) {
+    const clickAttr = it.url
+      ? ' onclick="window.open(' + JSON.stringify(it.url) + ',\'_blank\')" style="cursor:pointer"'
+      : "";
+    return '<div' + clickAttr + ' style="padding:9px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start">'
+      + '<span style="color:#0071e3;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px">' + (i+1) + '</span>'
+      + '<div style="flex:1;min-width:0">'
+      + '<div style="font-size:13px;font-weight:600;color:var(--text);line-height:1.35">' + esc(it.title) + '</div>'
+      + (it.sub ? '<div style="font-size:11px;color:var(--text-tertiary);margin-top:2px">' + esc(it.sub) + '</div>' : "")
+      + '</div>'
+      + (it.url ? '<span style="color:var(--text-tertiary);flex-shrink:0">↗</span>' : "")
+      + '</div>';
+  }).join("");
+
+  let actionsHtml = "";
+  if (kind === "biblioteca" && items.length) {
+    actionsHtml = '<div class="agent-artifact-actions">'
+      + '<button class="agent-artifact-btn primary" onclick="agentQuickSend(\'Gere um relatório executivo com todos esses achados\')">📋 Gerar relatório</button>'
+      + '<button class="agent-artifact-btn" onclick="agentQuickSend(\'Faça um comparativo entre esses achados\')">⚖ Comparativo</button>'
+      + '</div>';
+  }
+
+  wrap.innerHTML = '<div class="agent-artifact-head">' + esc(title) + ' · ' + items.length + '</div>'
+    + '<div class="agent-artifact-body" style="max-height:280px;overflow-y:auto;padding-top:4px">' + rows + '</div>'
+    + actionsHtml;
+  msgs.appendChild(wrap);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
 
 // Store last artifact for export
 let lastAgentArtifact = null;
