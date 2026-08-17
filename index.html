@@ -3130,7 +3130,7 @@ async function doSearch(q) {
   const btn = document.getElementById("search-btn");
   btn.disabled = true; btn.textContent = "…";
 
-  const seen = Array.from(getAllSeenTitles()).slice(0, 25);
+  const seen = Array.from(getAllSeenTitles()).slice(-10);
   const excl = seen.length ? "\nEVITE títulos similares aos já vistos:\n" + seen.map(t => "- " + t).join("\n") : "";
 
   setLoadingStep(T, 1);
@@ -3140,13 +3140,13 @@ async function doSearch(q) {
     const deep = searchMode === "deep";
     const userMsg = "Tema de risco: " + T.label
       + "\nConsulta: " + q + excl + domainInstr
-      + (deep ? "\n\nModo profundo: use até 3 buscas e seja minucioso na verificação."
-              : "\n\nModo rápido: use no máximo 2 buscas focadas. Priorize velocidade com precisão.");
+      + (deep ? "\n\nModo profundo: até 3 buscas, 5 itens, verificação minuciosa."
+              : "\n\nModo rápido: no máximo 2 buscas focadas e 4 itens. Body de 3 frases diretas. Priorize velocidade mantendo precisão.");
 
     // Single call: research + self-review fused (was 2 sequential calls)
     const raw = await callClaude(SYS_RESEARCH, userMsg, {
       model: "claude-sonnet-4-5",
-      maxTokens: deep ? 4500 : 3500,
+      maxTokens: deep ? 3800 : 2800,
       useSearch: true,
       maxSearches: deep ? 3 : 2
     });
@@ -5186,7 +5186,13 @@ AÇÕES que você pode sugerir (campo "acao"), quando o usuário pedir para VER 
 - {"tipo": "mostrar_feed"} — exibe as fontes do feed
 - {"tipo": "abrir_pagina", "pagina": "library|feed|bi|podcast|search|history"} — navega para uma aba
 
-Ao gerar relatórios/análises/comparativos, USE os achados salvos fornecidos no contexto. Baseie-se em normas e fatos reais; nunca invente número de resolução ou métrica. Se não houver achados salvos suficientes, diga na "fala" e gere o melhor artefato possível com seu conhecimento.
+PADRÃO DE QUALIDADE DOS ARTEFATOS (obrigatório):
+- Cite os achados salvos pelo NOME e pela NORMA quando usá-los — o gestor precisa rastrear a origem.
+- Traga números e métricas concretas sempre que existirem no contexto (percentuais, prazos, limites).
+- Cada recomendação deve ser acionável: diga O QUE fazer, POR QUE e em QUE PRAZO.
+- Relatórios executivos: mínimo 400 palavras, com as 4 seções completas. Nada de bullets genéricos.
+- Escreva para um gestor de riscos de banco: linguagem técnica, direta, sem floreio.
+- Baseie-se em normas e fatos reais; nunca invente número de resolução ou métrica. Se não tiver certeza, sinalize explicitamente.
 
 Mantenha a "fala" curta e natural. O valor está no artefato, não em explicar o que você fez.`;
 
@@ -5225,9 +5231,14 @@ function renderAgentWelcome() {
 function renderAgentSuggestions(list) {
   const wrap = document.getElementById("agent-suggestions");
   if (!wrap) return;
-  wrap.innerHTML = (list || []).map(function(s) {
-    return '<button class="agent-chip" onclick="agentQuickSend(' + JSON.stringify(s) + ')">' + esc(s) + '</button>';
-  }).join("");
+  wrap.innerHTML = "";
+  (list || []).forEach(function(s) {
+    const b = document.createElement("button");
+    b.className = "agent-chip";
+    b.textContent = s;
+    b.addEventListener("click", function() { agentQuickSend(s); });
+    wrap.appendChild(b);
+  });
 }
 
 function agentQuickSend(text) {
@@ -5270,11 +5281,11 @@ async function sendAgentMsg() {
 
   // Compact library context — assertive items only
   const lib = getLib().filter(function(i){ return i.rating !== "bad"; });
-  const libContext = lib.slice(0, 20).map(function(i, n) {
+  const libContext = lib.slice(0, 30).map(function(i, n) {
     return (n+1) + ". [" + ((THEMES[i.themeId]||{}).label || "?") + "] " + i.title
       + (i.normRef ? " (" + i.normRef + ")" : "")
       + (i.metric ? " [métrica: " + i.metric + "]" : "")
-      + " — " + (i.body || "").slice(0, 180);
+      + " — " + (i.body || "").slice(0, 220);
   }).join("\n");
 
   const userWithContext =
@@ -5288,7 +5299,7 @@ async function sendAgentMsg() {
   try {
     const raw = await callClaude(AGENT_SYS, agentHistory.slice(-8), {
       model: "claude-sonnet-4-5",
-      maxTokens: 3000,
+      maxTokens: 4000,
       useSearch: false,
       isConversation: true
     });
@@ -5391,31 +5402,46 @@ function renderAgentDataList(title, items, kind) {
     return;
   }
 
-  const rows = items.map(function(it, i) {
-    const clickAttr = it.url
-      ? ' onclick="window.open(' + JSON.stringify(it.url) + ',\'_blank\')" style="cursor:pointer"'
-      : "";
-    return '<div' + clickAttr + ' style="padding:9px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start">'
-      + '<span style="color:#0071e3;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px">' + (i+1) + '</span>'
+  const rowsFrag = document.createElement("div");
+  items.forEach(function(it, i) {
+    const row = document.createElement("div");
+    row.style.cssText = "padding:9px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start";
+    row.innerHTML =
+      '<span style="color:#0071e3;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px">' + (i+1) + '</span>'
       + '<div style="flex:1;min-width:0">'
       + '<div style="font-size:13px;font-weight:600;color:var(--text);line-height:1.35">' + esc(it.title) + '</div>'
       + (it.sub ? '<div style="font-size:11px;color:var(--text-tertiary);margin-top:2px">' + esc(it.sub) + '</div>' : "")
       + '</div>'
-      + (it.url ? '<span style="color:var(--text-tertiary);flex-shrink:0">↗</span>' : "")
-      + '</div>';
-  }).join("");
+      + (it.url ? '<span style="color:var(--text-tertiary);flex-shrink:0">\u2197</span>' : "");
+    if (it.url) {
+      row.style.cursor = "pointer";
+      row.addEventListener("click", function() { window.open(it.url, "_blank"); });
+    }
+    rowsFrag.appendChild(row);
+  });
 
-  let actionsHtml = "";
+  wrap.innerHTML = '<div class="agent-artifact-head">' + esc(title) + ' \u00b7 ' + items.length + '</div>';
+  const body = document.createElement("div");
+  body.className = "agent-artifact-body";
+  body.style.cssText = "max-height:280px;overflow-y:auto;padding-top:4px";
+  while (rowsFrag.firstChild) body.appendChild(rowsFrag.firstChild);
+  wrap.appendChild(body);
+
   if (kind === "biblioteca" && items.length) {
-    actionsHtml = '<div class="agent-artifact-actions">'
-      + '<button class="agent-artifact-btn primary" onclick="agentQuickSend(\'Gere um relatório executivo com todos esses achados\')">📋 Gerar relatório</button>'
-      + '<button class="agent-artifact-btn" onclick="agentQuickSend(\'Faça um comparativo entre esses achados\')">⚖ Comparativo</button>'
-      + '</div>';
+    const acts = document.createElement("div");
+    acts.className = "agent-artifact-actions";
+    const mk = function(label, cls, msg) {
+      const b = document.createElement("button");
+      b.className = "agent-artifact-btn" + (cls ? " " + cls : "");
+      b.textContent = label;
+      b.addEventListener("click", function() { agentQuickSend(msg); });
+      return b;
+    };
+    acts.appendChild(mk("\ud83d\udccb Gerar relatório", "primary", "Gere um relatório executivo completo com esses achados"));
+    acts.appendChild(mk("\u2696 Comparativo", "", "Faça um comparativo estruturado entre esses achados"));
+    wrap.appendChild(acts);
   }
 
-  wrap.innerHTML = '<div class="agent-artifact-head">' + esc(title) + ' · ' + items.length + '</div>'
-    + '<div class="agent-artifact-body" style="max-height:280px;overflow-y:auto;padding-top:4px">' + rows + '</div>'
-    + actionsHtml;
   msgs.appendChild(wrap);
   msgs.scrollTop = msgs.scrollHeight;
 }
