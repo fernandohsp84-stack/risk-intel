@@ -1,7 +1,132 @@
 {
-  "data": "2026-10-13",
-  "edicao": "Aguardando primeira execução",
-  "gerado": "—",
-  "manchete": "A primeira edição automática será publicada na próxima execução do workflow, às 07:00. Até lá, use a busca do app ou o botão Gerar edição agora.",
-  "editorias": []
+  "data": "2026-10-19",
+  "edicao": "Edição do dia",
+  "gerado": "19/10, 18:35",
+  "manchete": "Últimos 30 dias trouxeram avanços concretos na regulação de risco de modelo no Brasil e internacionalmente. Destaque para Resolução BCB 586/2026 (GRSAC), validação IRB (IN BCB 609/2025 atualizada), stress testing BCBS (Basel Framework 18/10/2026) e consolidação prática da Resolução 4966 sobre IFRS 9. FSB finalizou em 15/out/2026 12 práticas para adoção responsável de IA em instituições financeiras, enquanto BCB alertou em set/2026 sobre risco de concentração em fornecedores de IA no Zetta Summit. BIS sinalizou em 18/set/2026 que frameworks de governança de modelos não foram desenhados para LLMs e explainability é lacuna crítica.",
+  "editorias": [
+    {
+      "themeId": "modelo",
+      "titulo": "Risco de Modelo",
+      "itens": [
+        {
+          "title": "Resolução BCB 586/2026: Governança de Riscos Socioambientais e Climáticos exige validação de modelos",
+          "body": "Resolução BCB 586 de 04/09/2026 dispõe sobre divulgação do Relatório GRSAC, incluindo tabela CRFRA-GOV sobre governança do gerenciamento de riscos socioambientais e climáticos. Expert judgment e validação pelos membros do GRC são exigidos para riscos mapeados em modelos de percepção por consenso. Instituições S1 e S2 enfrentam novo paradigma de validação independente de modelos de risco climático, com impacto direto em stress tests integrados a partir de 2026.",
+          "source": "Resolução BCB 586/2026 e Ata GRC 66/2025",
+          "sourceCode": "BCB",
+          "tag": "Governança de Modelos",
+          "themeId": "modelo",
+          "date": "setembro 2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "Res. BCB 586/2026",
+          "metric": "Tabela CRFRA-GOV obrigatória para S1/S2 a partir de set/2026",
+          "url": "https://www.legisweb.com.br/legislacao/?id=500459"
+        },
+        {
+          "title": "IN BCB 609/2025: Validação de modelos IRB para risco de crédito mantém-se referência operacional",
+          "body": "Instrução Normativa BCB 609/2025 descreve etapas do processo de validação e exige parecer de validação dos modelos e processos da candidatura IRB, incluindo relatórios sobre parâmetros de risco. Estrutura de validação independente deve ser livre de incentivos adversos, sem remuneração variável relacionada ao resultado, com backtesting de taxas de descumprimento realizadas versus valores previstos para cada nível de risco. Norma segue vigente e crítica para bancos em migração ou manutenção de abordagens avançadas (IRB-A) sob Basileia III.",
+          "source": "Instrução Normativa BCB 609/2025",
+          "sourceCode": "BCB",
+          "tag": "Validação de Modelos",
+          "themeId": "modelo",
+          "date": "abril 2025 (vigente)",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "IN BCB 609/2025",
+          "metric": "Backtesting PD/LGD/EAD por nível de risco; validação independente sem conflito de interesse",
+          "url": "https://www.legisweb.com.br/legislacao/?id=476782"
+        },
+        {
+          "title": "Basel Framework atualizado (18/10/2026): Backtesting e stress testing de modelos internos",
+          "body": "Basel Framework atualizado em 18/10/2026 mantém requisitos de backtesting e teste de atribuição de P&L para abordagem de modelos internos. Federal Reserve publicou em outubro/2026 documentação de modelo de risco operacional para stress test supervisionado, exigindo cinco anos de dados por tipo de evento conforme BCBS (2026) OPE25.15 para abordagem padronizada de capital. Evolução reforça convergência global entre backtesting regulatório, validação independente e stress testing integrado para modelos de mercado e risco operacional.",
+          "source": "Basel Framework e Federal Reserve Operational Risk Model Fall 2026",
+          "sourceCode": "BIS",
+          "tag": "Backtesting",
+          "themeId": "modelo",
+          "date": "18 outubro 2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "BCBS Basel Framework 18/10/2026; BCBS OPE25.15",
+          "metric": "5 anos de dados por evento (threshold $20k); backtesting P&L mensal para modelos internos",
+          "url": "https://www.bis.org/committees/bcbs/basel-framework/basel-framework.pdf"
+        },
+        {
+          "title": "Resolução 4966 e IFRS 9: Transição de ECL em estágio crítico com impacto em governança de modelos",
+          "body": "CMN e BCB permitiram reintegrar ao capital principal o ajuste negativo ECL apurado em 1º/jan/2025, com reintegração decrescente: 75% até fim de 2025, 50% em 2026, 25% em 2027. Modelo de Perda Esperada de Crédito (ECL) já opera nos balanços, com provisão calculada com base em estimativas de perdas futuras desde a concessão do crédito. Modelo de perdas esperadas exige validação independente de cenários macroeconômicos, histórico de crédito e probabilidade de default (PD), elevando exigências de stress testing e backtesting de staging (Stage 1/2/3). Bancos brasileiros enfrentam desafio operacional crítico em 2026: 50% de reintegração do ajuste ECL ao PR expõe fragilidades em modelos PD/LGD/EAD não validados adequadamente.",
+          "source": "Resolução CMN 4966 e análises de mercado (Matera, Funcao Sistemas)",
+          "sourceCode": "BCB",
+          "tag": "IFRS 9 & ECL",
+          "themeId": "modelo",
+          "date": "transição 2025-2028 (2026=50%)",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "Res. CMN 4966/2020",
+          "metric": "Reintegração 50% do ajuste ECL negativo ao capital em 2026; staging 12m vs. lifetime ECL",
+          "url": "https://www.matera.com/br/blog/ifrs-e-os-desafios-da-resolucao-4966/"
+        }
+      ]
+    },
+    {
+      "themeId": "ia",
+      "titulo": "Risco de IA",
+      "itens": [
+        {
+          "title": "FSB finaliza 12 práticas de governança para IA em instituições financeiras",
+          "body": "FSB publicou em 15 de outubro de 2026 práticas finais para adoção responsável de IA. O relatório destila práticas de governança emergentes em doze recomendações não vinculantes cobrindo ciclo completo de IA. O toolkit não vinculante aborda riscos como explainability complexa, ações agênticas autônomas, ameaças cibernéticas e shadow AI. Para bancos brasileiros, representa convergência global de expectativas supervisórias que BCB deve incorporar em agenda regulatória 2025-2026.",
+          "source": "Financial Stability Board - Sound Practices for Responsible Adoption of AI",
+          "sourceCode": "FSB",
+          "tag": "Regulação IA & BIS",
+          "themeId": "ia",
+          "date": "15/out/2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "FSB Sound Practices for Responsible Adoption of AI (Final Report)",
+          "metric": "12 práticas não vinculantes",
+          "url": "https://www.fsb.org/"
+        },
+        {
+          "title": "BCB identifica risco de concentração sistêmica em fornecedores de IA",
+          "body": "Carlos André de Melo Alves alertou no Zetta Summit 2026 que contratação em manada da mesma fornecedora de IA pode gerar falha isolada atingindo várias instituições. BCB mapeou risco de concentração onde movimento em manada pode afetar estabilidade financeira caso único prestador falhe. Processamento em nuvem tem Resolução CMN 4.893/2021, mas uso de IA ainda sem norma específica. Instituições S1 devem avaliar diversificação de provedores de LLMs e modelos generativos para mitigar risco sistêmico.",
+          "source": "Banco Central do Brasil - Zetta Summit 2026",
+          "sourceCode": "BCB",
+          "tag": "Cibersegurança & IA",
+          "themeId": "ia",
+          "date": "02/set/2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "Res. CMN 4.893/2021 (nuvem); IA sem norma específica",
+          "metric": "Risco concentração fornecedores",
+          "url": "https://www.letsmoney.com.br/noticias/bc-risco-concentracao-fornecedores-ia/"
+        },
+        {
+          "title": "BIS sinaliza que explainability de LLMs desafia frameworks prudenciais vigentes",
+          "body": "BIS publicou em 18/set/2026 alerta que frameworks de governança de modelos e validação não foram desenhados para LLMs, com explainability identificada como lacuna particular. BCBS publicou em 2024 relatório sobre digitalização das finanças e avanços em IA levaram a sistemas cada vez mais poderosos. Relatório FSB descreve banco que embedou ML em operações de risco de crédito para identificar sinais precoces de deterioração de cashflow. Bancos brasileiros devem revisar capacidade de explicar decisões de modelos generativos perante BCB e auditoria interna.",
+          "source": "BIS - Supervising banks in an AI-shaped economy",
+          "sourceCode": "BIS",
+          "tag": "Explainability (XAI)",
+          "themeId": "ia",
+          "date": "18/set/2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "BCBS Digitalisation of finance (2024); BIS Speech 18/set/2026",
+          "metric": "Explainability gap em LLMs",
+          "url": "https://aigovernance.com/news/bis-warns-ai-strains-core-bank-supervisory-expectations-on-model-governance"
+        },
+        {
+          "title": "BCBS discute riscos de IA e governança em reunião de setembro 2026",
+          "body": "BCBS reuniu-se em 28-29/set/2026 para avançar iniciativas supervisórias e discutir riscos ao sistema bancário global, incluindo desenvolvimentos em IA. Bancos, supervisores e outros participantes implementam e experimentam crescentemente ferramentas de IA, com 40% dos bancos vendo impactos positivos de lucratividade segundo Cambridge Centre for Alternative Finance. Diretor BCB relatou visita a grande instituição brasileira onde percebeu riscos relevantes no uso de IA em gestão de risco, modelagem e auditoria interna. Instituições devem antecipar que BCBS pode traduzir discussões em guidance vinculante sobre viés algorítmico e governança.",
+          "source": "Basel Committee on Banking Supervision - Meeting Summary",
+          "sourceCode": "BIS",
+          "tag": "Viés Algorítmico",
+          "themeId": "ia",
+          "date": "28-29/set/2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "BCBS Meeting 28-29/set/2026",
+          "metric": "40% bancos com impacto positivo lucratividade (CCAF)",
+          "url": "https://www.bis.org/committees/bcbs/news"
+        }
+      ]
+    }
+  ]
 }
