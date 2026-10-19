@@ -12,11 +12,40 @@
 
 import { writeFileSync, readFileSync, existsSync } from "node:fs";
 
-const API_KEY = process.env.ANTHROPIC_API_KEY;
-if (!API_KEY) {
-  console.error("ANTHROPIC_API_KEY não definida.");
+const API_KEY = (process.env.ANTHROPIC_API_KEY || "").trim();
+
+function fatal(titulo, detalhe, comoResolver) {
+  console.error("\n" + "=".repeat(68));
+  console.error("ERRO: " + titulo);
+  console.error("=".repeat(68));
+  if (detalhe) console.error(detalhe);
+  if (comoResolver) console.error("\nCOMO RESOLVER:\n" + comoResolver);
+  console.error("=".repeat(68) + "\n");
   process.exit(1);
 }
+
+if (!API_KEY) {
+  fatal(
+    "O segredo ANTHROPIC_API_KEY não chegou ao workflow.",
+    "A variável de ambiente veio vazia.",
+    "1. Settings > Secrets and variables > Actions\n" +
+    "2. Confira se existe um segredo com o nome EXATO: ANTHROPIC_API_KEY\n" +
+    "   (maiusculas e underscores; sem espacos antes ou depois)\n" +
+    "3. Se existir mas estiver errado, clique nele e use Update secret"
+  );
+}
+
+if (!API_KEY.startsWith("sk-ant-")) {
+  fatal(
+    "A chave da Anthropic parece invalida.",
+    "Ela deveria comecar com 'sk-ant-' e tem " + API_KEY.length + " caracteres.",
+    "Gere uma chave nova em console.anthropic.com > API Keys > Create Key\n" +
+    "e atualize o segredo ANTHROPIC_API_KEY."
+  );
+}
+
+console.log("Chave carregada: " + API_KEY.slice(0, 14) + "..." + API_KEY.slice(-4) +
+            " (" + API_KEY.length + " caracteres)");
 
 // ─── Temas fixos da edição ────────────────────────────────────────────
 const TEMAS = [
@@ -71,7 +100,27 @@ async function callClaude(userMsg, { maxTokens = 3000, maxSearches = 3 } = {}) {
 
   if (!res.ok) {
     const txt = await res.text();
-    throw new Error(`HTTP ${res.status} — ${txt.slice(0, 400)}`);
+    let msg = txt;
+    try {
+      const j = JSON.parse(txt);
+      msg = j?.error?.message || txt;
+    } catch {}
+
+    if (res.status === 401) {
+      fatal("A API da Anthropic recusou a chave (HTTP 401).", msg,
+        "A chave foi revogada ou esta incorreta.\n" +
+        "Gere uma nova em console.anthropic.com > API Keys > Create Key\n" +
+        "e atualize o segredo ANTHROPIC_API_KEY.");
+    }
+    if (res.status === 400 && /credit balance/i.test(msg)) {
+      fatal("Creditos insuficientes na conta Anthropic.", msg,
+        "Adicione creditos em console.anthropic.com > Billing > Add Credits.");
+    }
+    if (res.status === 429) {
+      fatal("Limite de requisicoes atingido (HTTP 429).", msg,
+        "Aguarde alguns minutos e rode o workflow novamente.");
+    }
+    throw new Error(`HTTP ${res.status} — ${msg.slice(0, 500)}`);
   }
 
   const data = await res.json();
@@ -132,7 +181,52 @@ function titulosAnteriores() {
 }
 
 // ─── Montagem da edição ───────────────────────────────────────────────
+// Chamada minima (sem busca web) para validar autenticacao e creditos
+// antes de gastar uma consulta completa.
+async function preflight() {
+  console.log("Verificando acesso a API...");
+  const res = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "x-api-key": API_KEY,
+      "anthropic-version": "2023-06-01",
+    },
+    body: JSON.stringify({
+      model: "claude-sonnet-4-5",
+      max_tokens: 8,
+      messages: [{ role: "user", content: "ok" }],
+    }),
+  });
+
+  if (!res.ok) {
+    const txt = await res.text();
+    let msg = txt;
+    try { msg = JSON.parse(txt)?.error?.message || txt; } catch {}
+
+    if (res.status === 401) {
+      fatal("A API recusou a chave (HTTP 401).", msg,
+        "Gere uma chave nova em console.anthropic.com > API Keys > Create Key\n" +
+        "e atualize o segredo ANTHROPIC_API_KEY em Settings > Secrets and variables > Actions.");
+    }
+    if (/credit balance/i.test(msg)) {
+      fatal("Creditos insuficientes na conta Anthropic.", msg,
+        "Adicione creditos em console.anthropic.com > Billing > Add Credits (minimo US$ 5).");
+    }
+    if (res.status === 404 && /model/i.test(msg)) {
+      fatal("O modelo nao esta disponivel para esta chave.", msg,
+        "Verifique em console.anthropic.com se a conta tem acesso ao claude-sonnet-4-5.");
+    }
+    fatal("A API respondeu HTTP " + res.status + " na verificacao inicial.", msg,
+      "Confira a chave e os creditos em console.anthropic.com.");
+  }
+
+  console.log("Acesso a API confirmado.\n");
+}
+
 async function main() {
+  await preflight();
+
   const hoje = new Date();
   const iso = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Sao_Paulo" }).format(hoje);
   const anteriores = titulosAnteriores();
@@ -156,7 +250,9 @@ async function main() {
       const parsed = parseJSON(raw);
 
       if (!parsed?.items?.length) {
-        console.warn(`  ⚠ ${tema.label}: sem itens estruturados`);
+        console.warn(`  ⚠ ${tema.label}: a resposta nao veio no formato JSON esperado.`);
+        console.warn(`    Primeiros 400 caracteres recebidos:`);
+        console.warn(`    ${String(raw).slice(0, 400).replace(/\n/g, "\n    ")}`);
         continue;
       }
 
@@ -186,8 +282,14 @@ async function main() {
   }
 
   if (!editorias.length) {
-    console.error("Nenhuma editoria gerada — abortando sem sobrescrever a edição anterior.");
-    process.exit(1);
+    fatal(
+      "Nenhuma editoria foi gerada.",
+      "A API respondeu, mas nenhum tema produziu itens utilizaveis.\n" +
+      "As mensagens de cada tema estao logo acima neste log.\n" +
+      "O briefing.json anterior foi preservado — nada foi sobrescrito.",
+      "Normalmente e uma resposta fora do formato. Rode o workflow de novo:\n" +
+      "Actions > Briefing diario Risk Intel > Run workflow."
+    );
   }
 
   const briefing = {
@@ -283,6 +385,6 @@ function montarEmail(b) {
 }
 
 main().catch((err) => {
-  console.error("Falha:", err);
-  process.exit(1);
+  fatal("Falha inesperada durante a geracao.", String(err && err.stack || err),
+    "Copie a mensagem acima e envie para analise.");
 });
