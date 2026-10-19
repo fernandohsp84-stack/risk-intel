@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap">
 <title>Risk Intel v5.1</title>
 <!-- Chart.js é carregado sob demanda quando o Dashboard é aberto (lazy load) -->
 <!-- MutationObserver removido: causa raiz dos backticks (nested template literals) já corrigida -->
@@ -1441,6 +1441,125 @@ body {
 
 .saiba-tip-text strong { color: var(--text); }
 
+/* ═══════════ EDIÇÃO — layout de jornal executivo ═══════════ */
+.np-masthead{
+  border-bottom:2.5px solid var(--text); padding:4px 0 12px; margin-bottom:16px;
+}
+.np-kicker{
+  display:flex; align-items:center; justify-content:space-between;
+  font-size:9.5px; font-weight:700; letter-spacing:1.4px; text-transform:uppercase;
+  color:var(--text-tertiary); padding-bottom:7px;
+  border-bottom:1px solid var(--border); margin-bottom:9px;
+}
+.np-kicker .np-live{display:flex;align-items:center;gap:5px;color:#34c759}
+.np-kicker .np-dot{width:5px;height:5px;border-radius:50%;background:#34c759;animation:npPulse 2s infinite}
+@keyframes npPulse{0%,100%{opacity:1}50%{opacity:.35}}
+.np-title{
+  font-family:'Source Serif 4',Georgia,serif; font-weight:700;
+  font-size:34px; line-height:1; letter-spacing:-.025em; color:var(--text);
+  text-align:center; margin:2px 0 6px;
+}
+.np-tagline{
+  font-family:'Source Serif 4',Georgia,serif; font-style:italic;
+  font-size:12.5px; color:var(--text-tertiary); text-align:center; letter-spacing:.01em;
+}
+
+/* barra de busca compacta */
+.np-searchbar{display:flex;gap:7px;align-items:center;margin-bottom:16px}
+.np-searchbar input{
+  flex:1; border:1px solid var(--border-strong); border-radius:9px;
+  padding:10px 13px; font-family:'Inter',sans-serif; font-size:14px;
+  background:var(--surface); color:var(--text); outline:none; min-width:0;
+}
+.np-searchbar input:focus{border-color:var(--accent)}
+.np-searchbar button{
+  flex-shrink:0; padding:10px 15px; border-radius:9px; border:none;
+  background:var(--text); color:var(--bg); font-family:'Inter',sans-serif;
+  font-size:13px; font-weight:700; cursor:pointer; -webkit-tap-highlight-color:transparent;
+}
+.np-advanced{
+  background:none;border:none;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;
+  color:var(--text-tertiary);cursor:pointer;padding:0 0 14px;display:block;
+}
+
+/* manchete */
+.np-lead{
+  border-left:3px solid var(--accent); padding:2px 0 2px 15px; margin-bottom:22px;
+}
+.np-lead-label{
+  font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--accent);margin-bottom:7px;
+}
+.np-lead-text{
+  font-family:'Source Serif 4',Georgia,serif; font-size:17.5px; line-height:1.52;
+  color:var(--text); letter-spacing:-.01em;
+}
+
+/* editoria */
+.np-editoria{margin-bottom:26px}
+.np-ed-head{
+  display:flex;align-items:center;gap:9px;
+  border-bottom:1.5px solid var(--text); padding-bottom:7px; margin-bottom:14px;
+}
+.np-ed-icon{font-size:15px;line-height:1}
+.np-ed-name{
+  font-family:'Inter',sans-serif; font-size:12px; font-weight:800;
+  letter-spacing:1.3px; text-transform:uppercase; color:var(--text); flex:1;
+}
+.np-ed-count{font-size:10px;font-weight:700;color:var(--text-tertiary)}
+
+/* artigo */
+.np-art{
+  padding:13px 0; border-bottom:1px solid var(--border); cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.np-art:last-child{border-bottom:none}
+.np-art:active{opacity:.6}
+.np-art-tag{
+  display:inline-block; font-size:9px; font-weight:800; letter-spacing:.9px;
+  text-transform:uppercase; padding:2.5px 7px; border-radius:3px; margin-bottom:7px;
+}
+.np-art-title{
+  font-family:'Source Serif 4',Georgia,serif; font-weight:600;
+  font-size:16.5px; line-height:1.33; letter-spacing:-.015em;
+  color:var(--text); margin-bottom:6px;
+}
+.np-art-body{
+  font-size:13.5px; line-height:1.62; color:var(--text-secondary); margin-bottom:8px;
+}
+.np-art-meta{
+  display:flex;flex-wrap:wrap;gap:7px;align-items:center;
+  font-size:10.5px;font-weight:600;color:var(--text-tertiary);
+}
+.np-art-src{
+  font-weight:800; letter-spacing:.4px; text-transform:uppercase; font-size:9.5px;
+}
+.np-art-norm{
+  background:var(--surface2); border-radius:3px; padding:2px 6px;
+  font-size:10px; font-weight:700; color:var(--text-secondary);
+}
+
+/* estado / rodapé */
+.np-state{text-align:center;padding:46px 20px}
+.np-state-icon{font-size:30px;opacity:.16;margin-bottom:12px}
+.np-state-title{font-family:'Source Serif 4',Georgia,serif;font-size:17px;font-weight:600;color:var(--text);margin-bottom:7px}
+.np-state-sub{font-size:13px;color:var(--text-tertiary);line-height:1.65;max-width:300px;margin:0 auto}
+.np-state button{
+  margin-top:16px;padding:11px 20px;border-radius:9px;border:none;
+  background:var(--text);color:var(--bg);font-family:'Inter',sans-serif;
+  font-size:13px;font-weight:700;cursor:pointer;
+}
+.np-foot{
+  border-top:2.5px solid var(--text); margin-top:10px; padding:11px 0 4px;
+  display:flex; align-items:center; justify-content:space-between;
+  font-size:10px; font-weight:600; color:var(--text-tertiary);
+}
+.np-refresh{
+  background:none;border:none;font-family:'Inter',sans-serif;font-size:11px;
+  font-weight:700;color:var(--accent);cursor:pointer;padding:0;
+}
+
+
 /* ── AGENTE IA ── */
 .agent-fab {
   position: fixed; bottom: 78px; right: 16px; z-index: 200;
@@ -1916,39 +2035,48 @@ body {
     <!-- ── BUSCA ── -->
     <div class="page active" id="page-search">
 
-      <div class="risk-scroll-wrap">
-        <div class="risk-chips" id="risk-chips"></div>
+      <!-- CABEÇALHO DA EDIÇÃO -->
+      <div class="np-masthead">
+        <div class="np-kicker">
+          <span id="np-date">—</span>
+          <span class="np-live"><span class="np-dot"></span><span id="np-edition">Edição</span></span>
+        </div>
+        <div class="np-title">Risk Intel</div>
+        <div class="np-tagline">Inteligência regulatória para gestão de riscos financeiros</div>
       </div>
 
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px">
-        <div class="section-label" style="margin-bottom:0">Tópicos Rápidos</div>
-        <button onclick="openCustomThemeModal()" style="font-size:11px;font-weight:600;color:#5856d6;background:rgba(88,86,214,.07);border:1.5px solid rgba(88,86,214,.25);border-radius:8px;padding:4px 10px;cursor:pointer;font-family:'Inter',sans-serif">＋ Novo tema</button>
+      <!-- BUSCA -->
+      <div class="np-searchbar">
+        <input id="search-input" type="text" placeholder="Pesquisar tema, norma ou métrica…"
+          autocomplete="off" onkeydown="if(event.key==='Enter')search()"/>
+        <button id="search-btn" onclick="search()">Buscar</button>
       </div>
-      
-      <div class="topics-wrap" id="topics-wrap"></div>
+      <button class="np-advanced" onclick="toggleNpAdvanced()" id="np-adv-btn">⚙ Temas, filtros e modo de busca ▾</button>
 
-      <div style="margin-bottom:8px">
-        <div style="font-size:9px;font-weight:700;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">Filtrar por domínio</div>
-        <div id="domain-presets-wrap" style="display:flex;flex-wrap:wrap;gap:6px"></div>
-      </div>
-      <div style="display:flex;gap:6px;margin-bottom:8px;align-items:center">
-        <span style="font-size:9px;font-weight:700;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.8px">Modo:</span>
-        <button id="mode-fast" onclick="setSearchMode('fast')" style="padding:4px 11px;border-radius:14px;border:1.5px solid #34c759;background:rgba(52,199,89,.1);color:#34c759;font-family:'Inter',sans-serif;font-size:10px;font-weight:700;cursor:pointer">⚡ Rápida ~30s</button>
-        <button id="mode-deep" onclick="setSearchMode('deep')" style="padding:4px 11px;border-radius:14px;border:1.5px solid var(--border-strong);background:var(--surface);color:var(--text-secondary);font-family:'Inter',sans-serif;font-size:10px;font-weight:600;cursor:pointer">🔎 Profunda ~50s</button>
-      </div>
-      <div class="search-wrap">
-        <input id="search-input" class="search-input" type="text" placeholder="Pesquisar…" autocomplete="off" onkeydown="if(event.key==='Enter')search()"/>
-        <button class="search-btn" id="search-btn" onclick="search()">Buscar</button>
+      <div id="np-advanced" style="display:none;margin-bottom:16px">
+        <div class="risk-scroll-wrap">
+          <div class="risk-chips" id="risk-chips"></div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px">
+          <div class="section-label" style="margin-bottom:0">Tópicos Rápidos</div>
+          <button onclick="openCustomThemeModal()" style="font-size:11px;font-weight:600;color:#5856d6;background:rgba(88,86,214,.07);border:1.5px solid rgba(88,86,214,.25);border-radius:8px;padding:4px 10px;cursor:pointer;font-family:'Inter',sans-serif">＋ Novo tema</button>
+        </div>
+        <div class="topics-wrap" id="topics-wrap"></div>
+        <div style="margin-bottom:8px">
+          <div style="font-size:9px;font-weight:700;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">Filtrar por domínio</div>
+          <div id="domain-presets-wrap" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center">
+          <span style="font-size:9px;font-weight:700;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.8px">Modo:</span>
+          <button id="mode-fast" onclick="setSearchMode('fast')" style="padding:4px 11px;border-radius:14px;border:1.5px solid #34c759;background:rgba(52,199,89,.1);color:#34c759;font-family:'Inter',sans-serif;font-size:10px;font-weight:700;cursor:pointer">⚡ Rápida ~30s</button>
+          <button id="mode-deep" onclick="setSearchMode('deep')" style="padding:4px 11px;border-radius:14px;border:1.5px solid var(--border-strong);background:var(--surface);color:var(--text-secondary);font-family:'Inter',sans-serif;font-size:10px;font-weight:600;cursor:pointer">🔎 Profunda ~50s</button>
+        </div>
       </div>
 
       <div id="compare-strip-area"></div>
-      <div id="results-area">
-        <div class="welcome-box">
-          <div class="welcome-icon" id="welcome-icon">◈</div>
-          <div class="welcome-title" id="welcome-title">Risco de Modelo</div>
-          <div class="welcome-sub">Selecione um risco ou tópico para obter análises técnicas das principais fontes do mercado financeiro brasileiro.</div>
-        </div>
-      </div>
+
+      <!-- A EDIÇÃO DO DIA (ou resultados de busca) -->
+      <div id="results-area"></div>
     </div>
 
     <!-- ── BIBLIOTECA ── -->
@@ -2856,6 +2984,7 @@ function showApp() {
   renderDomainPresets();
   updateMonitorBadge();
   checkUrlImport(); // Evo 7: check shared library in URL
+  renderEdition();  // A edição do dia é a tela inicial
   // Feed e monitores carregam sob demanda / em idle — não bloqueiam o startup
   if ("requestIdleCallback" in window) {
     requestIdleCallback(function() { runMonitors(); }, { timeout: 8000 });
@@ -3001,11 +3130,21 @@ function setTheme(id) {
     wrap.appendChild(b);
   });
 
-  document.getElementById("welcome-icon").textContent = T.icon;
-  document.getElementById("welcome-title").textContent = T.label;
-  showWelcome();
-  document.getElementById("search-input").value = "";
-  document.getElementById("search-input").placeholder = "Pesquisar " + T.label + "…";
+  // A tela inicial é a Edição; os antigos elementos de boas-vindas não existem mais.
+  const wIcon = document.getElementById("welcome-icon");
+  const wTitle = document.getElementById("welcome-title");
+  if (wIcon) wIcon.textContent = T.icon;
+  if (wTitle) wTitle.textContent = T.label;
+
+  // Só volta para a edição se não houver resultados de busca na tela
+  const area = document.getElementById("results-area");
+  if (!area || !area.querySelector(".card, .results-count, .no-news-box")) showWelcome();
+
+  const si = document.getElementById("search-input");
+  if (si) {
+    si.value = "";
+    si.placeholder = "Pesquisar em " + T.label + "…";
+  }
 }
 
 // ════════════════════════════════════════
@@ -3223,12 +3362,238 @@ function setLoadingStep(T, step) {
 }
 
 function showWelcome() {
-  document.getElementById("results-area").innerHTML = `
-    <div class="welcome-box">
-      <div class="welcome-icon" id="welcome-icon">${THEMES[theme].icon}</div>
-      <div class="welcome-title" id="welcome-title">${THEMES[theme].label}</div>
-      <div class="welcome-sub">Selecione um risco ou tópico para obter análises técnicas das principais fontes do mercado financeiro brasileiro.</div>
-    </div>`;
+  // A tela inicial é a Edição do dia, não uma caixa vazia
+  renderEdition();
+}
+
+// ════════════════════════════════════════
+// EDIÇÃO DIÁRIA — briefing pré-gerado (jornal)
+// ════════════════════════════════════════
+const BRIEFING_URL = "briefing.json";   // gerado pelo GitHub Actions às 07:00 BRT
+let BRIEFING = null;
+let briefingLoading = false;
+
+function toggleNpAdvanced() {
+  const box = document.getElementById("np-advanced");
+  const btn = document.getElementById("np-adv-btn");
+  if (!box || !btn) return;
+  const open = box.style.display === "none";
+  box.style.display = open ? "block" : "none";
+  btn.textContent = open
+    ? "\u2699 Temas, filtros e modo de busca \u25b4"
+    : "\u2699 Temas, filtros e modo de busca \u25be";
+}
+
+function fmtEditionDate(iso) {
+  const MESES = ["janeiro","fevereiro","março","abril","maio","junho",
+                 "julho","agosto","setembro","outubro","novembro","dezembro"];
+  const DIAS = ["domingo","segunda-feira","terça-feira","quarta-feira",
+                "quinta-feira","sexta-feira","sábado"];
+  const d = iso ? new Date(iso + "T12:00:00") : new Date();
+  if (isNaN(d)) return "";
+  return DIAS[d.getDay()] + ", " + d.getDate() + " de " + MESES[d.getMonth()] + " de " + d.getFullYear();
+}
+
+function paintMasthead(iso, label) {
+  const dEl = document.getElementById("np-date");
+  const eEl = document.getElementById("np-edition");
+  if (dEl) dEl.textContent = fmtEditionDate(iso);
+  if (eEl) eEl.textContent = label || "Edição";
+}
+
+async function loadBriefing(force) {
+  if (briefingLoading) return BRIEFING;
+  briefingLoading = true;
+  try {
+    const res = await fetch(BRIEFING_URL + "?t=" + Date.now(), { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const j = await res.json();
+    if (j && Array.isArray(j.editorias)) {
+      BRIEFING = j;
+      try { localStorage.setItem("ri_briefing", JSON.stringify(j)); } catch(_) {}
+    }
+  } catch(_) {
+    // Sem rede ou arquivo ainda não gerado: usa a última edição guardada
+    if (!BRIEFING) {
+      try {
+        const cached = JSON.parse(localStorage.getItem("ri_briefing") || "null");
+        if (cached && Array.isArray(cached.editorias)) BRIEFING = cached;
+      } catch(_) {}
+    }
+  }
+  briefingLoading = false;
+  return BRIEFING;
+}
+
+function npArticleHTML(item, accent) {
+  const src  = item.source || item.fonte || "";
+  const norm = item.normRef || item.norma || "";
+  const metr = item.metric || item.metrica || "";
+  const date = item.date || item.periodo || "";
+  const tag  = item.tag || "";
+  const payload = jsStr(normalizeBriefItem(item));
+  return '<div class="np-art" onclick=\'openBriefItem(' + payload + ')\'>'
+    + (tag ? '<span class="np-art-tag" style="background:' + accent + '18;color:' + accent + '">' + esc(tag) + '</span>' : "")
+    + '<div class="np-art-title">' + esc(item.title || item.titulo || "") + '</div>'
+    + '<div class="np-art-body">' + esc(item.body || item.texto || "") + '</div>'
+    + '<div class="np-art-meta">'
+    +   (src  ? '<span class="np-art-src" style="color:' + accent + '">' + esc(src) + '</span>' : "")
+    +   (date ? '<span>' + esc(date) + '</span>' : "")
+    +   (norm ? '<span class="np-art-norm">' + esc(norm) + '</span>' : "")
+    +   (metr ? '<span class="np-art-norm">' + esc(metr) + '</span>' : "")
+    + '</div></div>';
+}
+
+function normalizeBriefItem(it) {
+  return {
+    title: it.title || it.titulo || "",
+    body: it.body || it.texto || "",
+    source: it.source || it.fonte || "",
+    sourceCode: it.sourceCode || "",
+    themeId: it.themeId || theme,
+    date: it.date || it.periodo || "",
+    relevance: it.relevance || "alto",
+    confidence: it.confidence || "médio",
+    normRef: it.normRef || it.norma || "",
+    metric: it.metric || it.metrica || "",
+    url: it.url || ""
+  };
+}
+
+// Toque num artigo: abre o leitor com as mesmas ações dos cards de busca
+function openBriefItem(item) {
+  const T = THEMES[item.themeId] || THEMES[theme] || THEMES.modelo;
+  renderResults({ summary: "", items: [item] }, T);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function renderEdition() {
+  const el = document.getElementById("results-area");
+  if (!el) return;
+
+  if (!BRIEFING) {
+    paintMasthead(null, "Carregando…");
+    el.innerHTML =
+      '<div class="np-state">'
+      + '<div class="np-state-icon">\ud83d\udcf0</div>'
+      + '<div class="np-state-title">Preparando a edição</div>'
+      + '<div class="np-state-sub">Buscando o briefing do dia…</div>'
+      + '</div>';
+    loadBriefing().then(function() {
+      if (BRIEFING) renderEdition(); else renderEditionEmpty();
+    });
+    return;
+  }
+
+  paintMasthead(BRIEFING.data, BRIEFING.edicao || "Edição do dia");
+
+  let html = "";
+  if (BRIEFING.manchete) {
+    html += '<div class="np-lead">'
+      + '<div class="np-lead-label">Panorama do dia</div>'
+      + '<div class="np-lead-text">' + esc(BRIEFING.manchete) + '</div>'
+      + '</div>';
+  }
+
+  (BRIEFING.editorias || []).forEach(function(ed) {
+    const T = THEMES[ed.themeId] || THEMES.modelo;
+    const accent = T.accent || "#0071e3";
+    const items = ed.itens || ed.items || [];
+    if (!items.length) return;
+    html += '<div class="np-editoria">'
+      + '<div class="np-ed-head">'
+      +   '<span class="np-ed-icon" style="color:' + accent + '">' + (T.icon || "\u25c8") + '</span>'
+      +   '<span class="np-ed-name">' + esc(ed.titulo || T.label) + '</span>'
+      +   '<span class="np-ed-count">' + items.length + '</span>'
+      + '</div>'
+      + items.map(function(it) {
+          it.themeId = it.themeId || ed.themeId;
+          return npArticleHTML(it, accent);
+        }).join("")
+      + '</div>';
+  });
+
+  html += '<div class="np-foot">'
+    + '<span>Gerado em ' + esc(BRIEFING.gerado || fmtEditionDate(BRIEFING.data)) + '</span>'
+    + '<button class="np-refresh" onclick="refreshEdition()">\u21ba Atualizar</button>'
+    + '</div>';
+
+  el.innerHTML = html;
+}
+
+function renderEditionEmpty() {
+  paintMasthead(null, "Sem edição");
+  const el = document.getElementById("results-area");
+  if (!el) return;
+  el.innerHTML =
+    '<div class="np-state">'
+    + '<div class="np-state-icon">\ud83d\udcf0</div>'
+    + '<div class="np-state-title">A primeira edição ainda não foi publicada</div>'
+    + '<div class="np-state-sub">O briefing é gerado automaticamente às 07:00. '
+    + 'Enquanto isso, use a busca acima para consultar qualquer tema.</div>'
+    + '<button onclick="gerarEdicaoAgora()">Gerar edição agora</button>'
+    + '</div>';
+}
+
+function refreshEdition() {
+  BRIEFING = null;
+  renderEdition();
+}
+
+// Gera a edição ao vivo (consome API) quando ainda não há briefing publicado
+async function gerarEdicaoAgora() {
+  const el = document.getElementById("results-area");
+  if (!el) return;
+  if (!apiKey) { alert("Configure sua chave de API no \u2699 primeiro."); return; }
+
+  paintMasthead(null, "Gerando…");
+  el.innerHTML = '<div class="np-state"><div class="spinner" style="margin:0 auto 14px"></div>'
+    + '<div class="np-state-title">Montando a edição</div>'
+    + '<div class="np-state-sub">Consultando as fontes dos temas fixos — leva cerca de 40 segundos.</div></div>';
+
+  const temas = ["modelo", "ia"];
+  const editorias = [];
+  try {
+    for (const tid of temas) {
+      const T = THEMES[tid];
+      if (!T) continue;
+      const topicos = (T.topics || []).slice(0, 4).map(function(x){ return x.label || x; }).join(", ");
+      const raw = await callClaude(SYS_RESEARCH,
+        "Tema de risco: " + T.label
+        + "\nConsulta: panorama das novidades mais relevantes dos últimos 30 dias"
+        + (topicos ? ", cobrindo: " + topicos : "")
+        + "\n\nModo rápido: no máximo 2 buscas focadas e 4 itens. Body de 3 frases diretas.",
+        { model: "claude-sonnet-4-5", maxTokens: 2800, useSearch: true, maxSearches: 2 });
+      const parsed = parseJSON(raw);
+      if (parsed && parsed.items && parsed.items.length) {
+        editorias.push({
+          themeId: tid, titulo: T.label,
+          itens: parsed.items.map(function(i) {
+            i.body = cleanBody(i.body); i.title = cleanBody(i.title);
+            i.themeId = tid; return i;
+          })
+        });
+      }
+    }
+  } catch(err) {
+    el.innerHTML = '<div class="np-state"><div class="np-state-icon">\u26a0</div>'
+      + '<div class="np-state-title">Não consegui montar a edição</div>'
+      + '<div class="np-state-sub">' + esc(err.message) + '</div>'
+      + '<button onclick="gerarEdicaoAgora()">Tentar novamente</button></div>';
+    return;
+  }
+
+  if (!editorias.length) { renderEditionEmpty(); return; }
+
+  BRIEFING = {
+    data: new Date().toISOString().slice(0, 10),
+    edicao: "Edição ao vivo",
+    gerado: new Date().toLocaleString("pt-BR", { day:"2-digit", month:"2-digit", hour:"2-digit", minute:"2-digit" }),
+    manchete: "",
+    editorias: editorias
+  };
+  try { localStorage.setItem("ri_briefing", JSON.stringify(BRIEFING)); } catch(_) {}
+  renderEdition();
 }
 
 function renderError(msg, T) {
@@ -3285,12 +3650,14 @@ function renderResults(parsed, T) {
         <div class="no-news-title">Sem novas notícias</div>
         <div class="no-news-sub">Todos os achados desta consulta já foram lidos ou salvos anteriormente. Tente um tópico diferente ou refine sua busca.</div>
         <button class="no-news-btn" onclick="clearReadAndRetry()">↺ Limpar lidas e buscar novamente</button>
+        <button class="no-news-btn" style="margin-top:8px" onclick="renderEdition()">← Voltar à edição</button>
       </div>`;
     return;
   }
 
   const displayItems = newItems.length > 0 ? newItems : items;
-  let html = `<div class="results-count">${displayItems.length} resultado${displayItems.length!==1?"s":""} · ${T.label}</div>`;
+  let html = '<button class="np-advanced" style="padding:0 0 10px" onclick="renderEdition()">\u2190 Voltar à edição</button>'
+    + `<div class="results-count">${displayItems.length} resultado${displayItems.length!==1?"s":""} · ${T.label}</div>`;
 
   if (summary) {
     const cleanSummary = cleanBody(summary);
