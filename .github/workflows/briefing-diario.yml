@@ -1,0 +1,59 @@
+name: Briefing diário Risk Intel
+
+on:
+  schedule:
+    # 10:00 UTC = 07:00 BRT (UTC-3). Dias úteis.
+    - cron: "0 10 * * 1-5"
+  workflow_dispatch:        # permite disparar manualmente pelo botão "Run workflow"
+
+permissions:
+  contents: write           # necessário para commitar o briefing.json
+
+jobs:
+  gerar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Data da edição
+        id: data
+        run: echo "hoje=$(TZ=America/Sao_Paulo date +%d/%m/%Y)" >> "$GITHUB_OUTPUT"
+
+      - name: Gerar a edição do dia
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node scripts/gerar-briefing.mjs
+
+      - name: Publicar briefing.json no repositório
+        run: |
+          git config user.name  "Risk Intel Bot"
+          git config user.email "actions@github.com"
+          git add briefing.json
+          if git diff --staged --quiet; then
+            echo "Sem mudanças no briefing."
+          else
+            git commit -m "Edição de ${{ steps.data.outputs.hoje }}"
+            git push
+          fi
+
+      - name: Enviar por e-mail
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          from: Risk Intel <${{ secrets.MAIL_USERNAME }}>
+          to: ${{ secrets.MAIL_TO }}
+          subject: "Risk Intel — edição de ${{ steps.data.outputs.hoje }}"
+          html_body: file://briefing.html
+          convert_markdown: false
