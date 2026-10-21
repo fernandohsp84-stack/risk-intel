@@ -23,6 +23,37 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Conferir segredos
+        env:
+          K: ${{ secrets.ANTHROPIC_API_KEY }}
+          U: ${{ secrets.MAIL_USERNAME }}
+          P: ${{ secrets.MAIL_PASSWORD }}
+          T: ${{ secrets.MAIL_TO }}
+        run: |
+          falta=0
+          check() {
+            if [ -z "$2" ]; then
+              echo "  FALTA  $1"
+              falta=1
+            else
+              echo "  ok     $1  (${#2} caracteres)"
+            fi
+          }
+          echo "Segredos configurados neste repositorio:"
+          check ANTHROPIC_API_KEY "$K"
+          check MAIL_USERNAME     "$U"
+          check MAIL_PASSWORD     "$P"
+          check MAIL_TO           "$T"
+          if [ "$falta" = "1" ]; then
+            echo ""
+            echo "=============================================================="
+            echo "Crie os segredos que faltam em:"
+            echo "Settings > Secrets and variables > Actions > New repository secret"
+            echo "O nome precisa bater exatamente (maiusculas e underscores)."
+            echo "=============================================================="
+            exit 1
+          fi
+
       - name: Data da edição
         id: data
         run: echo "hoje=$(TZ=America/Sao_Paulo date +%d/%m/%Y)" >> "$GITHUB_OUTPUT"
@@ -36,13 +67,38 @@ jobs:
         run: |
           git config user.name  "Risk Intel Bot"
           git config user.email "actions@github.com"
-          git add briefing.json
-          if git diff --staged --quiet; then
-            echo "Sem mudanças no briefing."
-          else
+
+          # A edição leva cerca de 1,5 min para ser gerada. Se o repositório
+          # receber qualquer commit nesse intervalo, o push é rejeitado.
+          # A cada tentativa sincronizamos com o remoto e reaplicamos apenas o
+          # briefing recém-gerado — não há merge, logo não há conflito possível.
+          cp briefing.json "$RUNNER_TEMP/briefing-gerado.json"
+
+          for tentativa in 1 2 3; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp "$RUNNER_TEMP/briefing-gerado.json" briefing.json
+            git add briefing.json
+
+            if git diff --staged --quiet; then
+              echo "Briefing idêntico ao que já está publicado — nada a fazer."
+              exit 0
+            fi
+
             git commit -m "Edição de ${{ steps.data.outputs.hoje }}"
-            git push
-          fi
+
+            if git push origin HEAD:main; then
+              echo "Publicado com sucesso (tentativa $tentativa)."
+              exit 0
+            fi
+
+            echo "Push rejeitado na tentativa $tentativa — o repositório mudou. Sincronizando..."
+            sleep 5
+          done
+
+          echo "Não foi possível publicar após 3 tentativas."
+          echo "A edição foi gerada, mas não chegou ao repositório."
+          exit 1
 
       - name: Enviar por e-mail
         uses: dawidd6/action-send-mail@v3
