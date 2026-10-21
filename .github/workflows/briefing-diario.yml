@@ -65,6 +65,10 @@ jobs:
 
       - name: Publicar briefing.json no repositório
         run: |
+          echo "=============================================="
+          echo " PUBLICACAO v2 — com sincronizacao automatica"
+          echo "=============================================="
+
           git config user.name  "Risk Intel Bot"
           git config user.email "actions@github.com"
 
@@ -72,12 +76,17 @@ jobs:
           # receber qualquer commit nesse intervalo, o push é rejeitado.
           # A cada tentativa sincronizamos com o remoto e reaplicamos apenas o
           # briefing recém-gerado — não há merge, logo não há conflito possível.
-          cp briefing.json "$RUNNER_TEMP/briefing-gerado.json"
+          # Guarda a edição gerada como arquivo NÃO rastreado: o git reset
+          # --hard preserva arquivos não rastreados, então o backup sobrevive
+          # a todas as tentativas de sincronização.
+          cp briefing.json briefing-gerado.tmp
 
           for tentativa in 1 2 3; do
+            echo ""
+            echo "--- tentativa $tentativa de 3 ---"
             git fetch origin main
             git reset --hard origin/main
-            cp "$RUNNER_TEMP/briefing-gerado.json" briefing.json
+            cp briefing-gerado.tmp briefing.json
             git add briefing.json
 
             if git diff --staged --quiet; then
@@ -88,14 +97,16 @@ jobs:
             git commit -m "Edição de ${{ steps.data.outputs.hoje }}"
 
             if git push origin HEAD:main; then
-              echo "Publicado com sucesso (tentativa $tentativa)."
+              echo ""
+              echo "PUBLICADO COM SUCESSO (tentativa $tentativa)."
               exit 0
             fi
 
-            echo "Push rejeitado na tentativa $tentativa — o repositório mudou. Sincronizando..."
+            echo "Push rejeitado — o repositório mudou durante a geração. Sincronizando..."
             sleep 5
           done
 
+          echo ""
           echo "Não foi possível publicar após 3 tentativas."
           echo "A edição foi gerada, mas não chegou ao repositório."
           exit 1
