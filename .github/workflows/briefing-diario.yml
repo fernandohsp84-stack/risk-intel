@@ -1,9 +1,10 @@
-name: Briefing diário Risk Intel
+name: Briefing Risk Intel (segundas e quintas)
 
 on:
   schedule:
-    # 10:00 UTC = 07:00 BRT (UTC-3). Dias úteis.
-    - cron: "0 10 * * 1-5"
+    # 10:00 UTC = 07:00 BRT (UTC-3, fixo o ano todo).
+    # Dia da semana: 1 = segunda-feira, 4 = quinta-feira.
+    - cron: "0 10 * * 1,4"
   workflow_dispatch:        # permite disparar manualmente pelo botão "Run workflow"
 
 permissions:
