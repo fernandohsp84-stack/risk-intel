@@ -1,390 +1,421 @@
-/**
- * Risk Intel — gerador da edição diária
- *
- * Roda no GitHub Actions às 07:00 BRT. Consulta a API da Anthropic com busca
- * web real, monta o briefing dos temas fixos e grava dois arquivos:
- *   briefing.json  → lido pelo app ao abrir
- *   briefing.html  → corpo do e-mail
- *
- * Variáveis de ambiente obrigatórias:
- *   ANTHROPIC_API_KEY
- */
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Risk Intel — Edição</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap">
+<style>
+:root{
+  --bg:#f5f5f7; --surface:#fff; --surface2:#f5f5f7;
+  --border:rgba(0,0,0,.08); --border-strong:rgba(0,0,0,.14);
+  --text:#1d1d1f; --text-secondary:#6e6e73; --text-tertiary:#aeaeb2;
+  --accent:#0071e3; --green:#34c759; --orange:#ff9500; --indigo:#5856d6;
+  --radius:12px;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#000; --surface:#1c1c1e; --surface2:#2c2c2e;
+    --border:rgba(255,255,255,.1); --border-strong:rgba(255,255,255,.18);
+    --text:#f5f5f7; --text-secondary:#a1a1a6; --text-tertiary:#6e6e73;
+  }
+}
+*{box-sizing:border-box;-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:680px;margin:0 auto;padding:0 16px 60px}
 
-import { writeFileSync, readFileSync, existsSync } from "node:fs";
-
-const API_KEY = (process.env.ANTHROPIC_API_KEY || "").trim();
-
-function fatal(titulo, detalhe, comoResolver) {
-  console.error("\n" + "=".repeat(68));
-  console.error("ERRO: " + titulo);
-  console.error("=".repeat(68));
-  if (detalhe) console.error(detalhe);
-  if (comoResolver) console.error("\nCOMO RESOLVER:\n" + comoResolver);
-  console.error("=".repeat(68) + "\n");
-  process.exit(1);
+/* ── Cabeçalho ── */
+.mast{border-bottom:2.5px solid var(--text);padding:20px 0 13px;margin-bottom:16px}
+.mast-top{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  font-size:9.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--text-tertiary);padding-bottom:8px;
+  border-bottom:1px solid var(--border);margin-bottom:10px;
+}
+.mast-title{
+  font-family:'Source Serif 4',Georgia,serif;font-weight:700;
+  font-size:34px;line-height:1;letter-spacing:-.025em;text-align:center;margin-bottom:6px;
+}
+.mast-sub{
+  font-family:'Source Serif 4',Georgia,serif;font-style:italic;
+  font-size:12.5px;color:var(--text-tertiary);text-align:center;
 }
 
-if (!API_KEY) {
-  fatal(
-    "O segredo ANTHROPIC_API_KEY não chegou ao workflow.",
-    "A variável de ambiente veio vazia.",
-    "1. Settings > Secrets and variables > Actions\n" +
-    "2. Confira se existe um segredo com o nome EXATO: ANTHROPIC_API_KEY\n" +
-    "   (maiusculas e underscores; sem espacos antes ou depois)\n" +
-    "3. Se existir mas estiver errado, clique nele e use Update secret"
-  );
+/* ── Controles ── */
+.controls{margin-bottom:18px}
+.row{display:flex;gap:8px;align-items:center;margin-bottom:9px;flex-wrap:wrap}
+select,input[type="search"]{
+  font-family:'Inter',sans-serif;font-size:14px;color:var(--text);
+  background:var(--surface);border:1px solid var(--border-strong);
+  border-radius:9px;padding:10px 12px;outline:none;min-width:0;
 }
-
-if (!API_KEY.startsWith("sk-ant-")) {
-  fatal(
-    "A chave da Anthropic parece invalida.",
-    "Ela deveria comecar com 'sk-ant-' e tem " + API_KEY.length + " caracteres.",
-    "Gere uma chave nova em console.anthropic.com > API Keys > Create Key\n" +
-    "e atualize o segredo ANTHROPIC_API_KEY."
-  );
+input[type="search"]{flex:1}
+select{flex:1;cursor:pointer;-webkit-appearance:none;appearance:none;
+  background-image:linear-gradient(45deg,transparent 50%,var(--text-tertiary) 50%),
+                   linear-gradient(135deg,var(--text-tertiary) 50%,transparent 50%);
+  background-position:calc(100% - 17px) 18px, calc(100% - 12px) 18px;
+  background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:34px}
+input:focus,select:focus{border-color:var(--accent)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{
+  padding:6px 12px;border-radius:16px;border:1.5px solid var(--border-strong);
+  background:var(--surface);font-family:'Inter',sans-serif;font-size:11.5px;
+  font-weight:600;color:var(--text-secondary);cursor:pointer;white-space:nowrap;
+  -webkit-tap-highlight-color:transparent;transition:background .12s;
 }
+.chip.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+.chip-tag.on{background:var(--indigo);color:#fff;border-color:var(--indigo)}
+.lbl{font-size:9px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;
+  color:var(--text-tertiary);margin:12px 0 7px}
 
-console.log("Chave carregada: " + API_KEY.slice(0, 14) + "..." + API_KEY.slice(-4) +
-            " (" + API_KEY.length + " caracteres)");
+/* ── Panorama ── */
+.lead{border-left:3px solid var(--accent);padding:2px 0 2px 15px;margin-bottom:22px}
+.lead-lbl{font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--accent);margin-bottom:7px}
+.lead-txt{font-family:'Source Serif 4',Georgia,serif;font-size:17px;line-height:1.52}
 
-// ─── Temas fixos da edição ────────────────────────────────────────────
-const TEMAS = [
-  {
-    id: "modelo",
-    label: "Risco de Modelo",
-    icon: "◈",
-    accent: "#0071e3",
-    tags: ["Validação de Modelos", "IFRS 9 & ECL", "Backtesting", "Governança de Modelos", "Stress Test"],
-  },
-  {
-    id: "ia",
-    label: "Risco de IA",
-    icon: "⬡",
-    accent: "#ff9500",
-    tags: ["IA Generativa", "Regulação IA & BIS", "Viés Algorítmico", "Explainability (XAI)", "Cibersegurança & IA"],
-  },
-];
+/* ── Editoria e artigos ── */
+.ed-head{display:flex;align-items:center;gap:9px;border-bottom:1.5px solid var(--text);
+  padding-bottom:7px;margin:26px 0 4px}
+.ed-name{font-size:12px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;flex:1}
+.ed-count{font-size:10px;font-weight:700;color:var(--text-tertiary)}
 
-const SYS = `Você é especialista sênior em regulação bancária brasileira e internacional (BCB, CMN, BIS/BCBS, FSB). Você TEM acesso a busca web e DEVE usá-la para fundamentar os achados em documentos reais.
+.art{border-bottom:1px solid var(--border);padding:14px 0}
+.art-head{display:flex;gap:10px;align-items:flex-start;cursor:pointer;
+  -webkit-tap-highlight-color:transparent}
+.art-head:active{opacity:.6}
+.art-main{flex:1;min-width:0}
+.tag{display:inline-block;font-size:9px;font-weight:800;letter-spacing:.9px;
+  text-transform:uppercase;padding:2.5px 7px;border-radius:3px;margin-bottom:7px}
+.art-title{font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:16.5px;
+  line-height:1.33;letter-spacing:-.015em}
+.caret{color:var(--text-tertiary);font-size:12px;flex-shrink:0;margin-top:5px;
+  transition:transform .18s}
+.art.open .caret{transform:rotate(90deg)}
+.art-body{display:none;padding-top:9px}
+.art.open .art-body{display:block}
+.art-text{font-size:13.5px;line-height:1.64;color:var(--text-secondary);margin-bottom:10px}
+.meta{display:flex;flex-wrap:wrap;gap:7px;align-items:center;font-size:10.5px;
+  font-weight:600;color:var(--text-tertiary)}
+.src{font-weight:800;letter-spacing:.4px;text-transform:uppercase;font-size:9.5px}
+.pill{background:var(--surface2);border-radius:3px;padding:2px 7px;font-size:10px;
+  font-weight:700;color:var(--text-secondary)}
+.src-link{display:inline-block;margin-top:10px;font-size:12px;font-weight:600;
+  color:var(--accent);text-decoration:none}
 
-PROCESSO:
-1. BUSQUE (2-3 buscas focadas): priorize bcb.gov.br, bis.org/bcbs/publ, fsb.org. Para crédito/inadimplência inclua serasaexperian.com.br. Para acadêmico use scholar.google.com (nunca ssrn.com direto — bloqueia bots).
-2. EXTRAIA de cada documento real: número exato da norma, data, métrica concreta, URL de origem.
-3. AUTO-REVISE antes de responder: descarte itens genéricos sem norma/métrica; verifique formato das referências (Res. BCB XXXX/AAAA, Circular X.XXX, BCBS dXXX); NUNCA invente norma, data ou URL.
+/* ── Estados ── */
+.state{text-align:center;padding:52px 20px}
+.state-ic{font-size:30px;opacity:.16;margin-bottom:12px}
+.state-t{font-family:'Source Serif 4',Georgia,serif;font-size:17px;font-weight:600;margin-bottom:7px}
+.state-s{font-size:13px;color:var(--text-tertiary);line-height:1.65;max-width:320px;margin:0 auto}
+.count{font-size:11px;font-weight:600;color:var(--text-tertiary);margin:14px 0 2px}
+.foot{border-top:2.5px solid var(--text);margin-top:26px;padding:12px 0 4px;
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+  font-size:10.5px;font-weight:600;color:var(--text-tertiary);flex-wrap:wrap}
+.foot a{color:var(--accent);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
 
-CONFIDENCE: "alto"=URL real+conteúdo verificado · "médio"=norma existe, conteúdo não confirmado · "baixo"=sem fonte primária.
+  <div class="mast">
+    <div class="mast-top">
+      <span id="data">—</span>
+      <span id="selo">Edição</span>
+    </div>
+    <div class="mast-title">Risk Intel</div>
+    <div class="mast-sub">Inteligência regulatória para gestão de riscos financeiros</div>
+  </div>
 
-RETORNE APENAS este JSON (sem markdown, sem texto extra):
-{"summary":"síntese executiva em 2 frases","items":[{"title":"título técnico","body":"análise em 3 frases: (1) referência encontrada, (2) conteúdo real, (3) implicação prática para um banco brasileiro","source":"nome da fonte","sourceCode":"BCB|BIS|CMN|FSB|FEBRABAN|SERASA|ITAU|BB","tag":"uma das tags fornecidas","date":"período real","relevance":"alto|médio|baixo","confidence":"alto|médio|baixo","normRef":"norma real ou vazio","metric":"métrica real ou vazio","url":"URL real ou vazio"}]}
-Retorne 4 itens de ALTA qualidade.`;
+  <div class="controls" id="controles" style="display:none">
+    <div class="row">
+      <select id="sel-edicao" aria-label="Escolher edição"></select>
+    </div>
+    <div class="row">
+      <input type="search" id="busca" placeholder="Pesquisar título, norma, fonte…" autocomplete="off">
+    </div>
+    <div class="lbl">Tema</div>
+    <div class="chips" id="chips-tema"></div>
+    <div class="lbl" id="lbl-tag" style="display:none">Tag</div>
+    <div class="chips" id="chips-tag"></div>
+  </div>
 
-// ─── Chamada à API ────────────────────────────────────────────────────
-async function callClaude(userMsg, { maxTokens = 3000, maxSearches = 3 } = {}) {
-  const body = {
-    model: "claude-sonnet-4-5",
-    max_tokens: maxTokens,
-    system: SYS,
-    messages: [{ role: "user", content: userMsg }],
-    tools: [{ type: "web_search_20250305", name: "web_search", max_uses: maxSearches }],
-  };
+  <div id="conteudo">
+    <div class="state">
+      <div class="state-ic">📰</div>
+      <div class="state-t">Carregando a edição…</div>
+    </div>
+  </div>
 
-  const res = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      "x-api-key": API_KEY,
-      "anthropic-version": "2023-06-01",
-    },
-    body: JSON.stringify(body),
-  });
+  <div class="foot" id="rodape" style="display:none">
+    <span id="gerado"></span>
+    <span><a href="./">Abrir o app</a></span>
+  </div>
 
-  if (!res.ok) {
-    const txt = await res.text();
-    let msg = txt;
-    try {
-      const j = JSON.parse(txt);
-      msg = j?.error?.message || txt;
-    } catch {}
+</div>
 
-    if (res.status === 401) {
-      fatal("A API da Anthropic recusou a chave (HTTP 401).", msg,
-        "A chave foi revogada ou esta incorreta.\n" +
-        "Gere uma nova em console.anthropic.com > API Keys > Create Key\n" +
-        "e atualize o segredo ANTHROPIC_API_KEY.");
-    }
-    if (res.status === 400 && /credit balance/i.test(msg)) {
-      fatal("Creditos insuficientes na conta Anthropic.", msg,
-        "Adicione creditos em console.anthropic.com > Billing > Add Credits.");
-    }
-    if (res.status === 429) {
-      fatal("Limite de requisicoes atingido (HTTP 429).", msg,
-        "Aguarde alguns minutos e rode o workflow novamente.");
-    }
-    throw new Error(`HTTP ${res.status} — ${msg.slice(0, 500)}`);
+<script>
+(function () {
+  "use strict";
+
+  var INDICE_URL = "edicoes/index.json";
+  var ATUAL_URL  = "briefing.json";
+
+  var CORES = { modelo:"#0071e3", ia:"#ff9500", operacional:"#5856d6",
+                mercado:"#34c759", liquidez:"#5ac8fa", terceiros:"#af52de" };
+
+  var edicao = null, indice = [], fTema = "todos", fTag = "todas", fTexto = "";
+  var abertos = {};
+
+  function esc(s){
+    return String(s == null ? "" : s)
+      .replace(/&/g,"&amp;").replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+  function cor(themeId){ return CORES[themeId] || "#0071e3"; }
+
+  var MESES = ["janeiro","fevereiro","março","abril","maio","junho",
+               "julho","agosto","setembro","outubro","novembro","dezembro"];
+  var DIAS = ["domingo","segunda-feira","terça-feira","quarta-feira",
+              "quinta-feira","sexta-feira","sábado"];
+
+  function dataLonga(iso){
+    if (!iso) return "";
+    var d = new Date(iso + "T12:00:00");
+    if (isNaN(d)) return iso;
+    return DIAS[d.getDay()] + ", " + d.getDate() + " de " +
+           MESES[d.getMonth()] + " de " + d.getFullYear();
+  }
+  function dataCurta(iso){
+    if (!iso) return "";
+    var d = new Date(iso + "T12:00:00");
+    if (isNaN(d)) return iso;
+    var dia = String(d.getDate()).padStart(2,"0");
+    return dia + " " + MESES[d.getMonth()].slice(0,3) + " " + d.getFullYear();
   }
 
-  const data = await res.json();
-  return (data.content || [])
-    .filter((b) => b.type === "text")
-    .map((b) => b.text)
-    .join("")
-    .trim();
-}
+  function itensDa(ed){ return ed.itens || ed.items || []; }
 
-// ─── Parsing tolerante ────────────────────────────────────────────────
-function parseJSON(text) {
-  if (!text) return null;
-  let t = text.trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "").trim();
-  try { return JSON.parse(t); } catch {}
-  const start = t.indexOf("{");
-  if (start < 0) return null;
-  let depth = 0, inStr = false, esc = false;
-  for (let i = start; i < t.length; i++) {
-    const ch = t[i];
-    if (inStr) {
-      if (esc) esc = false;
-      else if (ch === "\\") esc = true;
-      else if (ch === '"') inStr = false;
-    } else {
-      if (ch === '"') inStr = true;
-      else if (ch === "{") depth++;
-      else if (ch === "}") {
-        depth--;
-        if (depth === 0) {
-          try { return JSON.parse(t.slice(start, i + 1)); } catch { return null; }
-        }
-      }
-    }
+  function todosItens(){
+    if (!edicao) return [];
+    var out = [];
+    (edicao.editorias || []).forEach(function(ed){
+      itensDa(ed).forEach(function(it){
+        out.push({ it: it, ed: ed });
+      });
+    });
+    return out;
   }
-  return null;
-}
 
-function clean(s) {
-  return String(s || "")
-    .replace(/<cite[^>]*>([\s\S]*?)<\/cite>/gi, "$1")
-    .replace(/<[^>]+>/g, "")
-    .replace(/`{1,3}/g, "")
-    .replace(/\[\d+\]/g, "")
-    .replace(/\s{2,}/g, " ")
-    .trim();
-}
+  function passaFiltro(par){
+    var it = par.it, ed = par.ed;
+    if (fTema !== "todos" && ed.themeId !== fTema) return false;
+    if (fTag !== "todas" && (it.tag || "") !== fTag) return false;
+    if (fTexto) {
+      var alvo = [it.title, it.body, it.normRef, it.metric, it.source, it.tag]
+        .join(" ").toLowerCase();
+      if (alvo.indexOf(fTexto) === -1) return false;
+    }
+    return true;
+  }
 
-// Evita repetir as manchetes da edição anterior
-function titulosAnteriores() {
+  // ── Controles ──────────────────────────────────────────────
+  function montarSeletor(){
+    var sel = document.getElementById("sel-edicao");
+    if (!indice.length) { sel.style.display = "none"; return; }
+    sel.innerHTML = indice.map(function(e){
+      var rot = dataCurta(e.data) + "  ·  " + e.itens + " ite" + (e.itens === 1 ? "m" : "ns");
+      return '<option value="' + esc(e.data) + '">' + esc(rot) + "</option>";
+    }).join("");
+    if (edicao && edicao.data) sel.value = edicao.data;
+    sel.onchange = function(){ carregarEdicao(sel.value); };
+  }
+
+  function montarChipsTema(){
+    var wrap = document.getElementById("chips-tema");
+    var eds = (edicao && edicao.editorias) || [];
+    var html = '<button class="chip' + (fTema === "todos" ? " on" : "") +
+               '" data-t="todos">Todos</button>';
+    eds.forEach(function(ed){
+      var n = itensDa(ed).length;
+      html += '<button class="chip' + (fTema === ed.themeId ? " on" : "") +
+              '" data-t="' + esc(ed.themeId) + '">' + esc(ed.titulo) +
+              " · " + n + "</button>";
+    });
+    wrap.innerHTML = html;
+    Array.prototype.forEach.call(wrap.querySelectorAll(".chip"), function(b){
+      b.onclick = function(){ fTema = b.getAttribute("data-t"); fTag = "todas"; render(); };
+    });
+  }
+
+  function montarChipsTag(){
+    var wrap = document.getElementById("chips-tag");
+    var lbl = document.getElementById("lbl-tag");
+    var tags = [];
+    todosItens().forEach(function(p){
+      if (fTema !== "todos" && p.ed.themeId !== fTema) return;
+      var t = p.it.tag;
+      if (t && tags.indexOf(t) === -1) tags.push(t);
+    });
+    if (tags.length < 2) { wrap.innerHTML = ""; lbl.style.display = "none"; return; }
+    lbl.style.display = "block";
+    var html = '<button class="chip chip-tag' + (fTag === "todas" ? " on" : "") +
+               '" data-g="todas">Todas</button>';
+    tags.forEach(function(t){
+      html += '<button class="chip chip-tag' + (fTag === t ? " on" : "") +
+              '" data-g="' + esc(t) + '">' + esc(t) + "</button>";
+    });
+    wrap.innerHTML = html;
+    Array.prototype.forEach.call(wrap.querySelectorAll(".chip"), function(b){
+      b.onclick = function(){ fTag = b.getAttribute("data-g"); render(); };
+    });
+  }
+
+  // ── Render ─────────────────────────────────────────────────
+  function artigoHTML(par, i){
+    var it = par.it, c = cor(par.ed.themeId);
+    var id = "a" + i;
+    var aberto = abertos[it.title] ? " open" : "";
+    var meta = "";
+    if (it.source)  meta += '<span class="src" style="color:' + c + '">' + esc(it.source) + "</span>";
+    if (it.date)    meta += "<span>" + esc(it.date) + "</span>";
+    if (it.normRef) meta += '<span class="pill">' + esc(it.normRef) + "</span>";
+    if (it.metric)  meta += '<span class="pill">' + esc(it.metric) + "</span>";
+
+    return '<div class="art' + aberto + '" id="' + id + '">' +
+      '<div class="art-head" data-k="' + esc(it.title) + '">' +
+        '<div class="art-main">' +
+          (it.tag ? '<span class="tag" style="background:' + c + '1a;color:' + c + '">' +
+                    esc(it.tag) + "</span>" : "") +
+          '<div class="art-title">' + esc(it.title) + "</div>" +
+        "</div>" +
+        '<span class="caret">&#9654;</span>' +
+      "</div>" +
+      '<div class="art-body">' +
+        '<div class="art-text">' + esc(it.body) + "</div>" +
+        '<div class="meta">' + meta + "</div>" +
+        (it.url ? '<a class="src-link" href="' + esc(it.url) +
+                  '" target="_blank" rel="noopener">Ver documento &rarr;</a>' : "") +
+      "</div></div>";
+  }
+
+  function render(){
+    montarChipsTema();
+    montarChipsTag();
+
+    var alvo = document.getElementById("conteudo");
+    var sel = todosItens().filter(passaFiltro);
+
+    var html = "";
+    if (edicao.manchete && fTema === "todos" && fTag === "todas" && !fTexto) {
+      html += '<div class="lead"><div class="lead-lbl">Panorama</div>' +
+              '<div class="lead-txt">' + esc(edicao.manchete) + "</div></div>";
+    }
+
+    if (!sel.length) {
+      html += '<div class="state"><div class="state-ic">🔍</div>' +
+              '<div class="state-t">Nenhum achado com esses filtros</div>' +
+              '<div class="state-s">Tente limpar a busca ou escolher outro tema.</div></div>';
+      alvo.innerHTML = html;
+      return;
+    }
+
+    var filtrando = (fTema !== "todos" || fTag !== "todas" || fTexto);
+    if (filtrando) {
+      html += '<div class="count">' + sel.length + " achado" +
+              (sel.length === 1 ? "" : "s") + "</div>";
+    }
+
+    // Agrupa por editoria preservando a ordem original
+    var vistos = [];
+    (edicao.editorias || []).forEach(function(ed){
+      var doTema = sel.filter(function(p){ return p.ed === ed; });
+      if (!doTema.length) return;
+      var c = cor(ed.themeId);
+      html += '<div class="ed-head"><span class="ed-name" style="color:' + c + '">' +
+              esc(ed.titulo) + '</span><span class="ed-count">' + doTema.length + "</span></div>";
+      doTema.forEach(function(p){ html += artigoHTML(p, vistos.push(p) - 1); });
+    });
+
+    alvo.innerHTML = html;
+
+    Array.prototype.forEach.call(alvo.querySelectorAll(".art-head"), function(h){
+      h.onclick = function(){
+        var art = h.parentNode;
+        var k = h.getAttribute("data-k");
+        art.classList.toggle("open");
+        abertos[k] = art.classList.contains("open");
+      };
+    });
+  }
+
+  function pintarCabecalho(){
+    document.getElementById("data").textContent = dataLonga(edicao.data);
+    document.getElementById("selo").textContent = edicao.edicao || "Edição";
+    var r = document.getElementById("rodape");
+    document.getElementById("gerado").textContent =
+      edicao.gerado ? "Gerado em " + edicao.gerado : "";
+    r.style.display = "flex";
+    document.getElementById("controles").style.display = "block";
+  }
+
+  function erro(titulo, sub){
+    document.getElementById("conteudo").innerHTML =
+      '<div class="state"><div class="state-ic">📰</div>' +
+      '<div class="state-t">' + esc(titulo) + "</div>" +
+      '<div class="state-s">' + esc(sub) + "</div></div>";
+  }
+
+  function buscarJSON(url){
+    return fetch(url + "?t=" + Date.now(), { cache: "no-store" })
+      .then(function(r){ if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); });
+  }
+
+  function carregarEdicao(data){
+    var url = data ? "edicoes/" + data + ".json" : ATUAL_URL;
+    buscarJSON(url)
+      .catch(function(){ return data ? buscarJSON(ATUAL_URL) : Promise.reject(); })
+      .then(function(j){
+        edicao = j; abertos = {}; fTema = "todos"; fTag = "todas";
+        fTexto = ""; document.getElementById("busca").value = "";
+        pintarCabecalho(); montarSeletor(); render();
+        try { history.replaceState(null, "", "?d=" + (j.data || "")); } catch(e){}
+      })
+      .catch(function(){
+        erro("Não consegui carregar a edição",
+             "Verifique sua conexão e recarregue a página.");
+      });
+  }
+
+  // ── Início ─────────────────────────────────────────────────
+  var pedido = null;
   try {
-    if (!existsSync("briefing.json")) return [];
-    const prev = JSON.parse(readFileSync("briefing.json", "utf-8"));
-    return (prev.editorias || []).flatMap((e) => (e.itens || []).map((i) => i.title)).slice(0, 12);
-  } catch {
-    return [];
-  }
-}
+    var m = location.search.match(/[?&]d=(\d{4}-\d{2}-\d{2})/);
+    if (m) pedido = m[1];
+  } catch(e){}
 
-// ─── Montagem da edição ───────────────────────────────────────────────
-// Chamada minima (sem busca web) para validar autenticacao e creditos
-// antes de gastar uma consulta completa.
-async function preflight() {
-  console.log("Verificando acesso a API...");
-  const res = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      "x-api-key": API_KEY,
-      "anthropic-version": "2023-06-01",
-    },
-    body: JSON.stringify({
-      model: "claude-sonnet-4-5",
-      max_tokens: 8,
-      messages: [{ role: "user", content: "ok" }],
-    }),
+  buscarJSON(INDICE_URL)
+    .then(function(j){ indice = (j && j.edicoes) || []; })
+    .catch(function(){ indice = []; })
+    .then(function(){ carregarEdicao(pedido); });
+
+  var busca = document.getElementById("busca");
+  var atraso = null;
+  busca.addEventListener("input", function(){
+    clearTimeout(atraso);
+    atraso = setTimeout(function(){
+      fTexto = busca.value.trim().toLowerCase();
+      if (edicao) render();
+    }, 180);
   });
-
-  if (!res.ok) {
-    const txt = await res.text();
-    let msg = txt;
-    try { msg = JSON.parse(txt)?.error?.message || txt; } catch {}
-
-    if (res.status === 401) {
-      fatal("A API recusou a chave (HTTP 401).", msg,
-        "Gere uma chave nova em console.anthropic.com > API Keys > Create Key\n" +
-        "e atualize o segredo ANTHROPIC_API_KEY em Settings > Secrets and variables > Actions.");
-    }
-    if (/credit balance/i.test(msg)) {
-      fatal("Creditos insuficientes na conta Anthropic.", msg,
-        "Adicione creditos em console.anthropic.com > Billing > Add Credits (minimo US$ 5).");
-    }
-    if (res.status === 404 && /model/i.test(msg)) {
-      fatal("O modelo nao esta disponivel para esta chave.", msg,
-        "Verifique em console.anthropic.com se a conta tem acesso ao claude-sonnet-4-5.");
-    }
-    fatal("A API respondeu HTTP " + res.status + " na verificacao inicial.", msg,
-      "Confira a chave e os creditos em console.anthropic.com.");
-  }
-
-  console.log("Acesso a API confirmado.\n");
-}
-
-async function main() {
-  await preflight();
-
-  const hoje = new Date();
-  const iso = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Sao_Paulo" }).format(hoje);
-  const anteriores = titulosAnteriores();
-  const excl = anteriores.length
-    ? `\n\nEVITE repetir estes títulos já publicados:\n${anteriores.map((t) => "- " + t).join("\n")}`
-    : "";
-
-  const editorias = [];
-  const resumos = [];
-
-  for (const tema of TEMAS) {
-    console.log(`→ Gerando editoria: ${tema.label}`);
-    try {
-      const msg =
-        `Tema de risco: ${tema.label}\n` +
-        `Consulta: novidades regulatórias e de mercado mais relevantes dos últimos 30 dias\n` +
-        `Cubra estas tags (use o campo "tag" de cada item): ${tema.tags.join(", ")}${excl}\n\n` +
-        `Modo rápido: no máximo 3 buscas focadas e 4 itens. Body de 3 frases diretas.`;
-
-      const raw = await callClaude(msg, { maxTokens: 3000, maxSearches: 3 });
-      const parsed = parseJSON(raw);
-
-      if (!parsed?.items?.length) {
-        console.warn(`  ⚠ ${tema.label}: a resposta nao veio no formato JSON esperado.`);
-        console.warn(`    Primeiros 400 caracteres recebidos:`);
-        console.warn(`    ${String(raw).slice(0, 400).replace(/\n/g, "\n    ")}`);
-        continue;
-      }
-
-      const itens = parsed.items.map((i) => ({
-        title: clean(i.title),
-        body: clean(i.body),
-        source: i.source || "",
-        sourceCode: i.sourceCode || "",
-        tag: i.tag || "",
-        themeId: tema.id,
-        date: i.date || "",
-        relevance: i.relevance || "alto",
-        confidence: i.confidence || "médio",
-        normRef: i.normRef || "",
-        metric: i.metric || "",
-        url: i.url || "",
-      })).filter((i) => i.title && i.body);
-
-      if (itens.length) {
-        editorias.push({ themeId: tema.id, titulo: tema.label, itens });
-        if (parsed.summary) resumos.push(clean(parsed.summary));
-      }
-      console.log(`  ✓ ${itens.length} itens`);
-    } catch (err) {
-      console.error(`  ✗ ${tema.label}: ${err.message}`);
-    }
-  }
-
-  if (!editorias.length) {
-    fatal(
-      "Nenhuma editoria foi gerada.",
-      "A API respondeu, mas nenhum tema produziu itens utilizaveis.\n" +
-      "As mensagens de cada tema estao logo acima neste log.\n" +
-      "O briefing.json anterior foi preservado — nada foi sobrescrito.",
-      "Normalmente e uma resposta fora do formato. Rode o workflow de novo:\n" +
-      "Actions > Briefing diario Risk Intel > Run workflow."
-    );
-  }
-
-  const briefing = {
-    data: iso,
-    edicao: "Edição do dia",
-    gerado: new Intl.DateTimeFormat("pt-BR", {
-      timeZone: "America/Sao_Paulo",
-      day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit",
-    }).format(hoje),
-    manchete: resumos.join(" "),
-    editorias,
-  };
-
-  writeFileSync("briefing.json", JSON.stringify(briefing, null, 2), "utf-8");
-  writeFileSync("briefing.html", montarEmail(briefing), "utf-8");
-
-  const total = editorias.reduce((a, e) => a + e.itens.length, 0);
-  console.log(`\n✓ Edição de ${iso}: ${editorias.length} editorias, ${total} itens.`);
-}
-
-// ─── Corpo do e-mail ──────────────────────────────────────────────────
-function esc(s) {
-  return String(s || "").replace(/[&<>"]/g, (c) =>
-    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-}
-
-function montarEmail(b) {
-  const MESES = ["janeiro","fevereiro","março","abril","maio","junho",
-                 "julho","agosto","setembro","outubro","novembro","dezembro"];
-  const d = new Date(b.data + "T12:00:00");
-  const dataLonga = `${d.getDate()} de ${MESES[d.getMonth()]} de ${d.getFullYear()}`;
-  const cor = { modelo: "#0071e3", ia: "#ff9500" };
-
-  const corpo = b.editorias.map((ed) => {
-    const accent = cor[ed.themeId] || "#0071e3";
-    const artigos = ed.itens.map((i) => `
-      <tr><td style="padding:16px 0;border-bottom:1px solid #e5e5ea">
-        ${i.tag ? `<div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:${accent};margin-bottom:6px">${esc(i.tag)}</div>` : ""}
-        <div style="font-family:Georgia,serif;font-size:17px;font-weight:600;line-height:1.35;color:#1d1d1f;margin-bottom:7px">${esc(i.title)}</div>
-        <div style="font-size:14px;line-height:1.65;color:#48484a;margin-bottom:9px">${esc(i.body)}</div>
-        <div style="font-size:11px;color:#8e8e93">
-          ${i.source ? `<strong style="color:${accent};text-transform:uppercase;letter-spacing:.5px">${esc(i.source)}</strong>` : ""}
-          ${i.date ? ` &middot; ${esc(i.date)}` : ""}
-          ${i.normRef ? ` &middot; ${esc(i.normRef)}` : ""}
-          ${i.metric ? ` &middot; ${esc(i.metric)}` : ""}
-        </div>
-        ${i.url ? `<div style="margin-top:7px"><a href="${esc(i.url)}" style="font-size:12px;color:${accent};text-decoration:none">Ver documento &rarr;</a></div>` : ""}
-      </td></tr>`).join("");
-
-    return `
-      <tr><td style="padding-top:26px">
-        <div style="border-bottom:2px solid #1d1d1f;padding-bottom:7px;margin-bottom:4px">
-          <span style="font-size:12px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:#1d1d1f">${esc(ed.titulo)}</span>
-        </div>
-        <table width="100%" cellpadding="0" cellspacing="0">${artigos}</table>
-      </td></tr>`;
-  }).join("");
-
-  return `<!DOCTYPE html>
-<html lang="pt-BR"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Risk Intel — ${esc(dataLonga)}</title></head>
-<body style="margin:0;padding:0;background:#f5f5f7">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f5f7;padding:24px 0">
-<tr><td align="center">
-<table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#fff;border-radius:12px;padding:28px 26px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif">
-
-  <tr><td style="border-bottom:2.5px solid #1d1d1f;padding-bottom:14px">
-    <div style="font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#8e8e93;padding-bottom:8px;border-bottom:1px solid #e5e5ea;margin-bottom:10px">${esc(dataLonga)}</div>
-    <div style="font-family:Georgia,serif;font-size:32px;font-weight:700;letter-spacing:-.5px;color:#1d1d1f;text-align:center">Risk Intel</div>
-    <div style="font-family:Georgia,serif;font-style:italic;font-size:13px;color:#8e8e93;text-align:center;margin-top:5px">Inteligência regulatória para gestão de riscos financeiros</div>
-  </td></tr>
-
-  ${b.manchete ? `<tr><td style="padding-top:20px">
-    <div style="border-left:3px solid #0071e3;padding-left:15px">
-      <div style="font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#0071e3;margin-bottom:7px">Panorama do dia</div>
-      <div style="font-family:Georgia,serif;font-size:17px;line-height:1.5;color:#1d1d1f">${esc(b.manchete)}</div>
-    </div>
-  </td></tr>` : ""}
-
-  ${corpo}
-
-  <tr><td style="border-top:2.5px solid #1d1d1f;padding-top:14px;margin-top:10px">
-    <div style="font-size:11px;color:#8e8e93">
-      Gerado automaticamente em ${esc(b.gerado)} &middot;
-      <a href="https://fernandohsp84-stack.github.io/risk-intel/" style="color:#0071e3;text-decoration:none">Abrir o app</a>
-    </div>
-  </td></tr>
-
-</table>
-</td></tr></table>
-</body></html>`;
-}
-
-main().catch((err) => {
-  fatal("Falha inesperada durante a geracao.", String(err && err.stack || err),
-    "Copie a mensagem acima e envie para analise.");
-});
+})();
+</script>
+</body>
+</html>
