@@ -3515,7 +3515,12 @@ function renderEdition() {
 
   html += '<div class="np-foot">'
     + '<span>Gerado em ' + esc(BRIEFING.gerado || fmtEditionDate(BRIEFING.data)) + '</span>'
-    + '<button class="np-refresh" onclick="refreshEdition()">\u21ba Atualizar</button>'
+    + '<span style="display:flex;gap:14px;align-items:center">'
+    +   '<a class="np-refresh" style="text-decoration:none" '
+    +     'href="edicao.html' + (BRIEFING.data ? '?d=' + esc(BRIEFING.data) : '') + '" '
+    +     'target="_blank" rel="noopener">Edi\u00e7\u00f5es anteriores \u2192</a>'
+    +   '<button class="np-refresh" onclick="refreshEdition()">\u21ba Atualizar</button>'
+    + '</span>'
     + '</div>';
 
   el.innerHTML = html;
