@@ -1,7 +1,132 @@
 {
-  "data": "2026-10-13",
-  "edicao": "Aguardando primeira execução",
-  "gerado": "—",
-  "manchete": "A primeira edição automática será publicada na próxima execução do workflow, às 07:00. Até lá, use a busca do app ou o botão Gerar edição agora.",
-  "editorias": []
+  "data": "2026-11-14",
+  "edicao": "Edição do dia",
+  "gerado": "14/11, 21:04",
+  "manchete": "Últimos 30 dias trouxeram normas de stress test do Fed (efetivas 2/nov) com transparência de modelos para 2027, reforço de validação independente pela Res. BCB 555/2026 (vigência 1º/jul) e convergência de BCBS 239 com governança de modelos de IA conforme Newsletter BCBS jan/2026. BIS emitiu newsletter sobre desafios AML/CFT destacando IA em monitoramento de transações, governança e explicabilidade. OCC publicou em 4 de novembro de 2026 o Bulletin 2026-54 sobre Super Intelligence, framework supervisório com seis pilares e classificação em quatro níveis.",
+  "editorias": [
+    {
+      "themeId": "modelo",
+      "titulo": "Risco de Modelo",
+      "itens": [
+        {
+          "title": "Fed finaliza regra de transparência em stress test supervisionado com modelos para 2027",
+          "body": "Regra final do Fed, efetiva em 2 de novembro de 2026, estabelece processos anuais de consulta pública para cenários de stress test e mudanças materiais de modelos, além de adotar os modelos para o teste supervisionado de 2027. O documento finaliza modelos para o teste de 2027 e inclui simplificações nos modelos utilizados no teste de 2026. Para bancos brasileiros com subsidiárias nos EUA (S1/S2), a mudança exige revisão de cronogramas de validação e orçamento para responder a consultas públicas sobre premissas de modelos.",
+          "source": "Federal Register / KPMG / Forvis Mazars",
+          "sourceCode": "BIS",
+          "tag": "Stress Test",
+          "themeId": "modelo",
+          "date": "out-nov/2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "Fed Final Rule - Stress Testing Transparency (efetiva 2/nov/2026)",
+          "metric": "consulta pública anual obrigatória para cenários e modelos materiais",
+          "url": "https://www.govinfo.gov/content/pkg/FR-2026-10-02/pdf/2026-20247.pdf"
+        },
+        {
+          "title": "Resolução BCB 555/2026 impõe validação independente de modelos de risco com relatório anual a partir de jul/2026",
+          "body": "A Resolução BCB 555, de 24/mar/2026, exige validação independente de todas as metodologias de risco, com relatório anual base 31/dez e aprovação formal do Conselho ou Diretoria; instituições devem revisar fluxos, atualizar algoritmos para projeções de 3 anos e segregar equipes ou contratar consultorias externas. Vigência operacional em 1º de julho de 2026. Impacto direto em S2: custeio de validação externa, rastreabilidade de versões de modelo e ciclo anual de documentação com alçada de conselho.",
+          "source": "CadocAI - Análise Res. BCB 555",
+          "sourceCode": "BCB",
+          "tag": "Validação de Modelos",
+          "themeId": "modelo",
+          "date": "mar-jul/2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "Resolução BCB 555/2026",
+          "metric": "relatório anual de validação independente base 31/dez; projeções financeiras de 3 anos",
+          "url": "https://cadoc.ai/post/resolucao-bcb-555"
+        },
+        {
+          "title": "EBA publica metodologia de stress test 2027 com foco em transições de estágio IFRS 9 e cálculo de ECL",
+          "body": "Nota metodológica do teste EU-wide 2027 (9/nov/2026) exige que transições entre os três estágios de impairment do IFRS 9 sejam projetadas, com cálculo de ECL no Stage 3 incorporando o risco do mesmo ano e premissas-chave documentadas. Bancos devem fazer backtesting de outputs de ECL contra perdas realizadas, comparando PD previstas vs. taxas de default reais, LGD vs. severidade e alocações de estágio vs. migrações efetivas, com testes granulares por produto, segmento e safra. Bancos brasileiros com IFRS 9 voluntário ou grupos internacionais: revisar lógica de staging em cenários adversos e granularidade de backtesting.",
+          "source": "EBA Methodological Note 2027 / RegPulse",
+          "sourceCode": "BIS",
+          "tag": "IFRS 9 & ECL",
+          "themeId": "modelo",
+          "date": "nov/2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "EBA 2027 EU-wide Stress Test Methodological Note (9/nov/2026)",
+          "metric": "transições Stage 1-2-3 em projeções de 3 anos; backtesting granular (produto, segmento, safra)",
+          "url": "https://www.eba.europa.eu/sites/default/files/2026-11/2a077772-ee1f-4aac-8184-e12e70e438d3/2027%20EU-wide%20stress%20test%20-%20Methodological%20Note.pdf"
+        },
+        {
+          "title": "BCBS Newsletter jan/2026 vincula BCBS 239 a governança de modelos e dados de treinamento de IA como risco de modelo",
+          "body": "Newsletter de implementação BCBS 239 (jan/2026) é a primeira ligação explícita do Comitê entre BCBS 239 e adoção de IA, indicando que supervisores tratarão lacunas de governança de dados como risco de IA e questionarão como dados de treinamento, features e outputs de modelos atendem expectativas de linhagem e qualidade. Newsletter recomenda classificar datasets de treinamento, validação e inferência de modelos de IA materiais como dados de risco sob BCBS 239, com proprietário nomeado, registro de linhagem e limiar de qualidade, alinhado ao EU AI Act e guia ECB 2024. Para bancos brasileiros: modelos de crédito com ML exigem governança de dados end-to-end, linhagem automatizada e validação de features como parte de risco de modelo.",
+          "source": "BCBS Newsletter 36 (jan/2026) / BankingNewsAI",
+          "sourceCode": "BIS",
+          "tag": "Governança de Modelos",
+          "themeId": "modelo",
+          "date": "jan/2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "BCBS Newsletter 36 - BCBS 239 Implementation (6/jan/2026)",
+          "metric": "datasets de IA materiais = dados de risco; linhagem obrigatória; limiar de qualidade por dataset",
+          "url": "https://www.bis.org/publications/implementation-principles-effective-risk-data-aggregation-and-risk-reporting-bcbs-239-principles"
+        }
+      ]
+    },
+    {
+      "themeId": "ia",
+      "titulo": "Risco de IA",
+      "itens": [
+        {
+          "title": "BIS/BCBS: Newsletter AML/CFT enfatiza explicabilidade e supervisão humana em IA para transações",
+          "body": "Em novembro de 2026, o BIS divulgou newsletter sobre desafios de supervisão AML/CFT em 19 jurisdições, destacando monitoramento transacional por IA com ênfase em qualidade de dados, governança, explicabilidade e supervisão humana. O BCBS Work Programme 2025-26 confirmou que até 2026 não haverá regras específicas de IA, e bancos devem esperar exames via canais de terceiros, TIC, resiliência operacional e cibersegurança. Para bancos brasileiros, o documento reforça a necessidade de governança robusta em modelos de compliance AML/CFT, alinhando-se ao monitoramento BCB descrito nos achados nacionais.",
+          "source": "BIS/BCBS Newsletter AML/CFT",
+          "sourceCode": "BIS",
+          "tag": "Explainability (XAI)",
+          "themeId": "ia",
+          "date": "nov/2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "BCBS Work Programme 2025-26",
+          "metric": "19 jurisdições analisadas",
+          "url": "https://www.bbvaresearch.com/wp-content/uploads/2026/11/Financial-Regulation-Weekly-06-Nov-2026.pdf"
+        },
+        {
+          "title": "OCC Bulletin 2026-54: Framework supervisório para Super Intelligence em bancos dos EUA",
+          "body": "O OCC emitiu em 4 de novembro de 2026 o Bulletin 2026-54 'Super Intelligence: Supervisory Framework', com dezesseis componentes, seis pilares e classificação em quatro níveis baseada em consequências para IA generativa e agêntica. Reguladores alertam sobre riscos de fraude habilitada por IA, ameaças cibernéticas ampliadas por IA e concentração de fornecedores, com ECB exigindo planos de ação AI-cyber até 31 de outubro de 2026. Bancos brasileiros devem observar esta abordagem de classificação por consequências como referência para gestão de IA generativa, ainda não regulada especificamente pelo BCB.",
+          "source": "OCC Bulletin 2026-54",
+          "sourceCode": "BIS",
+          "tag": "IA Generativa",
+          "themeId": "ia",
+          "date": "04/nov/2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "OCC Bulletin 2026-54",
+          "metric": "16 componentes, 6 pilares, 4 níveis",
+          "url": "https://www.bankingnewsai.com/ai-regulation/documents"
+        },
+        {
+          "title": "BCB alerta sobre risco de concentração em fornecedores de IA no Zetta Summit 2026",
+          "body": "Em 2 de setembro de 2026, no Zetta Summit em Brasília, o coordenador do Denor/BCB Carlos André de Melo Alves alertou que contratação em massa da mesma fornecedora de IA pode gerar risco de concentração sistêmico. O BCB realizou em 2026 nova pesquisa sobre IA (repetindo levantamento de 2025), com resultados preliminares indicando que grandes bancos S1 avançaram em modelos e governança, mas cooperativas e instituições de pagamento apresentam assimetria. O BCB adotará abordagem cautelosa, não implementando regras formais de IA até pelo menos o final de 2026.",
+          "source": "Zetta Summit 2026 / BCB Denor",
+          "sourceCode": "BCB",
+          "tag": "Viés Algorítmico",
+          "themeId": "ia",
+          "date": "02/set/2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "",
+          "metric": "segmentos S1 vs cooperativas/IPs menores",
+          "url": "https://www.letsmoney.com.br/noticias/bc-risco-concentracao-fornecedores-ia/"
+        },
+        {
+          "title": "ECB 'Dear CEO' Letter SSM-2026-0301: planos de ação AI-cyber obrigatórios até 31/out/2026",
+          "body": "Em julho de 2026, o ECB emitiu sua primeira carta Dear-CEO focada em tecnologia (SSM-2026-0301), exigindo que instituições significativas submetessem planos de ação sobre ameaças cibernéticas habilitadas por IA até 31 de outubro de 2026. Supervisores tratam IA como multiplicador de força para atacantes, com alertas sobre fraude deepfake, clonagem de voz e riscos de concentração de modelos/fornecedores. Bancos brasileiros com operações europeias devem observar este padrão de supervisão direta sobre IA-cyber, antecipando possível movimento similar do BCB pós-2026 conforme evolução do marco legal nacional (PL 2.338/2023).",
+          "source": "ECB SSM-2026-0301",
+          "sourceCode": "BIS",
+          "tag": "Cibersegurança & IA",
+          "themeId": "ia",
+          "date": "jul/2026, deadline 31/out/2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "ECB SSM-2026-0301",
+          "metric": "instituições significativas SSM",
+          "url": "https://www.bankingnewsai.com/ai-regulation/regulator-warnings"
+        }
+      ]
+    }
+  ]
 }
