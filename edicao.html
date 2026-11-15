@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Risk Intel — Edição</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap">
+<style>
+:root{
+  --bg:#f5f5f7; --surface:#fff; --surface2:#f5f5f7;
+  --border:rgba(0,0,0,.08); --border-strong:rgba(0,0,0,.14);
+  --text:#1d1d1f; --text-secondary:#6e6e73; --text-tertiary:#aeaeb2;
+  --accent:#0071e3; --green:#34c759; --orange:#ff9500; --indigo:#5856d6;
+  --radius:12px;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#000; --surface:#1c1c1e; --surface2:#2c2c2e;
+    --border:rgba(255,255,255,.1); --border-strong:rgba(255,255,255,.18);
+    --text:#f5f5f7; --text-secondary:#a1a1a6; --text-tertiary:#6e6e73;
+  }
+}
+*{box-sizing:border-box;-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:680px;margin:0 auto;padding:0 16px 60px}
+
+/* ── Cabeçalho ── */
+.mast{border-bottom:2.5px solid var(--text);padding:20px 0 13px;margin-bottom:16px}
+.mast-top{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  font-size:9.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--text-tertiary);padding-bottom:8px;
+  border-bottom:1px solid var(--border);margin-bottom:10px;
+}
+.mast-title{
+  font-family:'Source Serif 4',Georgia,serif;font-weight:700;
+  font-size:34px;line-height:1;letter-spacing:-.025em;text-align:center;margin-bottom:6px;
+}
+.mast-sub{
+  font-family:'Source Serif 4',Georgia,serif;font-style:italic;
+  font-size:12.5px;color:var(--text-tertiary);text-align:center;
+}
+
+/* ── Controles ── */
+.controls{margin-bottom:18px}
+.row{display:flex;gap:8px;align-items:center;margin-bottom:9px;flex-wrap:wrap}
+select,input[type="search"]{
+  font-family:'Inter',sans-serif;font-size:14px;color:var(--text);
+  background:var(--surface);border:1px solid var(--border-strong);
+  border-radius:9px;padding:10px 12px;outline:none;min-width:0;
+}
+input[type="search"]{flex:1}
+select{flex:1;cursor:pointer;-webkit-appearance:none;appearance:none;
+  background-image:linear-gradient(45deg,transparent 50%,var(--text-tertiary) 50%),
+                   linear-gradient(135deg,var(--text-tertiary) 50%,transparent 50%);
+  background-position:calc(100% - 17px) 18px, calc(100% - 12px) 18px;
+  background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:34px}
+input:focus,select:focus{border-color:var(--accent)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{
+  padding:6px 12px;border-radius:16px;border:1.5px solid var(--border-strong);
+  background:var(--surface);font-family:'Inter',sans-serif;font-size:11.5px;
+  font-weight:600;color:var(--text-secondary);cursor:pointer;white-space:nowrap;
+  -webkit-tap-highlight-color:transparent;transition:background .12s;
+}
+.chip.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+.chip-tag.on{background:var(--indigo);color:#fff;border-color:var(--indigo)}
+.lbl{font-size:9px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;
+  color:var(--text-tertiary);margin:12px 0 7px}
+
+/* ── Panorama ── */
+.lead{border-left:3px solid var(--accent);padding:2px 0 2px 15px;margin-bottom:22px}
+.lead-lbl{font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--accent);margin-bottom:7px}
+.lead-txt{font-family:'Source Serif 4',Georgia,serif;font-size:17px;line-height:1.52}
+
+/* ── Editoria e artigos ── */
+.ed-head{display:flex;align-items:center;gap:9px;border-bottom:1.5px solid var(--text);
+  padding-bottom:7px;margin:26px 0 4px}
+.ed-name{font-size:12px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;flex:1}
+.ed-count{font-size:10px;font-weight:700;color:var(--text-tertiary)}
+
+.art{border-bottom:1px solid var(--border);padding:14px 0}
+.art-head{display:flex;gap:10px;align-items:flex-start;cursor:pointer;
+  -webkit-tap-highlight-color:transparent}
+.art-head:active{opacity:.6}
+.art-main{flex:1;min-width:0}
+.tag{display:inline-block;font-size:9px;font-weight:800;letter-spacing:.9px;
+  text-transform:uppercase;padding:2.5px 7px;border-radius:3px;margin-bottom:7px}
+.art-title{font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:16.5px;
+  line-height:1.33;letter-spacing:-.015em}
+.caret{color:var(--text-tertiary);font-size:12px;flex-shrink:0;margin-top:5px;
+  transition:transform .18s}
+.art.open .caret{transform:rotate(90deg)}
+.art-body{display:none;padding-top:9px}
+.art.open .art-body{display:block}
+.art-text{font-size:13.5px;line-height:1.64;color:var(--text-secondary);margin-bottom:10px}
+.meta{display:flex;flex-wrap:wrap;gap:7px;align-items:center;font-size:10.5px;
+  font-weight:600;color:var(--text-tertiary)}
+.src{font-weight:800;letter-spacing:.4px;text-transform:uppercase;font-size:9.5px}
+.pill{background:var(--surface2);border-radius:3px;padding:2px 7px;font-size:10px;
+  font-weight:700;color:var(--text-secondary)}
+.src-link{display:inline-block;margin-top:10px;font-size:12px;font-weight:600;
+  color:var(--accent);text-decoration:none}
+
+/* ── Estados ── */
+.state{text-align:center;padding:52px 20px}
+.state-ic{font-size:30px;opacity:.16;margin-bottom:12px}
+.state-t{font-family:'Source Serif 4',Georgia,serif;font-size:17px;font-weight:600;margin-bottom:7px}
+.state-s{font-size:13px;color:var(--text-tertiary);line-height:1.65;max-width:320px;margin:0 auto}
+.count{font-size:11px;font-weight:600;color:var(--text-tertiary);margin:14px 0 2px}
+.foot{border-top:2.5px solid var(--text);margin-top:26px;padding:12px 0 4px;
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+  font-size:10.5px;font-weight:600;color:var(--text-tertiary);flex-wrap:wrap}
+.foot a{color:var(--accent);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="mast">
+    <div class="mast-top">
+      <span id="data">—</span>
+      <span id="selo">Edição</span>
+    </div>
+    <div class="mast-title">Risk Intel</div>
+    <div class="mast-sub">Inteligência regulatória para gestão de riscos financeiros</div>
+  </div>
+
+  <div class="controls" id="controles" style="display:none">
+    <div class="row">
+      <select id="sel-edicao" aria-label="Escolher edição"></select>
+    </div>
+    <div class="row">
+      <input type="search" id="busca" placeholder="Pesquisar título, norma, fonte…" autocomplete="off">
+    </div>
+    <div class="lbl">Tema</div>
+    <div class="chips" id="chips-tema"></div>
+    <div class="lbl" id="lbl-tag" style="display:none">Tag</div>
+    <div class="chips" id="chips-tag"></div>
+  </div>
+
+  <div id="conteudo">
+    <div class="state">
+      <div class="state-ic">📰</div>
+      <div class="state-t">Carregando a edição…</div>
+    </div>
+  </div>
+
+  <div class="foot" id="rodape" style="display:none">
+    <span id="gerado"></span>
+    <span><a href="./">Abrir o app</a></span>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var INDICE_URL = "edicoes/index.json";
+  var ATUAL_URL  = "briefing.json";
+
+  var CORES = { modelo:"#0071e3", ia:"#ff9500", operacional:"#5856d6",
+                mercado:"#34c759", liquidez:"#5ac8fa", terceiros:"#af52de" };
+
+  var edicao = null, indice = [], fTema = "todos", fTag = "todas", fTexto = "";
+  var abertos = {};
+
+  function esc(s){
+    return String(s == null ? "" : s)
+      .replace(/&/g,"&amp;").replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+  function cor(themeId){ return CORES[themeId] || "#0071e3"; }
+
+  var MESES = ["janeiro","fevereiro","março","abril","maio","junho",
+               "julho","agosto","setembro","outubro","novembro","dezembro"];
+  var DIAS = ["domingo","segunda-feira","terça-feira","quarta-feira",
+              "quinta-feira","sexta-feira","sábado"];
+
+  function dataLonga(iso){
+    if (!iso) return "";
+    var d = new Date(iso + "T12:00:00");
+    if (isNaN(d)) return iso;
+    return DIAS[d.getDay()] + ", " + d.getDate() + " de " +
+           MESES[d.getMonth()] + " de " + d.getFullYear();
+  }
+  function dataCurta(iso){
+    if (!iso) return "";
+    var d = new Date(iso + "T12:00:00");
+    if (isNaN(d)) return iso;
+    var dia = String(d.getDate()).padStart(2,"0");
+    return dia + " " + MESES[d.getMonth()].slice(0,3) + " " + d.getFullYear();
+  }
+
+  function itensDa(ed){ return ed.itens || ed.items || []; }
+
+  function todosItens(){
+    if (!edicao) return [];
+    var out = [];
+    (edicao.editorias || []).forEach(function(ed){
+      itensDa(ed).forEach(function(it){
+        out.push({ it: it, ed: ed });
+      });
+    });
+    return out;
+  }
+
+  function passaFiltro(par){
+    var it = par.it, ed = par.ed;
+    if (fTema !== "todos" && ed.themeId !== fTema) return false;
+    if (fTag !== "todas" && (it.tag || "") !== fTag) return false;
+    if (fTexto) {
+      var alvo = [it.title, it.body, it.normRef, it.metric, it.source, it.tag]
+        .join(" ").toLowerCase();
+      if (alvo.indexOf(fTexto) === -1) return false;
+    }
+    return true;
+  }
+
+  // ── Controles ──────────────────────────────────────────────
+  function montarSeletor(){
+    var sel = document.getElementById("sel-edicao");
+    if (!indice.length) { sel.style.display = "none"; return; }
+    sel.innerHTML = indice.map(function(e){
+      var rot = dataCurta(e.data) + "  ·  " + e.itens + " ite" + (e.itens === 1 ? "m" : "ns");
+      return '<option value="' + esc(e.data) + '">' + esc(rot) + "</option>";
+    }).join("");
+    if (edicao && edicao.data) sel.value = edicao.data;
+    sel.onchange = function(){ carregarEdicao(sel.value); };
+  }
+
+  function montarChipsTema(){
+    var wrap = document.getElementById("chips-tema");
+    var eds = (edicao && edicao.editorias) || [];
+    var html = '<button class="chip' + (fTema === "todos" ? " on" : "") +
+               '" data-t="todos">Todos</button>';
+    eds.forEach(function(ed){
+      var n = itensDa(ed).length;
+      html += '<button class="chip' + (fTema === ed.themeId ? " on" : "") +
+              '" data-t="' + esc(ed.themeId) + '">' + esc(ed.titulo) +
+              " · " + n + "</button>";
+    });
+    wrap.innerHTML = html;
+    Array.prototype.forEach.call(wrap.querySelectorAll(".chip"), function(b){
+      b.onclick = function(){ fTema = b.getAttribute("data-t"); fTag = "todas"; render(); };
+    });
+  }
+
+  function montarChipsTag(){
+    var wrap = document.getElementById("chips-tag");
+    var lbl = document.getElementById("lbl-tag");
+    var tags = [];
+    todosItens().forEach(function(p){
+      if (fTema !== "todos" && p.ed.themeId !== fTema) return;
+      var t = p.it.tag;
+      if (t && tags.indexOf(t) === -1) tags.push(t);
+    });
+    if (tags.length < 2) { wrap.innerHTML = ""; lbl.style.display = "none"; return; }
+    lbl.style.display = "block";
+    var html = '<button class="chip chip-tag' + (fTag === "todas" ? " on" : "") +
+               '" data-g="todas">Todas</button>';
+    tags.forEach(function(t){
+      html += '<button class="chip chip-tag' + (fTag === t ? " on" : "") +
+              '" data-g="' + esc(t) + '">' + esc(t) + "</button>";
+    });
+    wrap.innerHTML = html;
+    Array.prototype.forEach.call(wrap.querySelectorAll(".chip"), function(b){
+      b.onclick = function(){ fTag = b.getAttribute("data-g"); render(); };
+    });
+  }
+
+  // ── Render ─────────────────────────────────────────────────
+  function artigoHTML(par, i){
+    var it = par.it, c = cor(par.ed.themeId);
+    var id = "a" + i;
+    var aberto = abertos[it.title] ? " open" : "";
+    var meta = "";
+    if (it.source)  meta += '<span class="src" style="color:' + c + '">' + esc(it.source) + "</span>";
+    if (it.date)    meta += "<span>" + esc(it.date) + "</span>";
+    if (it.normRef) meta += '<span class="pill">' + esc(it.normRef) + "</span>";
+    if (it.metric)  meta += '<span class="pill">' + esc(it.metric) + "</span>";
+
+    return '<div class="art' + aberto + '" id="' + id + '">' +
+      '<div class="art-head" data-k="' + esc(it.title) + '">' +
+        '<div class="art-main">' +
+          (it.tag ? '<span class="tag" style="background:' + c + '1a;color:' + c + '">' +
+                    esc(it.tag) + "</span>" : "") +
+          '<div class="art-title">' + esc(it.title) + "</div>" +
+        "</div>" +
+        '<span class="caret">&#9654;</span>' +
+      "</div>" +
+      '<div class="art-body">' +
+        '<div class="art-text">' + esc(it.body) + "</div>" +
+        '<div class="meta">' + meta + "</div>" +
+        (it.url ? '<a class="src-link" href="' + esc(it.url) +
+                  '" target="_blank" rel="noopener">Ver documento &rarr;</a>' : "") +
+      "</div></div>";
+  }
+
+  function render(){
+    montarChipsTema();
+    montarChipsTag();
+
+    var alvo = document.getElementById("conteudo");
+    var sel = todosItens().filter(passaFiltro);
+
+    var html = "";
+    if (edicao.manchete && fTema === "todos" && fTag === "todas" && !fTexto) {
+      html += '<div class="lead"><div class="lead-lbl">Panorama</div>' +
+              '<div class="lead-txt">' + esc(edicao.manchete) + "</div></div>";
+    }
+
+    if (!sel.length) {
+      html += '<div class="state"><div class="state-ic">🔍</div>' +
+              '<div class="state-t">Nenhum achado com esses filtros</div>' +
+              '<div class="state-s">Tente limpar a busca ou escolher outro tema.</div></div>';
+      alvo.innerHTML = html;
+      return;
+    }
+
+    var filtrando = (fTema !== "todos" || fTag !== "todas" || fTexto);
+    if (filtrando) {
+      html += '<div class="count">' + sel.length + " achado" +
+              (sel.length === 1 ? "" : "s") + "</div>";
+    }
+
+    // Agrupa por editoria preservando a ordem original
+    var vistos = [];
+    (edicao.editorias || []).forEach(function(ed){
+      var doTema = sel.filter(function(p){ return p.ed === ed; });
+      if (!doTema.length) return;
+      var c = cor(ed.themeId);
+      html += '<div class="ed-head"><span class="ed-name" style="color:' + c + '">' +
+              esc(ed.titulo) + '</span><span class="ed-count">' + doTema.length + "</span></div>";
+      doTema.forEach(function(p){ html += artigoHTML(p, vistos.push(p) - 1); });
+    });
+
+    alvo.innerHTML = html;
+
+    Array.prototype.forEach.call(alvo.querySelectorAll(".art-head"), function(h){
+      h.onclick = function(){
+        var art = h.parentNode;
+        var k = h.getAttribute("data-k");
+        art.classList.toggle("open");
+        abertos[k] = art.classList.contains("open");
+      };
+    });
+  }
+
+  function pintarCabecalho(){
+    document.getElementById("data").textContent = dataLonga(edicao.data);
+    document.getElementById("selo").textContent = edicao.edicao || "Edição";
+    var r = document.getElementById("rodape");
+    document.getElementById("gerado").textContent =
+      edicao.gerado ? "Gerado em " + edicao.gerado : "";
+    r.style.display = "flex";
+    document.getElementById("controles").style.display = "block";
+  }
+
+  function erro(titulo, sub){
+    document.getElementById("conteudo").innerHTML =
+      '<div class="state"><div class="state-ic">📰</div>' +
+      '<div class="state-t">' + esc(titulo) + "</div>" +
+      '<div class="state-s">' + esc(sub) + "</div></div>";
+  }
+
+  function buscarJSON(url){
+    return fetch(url + "?t=" + Date.now(), { cache: "no-store" })
+      .then(function(r){ if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); });
+  }
+
+  function carregarEdicao(data){
+    var url = data ? "edicoes/" + data + ".json" : ATUAL_URL;
+    buscarJSON(url)
+      .catch(function(){ return data ? buscarJSON(ATUAL_URL) : Promise.reject(); })
+      .then(function(j){
+        edicao = j; abertos = {}; fTema = "todos"; fTag = "todas";
+        fTexto = ""; document.getElementById("busca").value = "";
+        pintarCabecalho(); montarSeletor(); render();
+        try { history.replaceState(null, "", "?d=" + (j.data || "")); } catch(e){}
+      })
+      .catch(function(){
+        erro("Não consegui carregar a edição",
+             "Verifique sua conexão e recarregue a página.");
+      });
+  }
+
+  // ── Início ─────────────────────────────────────────────────
+  var pedido = null;
+  try {
+    var m = location.search.match(/[?&]d=(\d{4}-\d{2}-\d{2})/);
+    if (m) pedido = m[1];
+  } catch(e){}
+
+  buscarJSON(INDICE_URL)
+    .then(function(j){ indice = (j && j.edicoes) || []; })
+    .catch(function(){ indice = []; })
+    .then(function(){ carregarEdicao(pedido); });
+
+  var busca = document.getElementById("busca");
+  var atraso = null;
+  busca.addEventListener("input", function(){
+    clearTimeout(atraso);
+    atraso = setTimeout(function(){
+      fTexto = busca.value.trim().toLowerCase();
+      if (edicao) render();
+    }, 180);
+  });
+})();
+</script>
+</body>
+</html>
