@@ -1,10 +1,13 @@
-name: Briefing Risk Intel (segundas e quintas)
+name: Briefing Risk Intel (segunda a quinta)
 
 on:
   schedule:
     # 10:00 UTC = 07:00 BRT (UTC-3, fixo o ano todo).
-    # Dia da semana: 1 = segunda-feira, 4 = quinta-feira.
-    - cron: "0 10 * * 1,4"
+    # Dias 1 a 4 = segunda, terça, quarta e quinta.
+    # O foco de cada dia é definido na AGENDA do scripts/gerar-briefing.mjs:
+    #   segunda → Risco de IA          quarta → Risco de Crédito
+    #   terça   → Risco de Modelo      quinta → Risco de Mercado e Liquidez
+    - cron: "0 10 * * 1-4"
   workflow_dispatch:        # permite disparar manualmente pelo botão "Run workflow"
 
 permissions:
@@ -64,6 +67,13 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: node scripts/gerar-briefing.mjs
 
+      - name: Foco da edição
+        id: foco
+        run: |
+          FOCO=$(node -e "try{console.log(JSON.parse(require('fs').readFileSync('briefing.json','utf8')).foco||'')}catch(e){console.log('')}")
+          echo "Foco do dia: ${FOCO:-(não informado)}"
+          echo "texto=$FOCO" >> "$GITHUB_OUTPUT"
+
       - name: Publicar briefing.json no repositório
         run: |
           echo "=============================================="
@@ -77,18 +87,24 @@ jobs:
           # receber qualquer commit nesse intervalo, o push é rejeitado.
           # A cada tentativa sincronizamos com o remoto e reaplicamos apenas o
           # briefing recém-gerado — não há merge, logo não há conflito possível.
-          # Guarda a edição gerada como arquivo NÃO rastreado: o git reset
+          # Guarda o que foi gerado numa pasta NÃO rastreada: o git reset
           # --hard preserva arquivos não rastreados, então o backup sobrevive
           # a todas as tentativas de sincronização.
-          cp briefing.json briefing-gerado.tmp
+          rm -rf _publicar && mkdir -p _publicar/edicoes
+          cp briefing.json _publicar/briefing.json
+          cp edicoes/*.json _publicar/edicoes/
 
           for tentativa in 1 2 3; do
             echo ""
             echo "--- tentativa $tentativa de 3 ---"
             git fetch origin main
             git reset --hard origin/main
-            cp briefing-gerado.tmp briefing.json
-            git add briefing.json
+
+            # Reaplica a edição por cima do estado remoto. O "cp -r origem/."
+            # sobrepõe sem apagar edições que já estejam no repositório.
+            cp _publicar/briefing.json briefing.json
+            mkdir -p edicoes && cp -r _publicar/edicoes/. edicoes/
+            git add briefing.json edicoes
 
             if git diff --staged --quiet; then
               echo "Briefing idêntico ao que já está publicado — nada a fazer."
@@ -122,6 +138,6 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           from: Risk Intel <${{ secrets.MAIL_USERNAME }}>
           to: ${{ secrets.MAIL_TO }}
-          subject: "Risk Intel — edição de ${{ steps.data.outputs.hoje }}"
+          subject: "Risk Intel — ${{ steps.foco.outputs.texto }} — ${{ steps.data.outputs.hoje }}"
           html_body: file://briefing.html
           convert_markdown: false
