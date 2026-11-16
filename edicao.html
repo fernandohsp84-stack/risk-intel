@@ -168,8 +168,9 @@ input:focus,select:focus{border-color:var(--accent)}
   var INDICE_URL = "edicoes/index.json";
   var ATUAL_URL  = "briefing.json";
 
-  var CORES = { modelo:"#0071e3", ia:"#ff9500", operacional:"#5856d6",
-                mercado:"#34c759", liquidez:"#5ac8fa", terceiros:"#af52de" };
+  var CORES = { modelo:"#34c759", ia:"#ff9500", credito:"#30b0c7",
+                mercado:"#007aff", liquidez:"#5ac8fa",
+                operacional:"#af52de", terceiros:"#ff2d55" };
 
   var edicao = null, indice = [], fTema = "todos", fTag = "todas", fTexto = "";
   var abertos = {};
@@ -231,7 +232,9 @@ input:focus,select:focus{border-color:var(--accent)}
     var sel = document.getElementById("sel-edicao");
     if (!indice.length) { sel.style.display = "none"; return; }
     sel.innerHTML = indice.map(function(e){
-      var rot = dataCurta(e.data) + "  ·  " + e.itens + " ite" + (e.itens === 1 ? "m" : "ns");
+      // Com a rotação por dia, o foco identifica a edição melhor que a contagem
+      var rot = dataCurta(e.data) + (e.foco ? "  ·  " + e.foco
+                                            : "  ·  " + e.itens + " ite" + (e.itens === 1 ? "m" : "ns"));
       return '<option value="' + esc(e.data) + '">' + esc(rot) + "</option>";
     }).join("");
     if (edicao && edicao.data) sel.value = edicao.data;
@@ -358,7 +361,7 @@ input:focus,select:focus{border-color:var(--accent)}
 
   function pintarCabecalho(){
     document.getElementById("data").textContent = dataLonga(edicao.data);
-    document.getElementById("selo").textContent = edicao.edicao || "Edição";
+    document.getElementById("selo").textContent = edicao.foco || edicao.edicao || "Edição";
     var r = document.getElementById("rodape");
     document.getElementById("gerado").textContent =
       edicao.gerado ? "Gerado em " + edicao.gerado : "";
