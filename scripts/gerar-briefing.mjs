@@ -76,22 +76,74 @@ if (API_KEY.length < 95 || API_KEY.length > 120) {
 }
 
 // ─── Temas fixos da edição ────────────────────────────────────────────
-const TEMAS = [
-  {
-    id: "modelo",
-    label: "Risco de Modelo",
-    icon: "◈",
-    accent: "#0071e3",
-    tags: ["Validação de Modelos", "IFRS 9 & ECL", "Backtesting", "Governança de Modelos", "Stress Test"],
-  },
-  {
+const TEMAS = {
+  ia: {
     id: "ia",
     label: "Risco de IA",
     icon: "⬡",
     accent: "#ff9500",
     tags: ["IA Generativa", "Regulação IA & BIS", "Viés Algorítmico", "Explainability (XAI)", "Cibersegurança & IA"],
   },
-];
+  modelo: {
+    id: "modelo",
+    label: "Risco de Modelo",
+    icon: "◈",
+    accent: "#34c759",
+    tags: ["Validação de Modelos", "IFRS 9 & ECL", "Backtesting", "Governança de Modelos", "Stress Test"],
+  },
+  credito: {
+    id: "credito",
+    label: "Risco de Crédito",
+    icon: "◉",
+    accent: "#30b0c7",
+    tags: ["PCLD & Provisionamento", "Inadimplência", "Concessão & Scoring", "Res. BCB 4.966", "Recuperação de Crédito"],
+    fontes: "Inclua os indicadores do Serasa Experian (inadimplência, demanda por crédito, recuperação de dívidas) quando houver dado recente.",
+  },
+  mercado: {
+    id: "mercado",
+    label: "Risco de Mercado",
+    icon: "◑",
+    accent: "#007aff",
+    tags: ["FRTB", "IRRBB", "VaR & Backtesting", "Derivativos", "Carteira de Negociação"],
+  },
+  liquidez: {
+    id: "liquidez",
+    label: "Risco de Liquidez",
+    icon: "◎",
+    accent: "#5ac8fa",
+    tags: ["LCR", "NSFR", "Funding & Captação", "Stress de Liquidez", "Res. CMN 4.616"],
+  },
+};
+
+// Foco de cada dia da semana (1 = segunda … 4 = quinta).
+// Quinta cobre dois temas na mesma edição.
+const AGENDA = {
+  1: { foco: "Risco de IA",                  temas: ["ia"] },
+  2: { foco: "Risco de Modelo",              temas: ["modelo"] },
+  3: { foco: "Risco de Crédito",             temas: ["credito"] },
+  4: { foco: "Risco de Mercado e Liquidez",  temas: ["mercado", "liquidez"] },
+};
+
+// Dia da semana em Brasília (0 = domingo … 6 = sábado)
+function diaDaSemanaBRT(d) {
+  const nome = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Sao_Paulo", weekday: "short",
+  }).format(d);
+  return { Sun:0, Mon:1, Tue:2, Wed:3, Thu:4, Fri:5, Sat:6 }[nome];
+}
+
+// Permite forçar um dia pela linha de comando: node scripts/gerar-briefing.mjs --dia=3
+function diaEscolhido(d) {
+  const arg = process.argv.find((a) => a.startsWith("--dia="));
+  if (arg) {
+    const n = parseInt(arg.split("=")[1], 10);
+    if (AGENDA[n]) return n;
+    console.warn(`--dia=${arg.split("=")[1]} ignorado: use 1 (seg), 2 (ter), 3 (qua) ou 4 (qui).`);
+  }
+  const dow = diaDaSemanaBRT(d);
+  // Fora de segunda a quinta (execução manual num fim de semana), usa segunda.
+  return AGENDA[dow] ? dow : 1;
+}
 
 // Endereço público do app (usado nos links do e-mail)
 const BASE_URL = "https://fernandohsp84-stack.github.io/risk-intel";
@@ -200,15 +252,32 @@ function clean(s) {
     .trim();
 }
 
-// Evita repetir as manchetes da edição anterior
-function titulosAnteriores() {
+// Evita repetir manchetes. Com a rotação por dia, só interessam as edições
+// anteriores DO MESMO TEMA — as dos outros dias falam de outro assunto.
+function titulosAnteriores(themeId) {
+  const titulos = [];
   try {
-    if (!existsSync("briefing.json")) return [];
-    const prev = JSON.parse(readFileSync("briefing.json", "utf-8"));
-    return (prev.editorias || []).flatMap((e) => (e.itens || []).map((i) => i.title)).slice(0, 12);
-  } catch {
-    return [];
-  }
+    if (!existsSync("edicoes")) return [];
+    const arquivos = readdirSync("edicoes")
+      .filter((f) => /^\d{4}-\d{2}-\d{2}\.json$/.test(f))
+      .sort()
+      .reverse()
+      .slice(0, 12); // ~3 semanas de histórico
+
+    for (const f of arquivos) {
+      try {
+        const b = JSON.parse(readFileSync(`edicoes/${f}`, "utf-8"));
+        for (const ed of b.editorias || []) {
+          if (ed.themeId !== themeId) continue;
+          for (const it of ed.itens || []) {
+            if (it.title) titulos.push(it.title);
+          }
+        }
+      } catch {}
+      if (titulos.length >= 12) break;
+    }
+  } catch {}
+  return titulos.slice(0, 12);
 }
 
 // ─── Montagem da edição ───────────────────────────────────────────────
@@ -260,24 +329,45 @@ async function main() {
 
   const hoje = new Date();
   const iso = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Sao_Paulo" }).format(hoje);
-  const anteriores = titulosAnteriores();
-  const excl = anteriores.length
-    ? `\n\nEVITE repetir estes títulos já publicados:\n${anteriores.map((t) => "- " + t).join("\n")}`
-    : "";
+
+  const dia = diaEscolhido(hoje);
+  const pauta = AGENDA[dia];
+  const NOMES = { 1: "segunda-feira", 2: "terça-feira", 3: "quarta-feira", 4: "quinta-feira" };
+
+  console.log(`\nPauta de ${NOMES[dia]}: ${pauta.foco}`);
+  console.log(`Temas desta edição: ${pauta.temas.join(", ")}\n`);
 
   const editorias = [];
   const resumos = [];
 
-  for (const tema of TEMAS) {
+  for (const temaId of pauta.temas) {
+    const tema = TEMAS[temaId];
+    if (!tema) { console.warn(`Tema desconhecido na agenda: ${temaId}`); continue; }
+
     console.log(`→ Gerando editoria: ${tema.label}`);
     try {
+      const anteriores = titulosAnteriores(tema.id);
+      const excl = anteriores.length
+        ? `\n\nEVITE repetir estes títulos já publicados sobre este tema:\n${anteriores.map((t) => "- " + t).join("\n")}`
+        : "";
+
+      // Um tema por dia permite mais profundidade; dois temas dividem o orçamento.
+      const sozinho = pauta.temas.length === 1;
+      const nItens = sozinho ? 6 : 4;
+      const nBuscas = sozinho ? 4 : 3;
+
       const msg =
         `Tema de risco: ${tema.label}\n` +
         `Consulta: novidades regulatórias e de mercado mais relevantes dos últimos 30 dias\n` +
-        `Cubra estas tags (use o campo "tag" de cada item): ${tema.tags.join(", ")}${excl}\n\n` +
-        `Modo rápido: no máximo 3 buscas focadas e 4 itens. Body de 3 frases diretas.`;
+        `Cubra estas tags (use o campo "tag" de cada item): ${tema.tags.join(", ")}\n` +
+        (tema.fontes ? tema.fontes + "\n" : "") +
+        excl +
+        `\n\nUse no máximo ${nBuscas} buscas focadas e retorne ${nItens} itens. Body de 3 frases diretas.`;
 
-      const raw = await callClaude(msg, { maxTokens: 3000, maxSearches: 3 });
+      const raw = await callClaude(msg, {
+        maxTokens: sozinho ? 4200 : 3000,
+        maxSearches: nBuscas,
+      });
       const parsed = parseJSON(raw);
 
       if (!parsed?.items?.length) {
@@ -325,7 +415,8 @@ async function main() {
 
   const briefing = {
     data: iso,
-    edicao: "Edição do dia",
+    edicao: pauta.foco,
+    foco: pauta.foco,
     gerado: new Intl.DateTimeFormat("pt-BR", {
       timeZone: "America/Sao_Paulo",
       day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit",
@@ -342,6 +433,7 @@ async function main() {
   writeFileSync(`edicoes/${iso}.json`, JSON.stringify(briefing, null, 2), "utf-8");
   atualizarIndice(briefing);
 
+  console.log(`\nFoco: ${pauta.foco}`);
   const total = editorias.reduce((a, e) => a + e.itens.length, 0);
   console.log(`\n✓ Edição de ${iso}: ${editorias.length} editorias, ${total} itens.`);
 }
@@ -391,6 +483,7 @@ function resumoDaEdicao(b) {
   const editorias = b.editorias || [];
   return {
     data: b.data,
+    foco: b.foco || b.edicao || "",
     manchete: (b.manchete || "").slice(0, 220),
     editorias: editorias.length,
     itens: editorias.reduce((a, e) => a + (e.itens || []).length, 0),
@@ -409,7 +502,9 @@ function montarEmail(b) {
                  "julho","agosto","setembro","outubro","novembro","dezembro"];
   const d = new Date(b.data + "T12:00:00");
   const dataLonga = `${d.getDate()} de ${MESES[d.getMonth()]} de ${d.getFullYear()}`;
-  const cor = { modelo: "#0071e3", ia: "#ff9500" };
+  const cor = { modelo:"#34c759", ia:"#ff9500", credito:"#30b0c7",
+                mercado:"#007aff", liquidez:"#5ac8fa",
+                operacional:"#af52de", terceiros:"#ff2d55" };
 
   const corpo = b.editorias.map((ed) => {
     const accent = cor[ed.themeId] || "#0071e3";
@@ -447,6 +542,7 @@ function montarEmail(b) {
 
   <tr><td style="border-bottom:2.5px solid #1d1d1f;padding-bottom:14px">
     <div style="font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#8e8e93;padding-bottom:8px;border-bottom:1px solid #e5e5ea;margin-bottom:10px">${esc(dataLonga)}</div>
+    ${b.foco ? `<div style="font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#0071e3;text-align:center;margin-bottom:6px">${esc(b.foco)}</div>` : ""}
     <div style="font-family:Georgia,serif;font-size:32px;font-weight:700;letter-spacing:-.5px;color:#1d1d1f;text-align:center">Risk Intel</div>
     <div style="font-family:Georgia,serif;font-style:italic;font-size:13px;color:#8e8e93;text-align:center;margin-top:5px">Inteligência regulatória para gestão de riscos financeiros</div>
   </td></tr>
