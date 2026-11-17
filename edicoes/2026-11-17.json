@@ -1,0 +1,99 @@
+{
+  "data": "2026-11-17",
+  "edicao": "Risco de Modelo",
+  "foco": "Risco de Modelo",
+  "gerado": "17/11, 15:48",
+  "manchete": "Últimos 30 dias trouxeram avanços em stress testing (Fed revisou modelo de risco operacional out/2026; EBA publicou guideline SREP jun/2026), emendas IFRS 9 vigentes jan/2026 sobre classificação e ECL, além de movimentos do BCB em governança de modelos climáticos (ata GRC ago/2026) e nova Res. BCB 555/mar/2026 exigindo validação independente anual.",
+  "editorias": [
+    {
+      "themeId": "modelo",
+      "titulo": "Risco de Modelo",
+      "itens": [
+        {
+          "title": "Federal Reserve revisa modelo de risco operacional para Stress Test 2026",
+          "body": "O Fed publicou em outubro de 2025 as mudanças propostas para o stress test 2026, incluindo revisão do modelo de risco operacional e de risco de mercado. A proposta atualiza modelos de market risk para alinhar com princípios de robustez e estabilidade do stress testing. Para bancos brasileiros, representa benchmark internacional em model risk framework e reforça necessidade de documentação transparente e backtesting robusto de projeções sob cenários extremos.",
+          "source": "Federal Reserve Board",
+          "sourceCode": "BIS",
+          "tag": "Stress Test",
+          "themeId": "modelo",
+          "date": "outubro 2025 - documentação 2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "Fed Supervisory Stress Test 2026",
+          "metric": "atualização de modelos para ciclo 2026",
+          "url": "https://www.federalreserve.gov/supervisionreg/files/proposed-model-changes-2025-to-2026.pdf"
+        },
+        {
+          "title": "Resolução BCB nº 555/2026 institui validação independente obrigatória de modelos de risco",
+          "body": "A Res. BCB 555 de 24/03/2026 estabelece validação independente de todas as metodologias de risco, com relatório anual base 31/dez e aprovação formal pela alta gestão, elevando exigências de compliance e RegTech. Requer parametrizar projeções financeiras para 3 anos, rastrear riscos extremos e segregar equipes internas ou contratar consultorias externas para validação independente. Impacto direto: bancos devem revisar processos de governança de modelos, auditoria e custear validação contínua, alinhando-se a padrões BCBS 239 de qualidade de dados de risco.",
+          "source": "Cadoc.ai (análise normativa)",
+          "sourceCode": "BCB",
+          "tag": "Governança de Modelos",
+          "themeId": "modelo",
+          "date": "março 2026",
+          "relevance": "alto",
+          "confidence": "médio",
+          "normRef": "Resolução BCB nº 555/2026",
+          "metric": "relatório anual validação 31/dez, projeções 3 anos",
+          "url": "https://cadoc.ai/post/resolucao-bcb-555"
+        },
+        {
+          "title": "Emendas IFRS 9 e IFRS 7 entram em vigor em 1º janeiro 2026 sobre classificação e mensuração",
+          "body": "O IASB emitiu em maio 2024 emendas à classificação e mensuração de instrumentos financeiros (IFRS 9 e IFRS 7) efetivas para períodos iniciando em 1º jan/2026, ajustando referência a 'transaction price' do IFRS 15. As emendas de IFRS 9 sobre classificação, hedging e derecognition entram em vigor 1º jan/2026, impactando bancos e instituições financeiras. Para bancos brasileiros, exige revisão de políticas contábeis de ECL, recalibragem de modelos de provisionamento em 3 estágios e ajustes em sistemas de mensuração de ativos financeiros, com possível impacto em Patrimônio de Referência.",
+          "source": "EY / IFRS Foundation",
+          "sourceCode": "BIS",
+          "tag": "IFRS 9 & ECL",
+          "themeId": "modelo",
+          "date": "vigência 1º jan 2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "Amendments to IFRS 9 and IFRS 7 (maio 2024)",
+          "metric": "vigência 1º jan 2026",
+          "url": "https://www.ey.com/content/dam/ey-unified-site/ey-com/en-gl/technical/ifrs-technical-resources/documents/ey-gl-ifrs-update-07-2026.pdf"
+        },
+        {
+          "title": "EBA publica guideline SREP revisado em junho 2026 incorporando risco de modelo e BCBS 239",
+          "body": "A EBA adicionou ênfase em capacidades de agregação de dados de risco e reporting via sistemas ICT, refletindo princípios BCBS e framework DORA. ECB sinaliza em 2025 que dados de stress test devem atender padrões BCBS 239, com governança de qualidade, lineage documentado e controles automatizados. Para Brasil, serve de referência para supervisão baseada em risco (SRC) do BCB: reforça necessidade de infraestrutura robusta de dados de risco, backtesting contínuo de modelos e integração de testes de estresse a processos de gestão de capital (ICAAP).",
+          "source": "European Banking Authority",
+          "sourceCode": "BIS",
+          "tag": "Validação de Modelos",
+          "themeId": "modelo",
+          "date": "junho 2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "EBA Final Report on revised SREP and supervisory stress testing Guidelines",
+          "metric": "BCBS 239 aplicado a stress test",
+          "url": "https://www.eba.europa.eu/sites/default/files/2026-06/fd5fbfa1-2efb-4122-8e91-4831469d8150/Final%20Report%20on%20revised%20SREP%20and%20supervisory%20stress%20testing%20Guidelines.pdf"
+        },
+        {
+          "title": "BCB intensifica governança de modelos climáticos com expert judgment e validação (Ata GRC 75/ago-2026)",
+          "body": "Ata da 75ª sessão do GRC (12/ago/2026) reporta avanços em modelagem econômico-climática e atualizações de estudo de vulnerabilidades socioambientais, com expert judgment validando riscos mapeados. Houve atualização de atividades do FiBraS 2 sobre riscos físicos, modelagem econômica-financeira e integração de riscos climáticos à modelagem macroeconômica. Implicação prática: bancos devem incorporar cenários climáticos (físico e transição) em modelos de ECL e stress test, validar premissas com expert judgment e preparar-se para reporting GRSAC exigido pelo BCB a partir de 2026.",
+          "source": "Banco Central do Brasil - GRC",
+          "sourceCode": "BCB",
+          "tag": "Governança de Modelos",
+          "themeId": "modelo",
+          "date": "agosto 2026",
+          "relevance": "médio",
+          "confidence": "alto",
+          "normRef": "Ata GRC 75/2026",
+          "metric": "modelagem climática e expert judgment",
+          "url": "https://www.bcb.gov.br/content/acessoinformacao/atas_grc_docs/Ata_GRC_75.pdf"
+        },
+        {
+          "title": "Backtesting de modelos de crédito LASSO: BCB publica Working Paper sobre risco de modelo e tamanho amostral",
+          "body": "O BCB propôs medida para avaliar risco de modelo em credit scoring, enfatizando model misuse; indicadores tradicionais não capturam risco de modelo, especialmente associado a uso inadequado; a medida é ordinal e permite comparações entre especificações (in-sample e out-of-sample). Teste empírico em modelos plugin LASSO usando empréstimos a micro e pequenas firmas em São Paulo mostra que aumentar amostra adicionando dados de diferentes bancos raramente é escolha ótima. Recomendação prática: em backtesting de modelos internos, avaliar risco de modelo por medidas ordinais que capturem misuse, não apenas performance AUC/KS; cuidado ao pooling de dados heterogêneos.",
+          "source": "Banco Central do Brasil - Working Paper 582",
+          "sourceCode": "BCB",
+          "tag": "Backtesting",
+          "themeId": "modelo",
+          "date": "não datado (série WP recente)",
+          "relevance": "médio",
+          "confidence": "alto",
+          "normRef": "BCB Working Paper 582",
+          "metric": "medida ordinal de risco de modelo, amostra micro/pequenas firmas SP",
+          "url": "https://www.bcb.gov.br/content/publicacoes/WorkingPaperSeries/WP582.pdf"
+        }
+      ]
+    }
+  ]
+}

@@ -1,6 +1,16 @@
 {
-  "atualizado": "16/11, 16:54",
+  "atualizado": "17/11, 15:48",
   "edicoes": [
+    {
+      "data": "2026-11-17",
+      "foco": "Risco de Modelo",
+      "manchete": "Últimos 30 dias trouxeram avanços em stress testing (Fed revisou modelo de risco operacional out/2026; EBA publicou guideline SREP jun/2026), emendas IFRS 9 vigentes jan/2026 sobre classificação e ECL, além de movimentos",
+      "editorias": 1,
+      "itens": 6,
+      "temas": [
+        "Risco de Modelo"
+      ]
+    },
     {
       "data": "2026-11-16",
       "foco": "Risco de IA",
