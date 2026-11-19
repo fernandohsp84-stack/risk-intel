@@ -1,13 +1,14 @@
-name: Briefing Risk Intel (segunda a quinta)
+name: Briefing Risk Intel (dias úteis)
 
 on:
   schedule:
     # 10:00 UTC = 07:00 BRT (UTC-3, fixo o ano todo).
-    # Dias 1 a 4 = segunda, terça, quarta e quinta.
+    # Dias 1 a 5 = segunda a sexta.
     # O foco de cada dia é definido na AGENDA do scripts/gerar-briefing.mjs:
-    #   segunda → Risco de IA          quarta → Risco de Crédito
-    #   terça   → Risco de Modelo      quinta → Risco de Mercado e Liquidez
-    - cron: "0 10 * * 1-4"
+    #   segunda → Risco de IA          quinta → Risco de Mercado e Liquidez
+    #   terça   → Risco de Modelo      sexta  → Risco Climático
+    #   quarta  → Risco de Crédito
+    - cron: "0 10 * * 1-5"
   workflow_dispatch:        # permite disparar manualmente pelo botão "Run workflow"
 
 permissions:
