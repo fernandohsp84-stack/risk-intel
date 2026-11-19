@@ -113,6 +113,18 @@ const TEMAS = {
     accent: "#5ac8fa",
     tags: ["LCR", "NSFR", "Funding & Captação", "Stress de Liquidez", "Res. CMN 4.616"],
   },
+  climatico: {
+    id: "climatico",
+    label: "Risco Climático",
+    icon: "◍",
+    accent: "#689f38",
+    tags: ["PRSAC & Res. CMN 4.945", "GRSAC & Res. BCB 139", "Risco Físico e de Transição",
+           "Cenários NGFS", "Stress Test Climático", "ISSB / IFRS S2 & TCFD"],
+    fontes: "Priorize bcb.gov.br (Resoluções CMN 4.943/4.944/4.945, Resoluções BCB 139/151, "
+          + "Relatório de Riscos e Oportunidades Sociais, Ambientais e Climáticas) e bis.org "
+          + "(BCBS Climate-related financial risks). Inclua NGFS (ngfs.net), TCFD e ISSB/IFRS S2 "
+          + "quando houver material recente aplicável a bancos.",
+  },
 };
 
 // Foco de cada dia da semana (1 = segunda … 4 = quinta).
@@ -122,6 +134,7 @@ const AGENDA = {
   2: { foco: "Risco de Modelo",              temas: ["modelo"] },
   3: { foco: "Risco de Crédito",             temas: ["credito"] },
   4: { foco: "Risco de Mercado e Liquidez",  temas: ["mercado", "liquidez"] },
+  5: { foco: "Risco Climático",              temas: ["climatico"] },
 };
 
 // Dia da semana em Brasília (0 = domingo … 6 = sábado)
@@ -138,10 +151,10 @@ function diaEscolhido(d) {
   if (arg) {
     const n = parseInt(arg.split("=")[1], 10);
     if (AGENDA[n]) return n;
-    console.warn(`--dia=${arg.split("=")[1]} ignorado: use 1 (seg), 2 (ter), 3 (qua) ou 4 (qui).`);
+    console.warn(`--dia=${arg.split("=")[1]} ignorado: use 1 (seg), 2 (ter), 3 (qua), 4 (qui) ou 5 (sex).`);
   }
   const dow = diaDaSemanaBRT(d);
-  // Fora de segunda a quinta (execução manual num fim de semana), usa segunda.
+  // Fora de segunda a sexta (execução manual num fim de semana), usa segunda.
   return AGENDA[dow] ? dow : 1;
 }
 
@@ -332,7 +345,8 @@ async function main() {
 
   const dia = diaEscolhido(hoje);
   const pauta = AGENDA[dia];
-  const NOMES = { 1: "segunda-feira", 2: "terça-feira", 3: "quarta-feira", 4: "quinta-feira" };
+  const NOMES = { 1: "segunda-feira", 2: "terça-feira", 3: "quarta-feira",
+                  4: "quinta-feira", 5: "sexta-feira" };
 
   console.log(`\nPauta de ${NOMES[dia]}: ${pauta.foco}`);
   console.log(`Temas desta edição: ${pauta.temas.join(", ")}\n`);
@@ -503,7 +517,7 @@ function montarEmail(b) {
   const d = new Date(b.data + "T12:00:00");
   const dataLonga = `${d.getDate()} de ${MESES[d.getMonth()]} de ${d.getFullYear()}`;
   const cor = { modelo:"#34c759", ia:"#ff9500", credito:"#30b0c7",
-                mercado:"#007aff", liquidez:"#5ac8fa",
+                mercado:"#007aff", liquidez:"#5ac8fa", climatico:"#689f38",
                 operacional:"#af52de", terceiros:"#ff2d55" };
 
   const corpo = b.editorias.map((ed) => {
