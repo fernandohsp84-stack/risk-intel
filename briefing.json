@@ -1,7 +1,99 @@
 {
-  "data": "2026-10-13",
-  "edicao": "Aguardando primeira execução",
-  "gerado": "—",
-  "manchete": "A primeira edição automática será publicada na próxima execução do workflow, às 07:00. Até lá, use a busca do app ou o botão Gerar edição agora.",
-  "editorias": []
+  "data": "2026-11-18",
+  "edicao": "Risco de Crédito",
+  "foco": "Risco de Crédito",
+  "gerado": "18/11, 15:27",
+  "manchete": "BC aprovou três resoluções em outubro/2026 sobre oferta de crédito, com painel de dívidas e restrições ao crédito via Pix; inadimplência atingiu 84,6 milhões em outubro/2026 (22º mês de alta), mas desacelerou para crescimento anual de 5,1% ante 10% no ano anterior.",
+  "editorias": [
+    {
+      "themeId": "credito",
+      "titulo": "Risco de Crédito",
+      "itens": [
+        {
+          "title": "BC aprova três resoluções sobre concessão de crédito (Res. 601, 602 e 603) — entrada em vigor jul/2027",
+          "body": "Banco Central aprovou três resoluções em 23/out/2026 ampliando proteção ao consumidor: novas regras para oferta de crédito, painel de acompanhamento de dívidas e exigências para crédito via Pix. Painel reunirá inicialmente dados da própria instituição e depois incorporará SCR e Open Finance para visão consolidada das dívidas; vigência em 1º/jul/2027. Galípolo sinalizou em 27/out/2026 que novas medidas ainda serão anunciadas em 2026, focadas em devedores com atrasos significativos em linhas caras como rotativo.",
+          "source": "Banco Central do Brasil (via Seu Dinheiro, Mixvale, Lets Money)",
+          "sourceCode": "BCB",
+          "tag": "Concessão & Scoring",
+          "themeId": "credito",
+          "date": "out/nov-2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "Resoluções BCB 601, 602 e 603/2026",
+          "metric": "Vigência: 01/07/2027",
+          "url": "https://www.seudinheiro.com/2026/economia/bc-aprova-novas-regras-para-ofertas-de-credito-e-cria-protecao-contra-o-endividamento-excessivo-cbcb/"
+        },
+        {
+          "title": "Inadimplência em outubro/2026: 84,6 milhões de consumidores (+0,4% m/m) — desaceleração no ritmo anual",
+          "body": "Brasil registrou 84,6 milhões de consumidores inadimplentes em outubro/2026, alta de 0,4% vs. setembro, segundo Mapa Serasa. 22º mês consecutivo de crescimento, mas indicador apresenta desaceleração: variação anual passou de 10% (out/24-out/25) para 5,1% (out/25-out/26). Dívida média por consumidor atingiu R$ 7.225,61 (+1,9% m/m) e montante total chegou a R$ 611 bilhões (+2,3% m/m).",
+          "source": "Serasa Experian — Mapa da Inadimplência e Negociação de Dívidas",
+          "sourceCode": "SERASA",
+          "tag": "Inadimplência",
+          "themeId": "credito",
+          "date": "outubro/2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "",
+          "metric": "84,6 milhões inadimplentes; R$ 611 bi total; R$ 7.225,61 médio/consumidor",
+          "url": "https://valemaisnoticia.com.br/2026/11/18/numero-de-inadimplentes-recua-em-santa-catarina-e-desacelera-no-restante-do-pais/"
+        },
+        {
+          "title": "Res. BCB 4.966/2021 (IFRS 9) — um ano de vigência com impacto em PCLD e provisionamento",
+          "body": "Resolução CMN 4.966/21 entrou em vigor em 1º/jan/2025, estabelecendo perda esperada (IFRS 9) para provisões de crédito em substituição ao modelo de perda incorrida (Res. 2.682/99). Estudos indicam aumento substancial na PCLD e relação significativa entre variação na despesa de provisão e lucro líquido dos bancos. Dados CNDL/SPC Brasil mostram que em 2025, 83,81% dos devedores foram reincidentes em renegociações nos últimos 12 meses.",
+          "source": "Banco Central do Brasil / Sicoob / PUC-SP (Revista CAFI)",
+          "sourceCode": "BCB",
+          "tag": "PCLD & Provisionamento",
+          "themeId": "credito",
+          "date": "vigência jan/2025 — análise 2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "Resolução CMN 4.966 de 25/nov/2021",
+          "metric": "Substituiu Res. 2.682/99; modelo perda esperada (ECL/IFRS 9)",
+          "url": "https://www.bcb.gov.br/estabilidadefinanceira/exibenormativo?tipo=Resolu%C3%A7%C3%A3o%20CMN&numero=4966"
+        },
+        {
+          "title": "Inadimplência de empresas atinge recorde: 8,9 milhões de CNPJs com R$ 210 bi em dívidas (nov/2026)",
+          "body": "Inadimplência empresarial alcançou novo recorde em novembro/2026: 8,9 milhões de empresas brasileiras com R$ 210 bilhões em dívidas, aponta Serasa Experian. Taxa de inadimplência das famílias chegou a 6,0% em agosto/2026 ante 5,8% em julho/2026, maior patamar desde março/2011. Para bancos, isso amplia pressão sobre PCLD e estratégias de recuperação, especialmente em carteiras PJ e varejo com garantias limitadas.",
+          "source": "Serasa Experian — Indicadores Empresariais",
+          "sourceCode": "SERASA",
+          "tag": "Inadimplência",
+          "themeId": "credito",
+          "date": "outubro/novembro-2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "",
+          "metric": "8,9 milhões empresas inadimplentes; R$ 210 bi dívidas; taxa famílias 6,0% (ago/26)",
+          "url": "https://www.serasaexperian.com.br/sala-de-imprensa/indicadores/"
+        },
+        {
+          "title": "BIS/BCBS: atualização Basel Framework sobre risco de crédito — versão consolidada nov/2026",
+          "body": "BCBS publicou em 16/nov/2026 nova versão do Basel Framework descrevendo cálculo de RWA para risco de crédito (standardised e IRB approaches). Guidelines sobre práticas de risco de crédito para implementação de frameworks ECL (expected credit loss) publicadas em 01/jan/2026. Atualizações entraram em vigor em 01/jan/2026 nos capítulos SCO60, DIS10, DIS55, SRP31 e SRP98. Para bancos brasileiros, serve como benchmark técnico para modelos internos pós-Res. 4.966, especialmente na calibração de PD/LGD/EAD.",
+          "source": "BIS — Basel Committee on Banking Supervision",
+          "sourceCode": "BIS",
+          "tag": "PCLD & Provisionamento",
+          "themeId": "credito",
+          "date": "jan/nov-2026",
+          "relevance": "médio",
+          "confidence": "alto",
+          "normRef": "Basel Framework CRE20-CRE42, Guidelines ECL (publicadas 01/jan/2026)",
+          "metric": "Padrão internacional ECL/IRB; atualização 16/nov/2026",
+          "url": "https://www.bis.org/committees/bcbs/basel-framework/standard/cre"
+        },
+        {
+          "title": "Portabilidade de crédito no Open Finance — fase de testes em andamento (nov/2026)",
+          "body": "Lançamento público da portabilidade de crédito consignado do setor público federal previsto para novembro/2026, com testes iniciados em agosto/2026. Novas regras oficializadas pelo BC e CMN no fim de 2025: Resolução Conjunta 15 e Resolução CMN 5.265 (nov/2025). A partir de fevereiro/2026, integração da portabilidade ao Open Finance com transferências 100% digitais visa eliminar assimetrias de informação. Para bancos, amplia pressão competitiva em precificação e retenção de carteiras de crédito pessoal consignado.",
+          "source": "Banco Central do Brasil / CMN",
+          "sourceCode": "BCB",
+          "tag": "Recuperação de Crédito",
+          "themeId": "credito",
+          "date": "ago-nov/2026",
+          "relevance": "médio",
+          "confidence": "alto",
+          "normRef": "Resolução Conjunta BCB 15/2025; Resolução CMN 5.265/2025",
+          "metric": "Lançamento público consignado federal: nov/2026",
+          "url": "https://anbc.org.br/en/portabilidade-de-credito-no-open-finance-comeca-em-2026/"
+        }
+      ]
+    }
+  ]
 }
