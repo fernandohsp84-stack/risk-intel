@@ -1,0 +1,99 @@
+{
+  "data": "2026-11-20",
+  "edicao": "Risco Climático",
+  "foco": "Risco Climático",
+  "gerado": "20/11, 15:24",
+  "manchete": "Nos últimos 30 dias, destaca-se a Resolução BCB 586/2026 (publicada 03/09/2026, vigência 01/01/2027) que reformula o Relatório GRSAC revogando a Res. BCB 139/2021. NGFS publicou cenários de curto prazo (2025-2026) e atualizou guia para supervisores climáticos; ISSB/IFRS S2 consolidou-se como sucessor do TCFD em mais de 40 jurisdições, com bancos devendo aplicar os novos requisitos de divulgação.",
+  "editorias": [
+    {
+      "themeId": "climatico",
+      "titulo": "Risco Climático",
+      "itens": [
+        {
+          "title": "Resolução BCB 586/2026: Reformulação completa do Relatório GRSAC e revogação da BCB 139/2021",
+          "body": "A Resolução BCB 586/2026 e a Instrução Normativa BCB 772/2026, publicadas em 03/09/2026, revogam a Resolução BCB 139/2021 e a IN BCB 153/2021 e entram em vigor a partir de 01/01/2027. As duas normas anteriores (BCB 139/2021 e IN 153/2021) são revogadas pela Resolução BCB 586/2026 e pela IN BCB 772/2026. Para bancos S1/S2, isso implica atualização completa dos processos de coleta, controles internos e publicação do GRSAC conforme novo framework até dezembro de 2026, incluindo adaptação das tabelas padronizadas às novas métricas quantitativas exigidas pela norma revisada.",
+          "source": "ESGreen",
+          "sourceCode": "BCB",
+          "tag": "GRSAC & Res. BCB 139",
+          "themeId": "climatico",
+          "date": "30/09/2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "Resolução BCB 586/2026; IN BCB 772/2026",
+          "metric": "Vigência 01/01/2027; revoga Res. BCB 139/2021 e IN BCB 153/2021",
+          "url": "https://esgreen.com.br/research/prsac-drsac-grsac-bacen/"
+        },
+        {
+          "title": "Consulta Pública BCB 127/2025: Ampliação de escopo do Relatório GRSAC e entrada em vigor em janeiro/2027",
+          "body": "O Conselho do BCB lançou consulta pública que permanecerá aberta até 13 de fevereiro de 2026 sobre proposta regulatória que amplia o escopo de informações a serem divulgadas no Relatório GRSAC, conforme Resolução BCB 139 e Instrução Normativa BCB 153, ambas de 15 de setembro de 2021. O Relatório GRSAC, em seu novo formato, está previsto para entrar em vigor em janeiro de 2027 para instituições alocadas no Segmento 1 (S1) e Segmento 2 (S2). A ampliação exigirá dos bancos S1/S2 capacidade técnica para produzir métricas adicionais (quantitativas e qualitativas) sobre riscos físicos, de transição e oportunidades climáticas, bem como revisão de procedimentos de governança e validação interna.",
+          "source": "Banco Central do Brasil - Public Consultation 127",
+          "sourceCode": "BCB",
+          "tag": "GRSAC & Res. BCB 139",
+          "themeId": "climatico",
+          "date": "04/11/2025",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "Consulta Pública BCB 127/2025; Res. BCB 139/2021; IN BCB 153/2021",
+          "metric": "Consulta aberta até 13/02/2026; entrada em vigor jan/2027 para S1/S2",
+          "url": "https://www.bcb.gov.br/content/estabilidadefinanceira/regulacao_prudencial_docs/Relatorio_GRSAC/BCB_PublicConsultation_127.pdf"
+        },
+        {
+          "title": "BCBS: Framework voluntário de divulgação de riscos climáticos publicado em junho/2025 — Pilar 3 permanece não mandatório",
+          "body": "Em 13 de junho de 2025, o Basel Committee on Banking Supervision (BCBS) publicou seu framework para divulgação de riscos financeiros relacionados ao clima, sendo que o framework final de divulgação será voluntário (ou seja, não faz parte dos requisitos internacionais de Pilar 3). O capítulo sobre riscos financeiros relacionados ao clima foi publicado em 01 de janeiro de 2026 e estabelece princípios para a gestão desses riscos, afirmando que bancos estão potencialmente expostos a riscos climáticos independentemente de tamanho, complexidade ou modelo de negócio. Para bancos brasileiros, embora o Pilar 3 climático do BCBS seja voluntário, a Res. BCB 586/2026 impõe obrigações domésticas mais rigorosas; a comparabilidade internacional exigirá alinhamento técnico com os templates qualitativos e quantitativos propostos pelo BCBS (governança, estratégia, gestão de risco, concentração).",
+          "source": "BIS - Basel Committee on Banking Supervision",
+          "sourceCode": "BIS",
+          "tag": "Stress Test Climático",
+          "themeId": "climatico",
+          "date": "13/06/2025 (framework); 01/01/2026 (chapter publicado)",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "BCBS Climate-related financial risks framework (Jun/2025); BIS guidelines Chapter 60 (Jan/2026)",
+          "metric": "Framework voluntário; princípios para gestão de riscos climáticos publicados 01/01/2026",
+          "url": "https://www.bis.org/committees/bcbs/basel-consolidated-guidelines/module/rma/60"
+        },
+        {
+          "title": "NGFS: Cenários de curto prazo (2025) e atualização do Guia para Supervisores — 73% dos supervisores já conduzem stress tests climáticos",
+          "body": "O NGFS publicou seus primeiros cenários climáticos de curto prazo em maio de 2025, introduzindo quatro trajetórias de prazo próximo (3 a 5 anos) que modelam métricas de risco financeiro como probabilidade de default setorial e ajustes de avaliação patrimonial, preenchendo lacuna crítica para stress testing climático em horizontes de planejamento de negócios. O NGFS publicou recentemente seu Guia para Supervisores atualizado, a primeira revisão completa desde 2020, e os achados principais confirmam que 77% dos supervisores afirmam que seu mandato cobre a avaliação de riscos climáticos; 73% agora conduzem análises de cenários climáticos ou stress tests, contra uso limitado quando o primeiro Guia foi publicado. Para bancos brasileiros, os cenários de curto prazo do NGFS são diretamente aplicáveis aos exercícios de stress test exigidos pela Res. BCB 586/2026 e permitem integração com frameworks de risco de crédito, mercado e operacional em horizonte compatível com planejamento estratégico.",
+          "source": "NGFS - Network for Greening the Financial System",
+          "sourceCode": "BIS",
+          "tag": "Cenários NGFS",
+          "themeId": "climatico",
+          "date": "Maio/2025 (cenários curto prazo); Out/2025 (Climate Impact Explorer); Out/2026 (Guide updated)",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "NGFS short-term climate scenarios (May 2025); NGFS Guide to climate scenario analysis (Oct 2026)",
+          "metric": "4 cenários de 3-5 anos; 73% supervisores conduzem stress tests climáticos; Climate Impact Explorer atualizado Out/2025",
+          "url": "https://www.ngfs.net/system/files/2025-11/Guide%20to%20climate%20scenario%20analysis%20for%20central%20banks%20and%20supervisors%20%E2%80%93%20Update_0.pdf"
+        },
+        {
+          "title": "ISSB/IFRS S2 substitui TCFD: mais de 40 jurisdições adotaram padrões até 2026, com bancos devendo reportar sob novo framework",
+          "body": "O TCFD foi dissolvido em 12 de outubro de 2023 e suas recomendações agora estão incorporadas aos padrões ISSB, sendo que a responsabilidade por monitorar as divulgações climáticas das empresas passou para a Fundação IFRS, através do International Sustainability Standards Board. Mais de 40 jurisdições já decidiram usar ou estão tomando medidas para introduzir os padrões ISSB em seus sistemas legais ou regulatórios, com base em informações disponíveis à Fundação IFRS até o final de março de 2026. Os requisitos em IFRS S2 são consistentes com as quatro recomendações centrais e onze divulgações recomendadas publicadas pelo TCFD, e uma empresa aplicando IFRS S1 e IFRS S2 atenderá às recomendações TCFD, pois as recomendações estão totalmente incorporadas aos padrões ISSB. Para bancos brasileiros, embora o Brasil não tenha adotado formalmente IFRS S2, instituições com operações em jurisdições que adotaram (Austrália, Japão, Hong Kong, Singapura, Canadá, UK, entre outras) devem reportar segundo ISSB; além disso, investidores globais pressionam por alinhamento voluntário, e a Res. BCB 586/2026 busca convergência técnica com IFRS S2.",
+          "source": "IFRS Foundation / ISSB",
+          "sourceCode": "BIS",
+          "tag": "ISSB / IFRS S2 & TCFD",
+          "themeId": "climatico",
+          "date": "Março/2026 (IFRS Foundation update); Out/2023 (TCFD dissolvido); Dez/2025 (emendas IFRS S2)",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "IFRS S1 & IFRS S2 (Jun/2023); Targeted amendments to IFRS S2 (Dec/2025); TCFD disbanded (Oct/2023)",
+          "metric": "Mais de 40 jurisdições adotaram até mar/2026; TCFD totalmente incorporado ao IFRS S2; emendas vigentes 01/01/2027",
+          "url": "https://www.ifrs.org/content/dam/ifrs/meetings/2026/april/ac/ac5-issb-update.pdf"
+        },
+        {
+          "title": "Risco Físico e de Transição: NGFS Phase VI prevista para 2026 e integração de riscos de natureza aos cenários climáticos",
+          "body": "O Network for Greening the Financial System desenvolveu cenários climáticos de longo prazo para instituições financeiras, alinhados com as últimas ciências de impacto climático e de transição, sendo que os cenários de longo prazo incluem análise de impacto climático e risco relacionado à natureza, com o Climate Impact Explorer atualizado em outubro de 2025, e a NGFS Phase VI incluirá a atualização em 2026. Os cenários de curto prazo (novos a partir de 2025) modelam eventos extremos compostos — por exemplo, onda de calor, seca e incêndio florestal ocorrendo na mesma janela de tempo —, são construídos para estudar como o risco climático interage com o ciclo econômico ordinário, camadas de política climática, clima extremo e dinâmicas econômicas setoriais, e são mais úteis para stress-testing de resiliência financeira de curto prazo ou para entender como um ano ruim plausível (ou dois) poderia se propagar através de um negócio. Para bancos brasileiros, os cenários Phase VI do NGFS (2026) permitirão stress tests integrados de risco físico (inundações, secas, eventos extremos) e de transição (precificação de carbono, mudanças regulatórias) aplicáveis às carteiras de crédito rural, infraestrutura, real estate e corporate expostas a setores de alta emissão ou regiões vulneráveis.",
+          "source": "NGFS",
+          "sourceCode": "BIS",
+          "tag": "Risco Físico e de Transição",
+          "themeId": "climatico",
+          "date": "Out/2025 (Climate Impact Explorer); 2026 (NGFS Phase VI prevista); Out/2026 (blog análise)",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "NGFS Phase VI (2026 prevista); NGFS short-term scenarios (May 2025); Climate Impact Explorer (Oct 2025)",
+          "metric": "Phase VI 2026; cenários curto prazo 3-5 anos com eventos compostos; Climate Impact Explorer atualizado Out/2025",
+          "url": "https://www.ngfs.net/system/files/2025-11/NGFS%20scenarios%20narratives%20and%20key%20findings_0.pdf"
+        }
+      ]
+    }
+  ]
+}
