@@ -68,8 +68,8 @@ if (API_KEY_BRUTA !== API_KEY) {
   console.log("Aviso: a chave tinha espacos ou quebras de linha — foram removidos.");
 }
 
-console.log("Chave carregada: " + API_KEY.slice(0, 14) + "..." + API_KEY.slice(-4) +
-            " (" + API_KEY.length + " caracteres)");
+// O repositório é público: não imprimir nenhum trecho da chave.
+console.log("Chave carregada: " + API_KEY.length + " caracteres, prefixo correto.");
 
 if (API_KEY.length < 95 || API_KEY.length > 120) {
   console.log("Aviso: o tamanho esperado fica por volta de 108 caracteres.");
