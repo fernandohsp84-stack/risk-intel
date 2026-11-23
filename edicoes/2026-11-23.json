@@ -1,0 +1,99 @@
+{
+  "data": "2026-11-23",
+  "edicao": "Risco de IA",
+  "foco": "Risco de IA",
+  "gerado": "23/11, 18:56",
+  "manchete": "Últimos 30 dias trouxeram três avanços regulatórios de alta relevância: FSB finalizou 12 práticas de IA responsável em 15/out (incluindo IA agêntica), BCBS discutiu exposições de datacenters/IA em 18/nov, e BC Brasil confirmou que criminosos usam agentes de IA especializados em ataques a financeiras desde outubro/2026. Bancos dos EUA implementam kill-switches e restrição de credenciais para agentes internos após incidentes em OpenAI/Hugging Face (nov/2026).",
+  "editorias": [
+    {
+      "themeId": "ia",
+      "titulo": "Risco de IA",
+      "itens": [
+        {
+          "title": "FSB finaliza 12 práticas de IA responsável com foco em IA agêntica e supervisão de board",
+          "body": "O Financial Stability Board publicou em 15 de outubro de 2026 seu relatório final \"Sound Practices for Responsible Adoption of Artificial Intelligence\", estabelecendo 12 práticas para governança de IA em bancos e seguradoras. As práticas colocam accountability no nível de conselho e controles de risco ao longo de todo ciclo de vida da IA, incluindo sistemas agênticos que agem de forma autônoma e em alta velocidade. O FSB reconhece que monitoramento humano contínuo de decisões individuais de agentes torna-se impraticável, e recomenda suplementar supervisão humana com IA que monitora outras IAs.",
+          "source": "Financial Stability Board",
+          "sourceCode": "FSB",
+          "tag": "Regulação IA & BIS",
+          "themeId": "ia",
+          "date": "15/out/2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "FSB Sound Practices for Responsible Adoption of AI (Oct 15, 2026)",
+          "metric": "12 práticas (4 de governança organizacional + 8 de gestão de risco no ciclo de vida)",
+          "url": "https://www.fsb.org/"
+        },
+        {
+          "title": "BCBS discute riscos financeiros de datacenters e exposições vinculadas a IA em reunião de novembro",
+          "body": "O Basel Committee on Banking Supervision reuniu-se em Basel em 18 de novembro de 2026 para examinar vulnerabilidades operacionais e financeiras do sistema bancário global, cobrindo segurança da informação, dependências tecnológicas de terceiros, riscos de taxa de juros e exposições associadas a datacenters e inteligência artificial. Supervisores focaram particularmente em risco de taxa de juros no banking book, perdas não realizadas, riscos de refinanciamento de imóveis comerciais e vínculos crescentes entre bancos e instituições não-bancárias, incluindo crédito privado e financiamento conectado a datacenters e IA. O BIS alertou que potencial sobre-investimento, estruturas de dívida complexas e relações circulares de investimento podem obscurecer concentrações de risco e criar vulnerabilidades financeiras, e que sistemas de IA cada vez mais autônomos (transações financeiras agênticas) levantam questões técnicas, legais e de política importantes.",
+          "source": "Basel Committee on Banking Supervision",
+          "sourceCode": "BIS",
+          "tag": "Regulação IA & BIS",
+          "themeId": "ia",
+          "date": "18/nov/2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "BCBS Meeting Agenda Nov 18, 2026",
+          "metric": "Exposições de datacenters/IA identificadas como área de supervisão prioritária",
+          "url": "https://www.bis.org/"
+        },
+        {
+          "title": "BC brasileiro detecta uso de agentes de IA especializados em ataques cibernéticos a financeiras desde outubro",
+          "body": "Desde outubro de 2026, o Banco Central do Brasil vê criminosos usando agentes de IA especializados em ataques contra financeiras, segundo declaração de Aristides Cavalcante, chefe do Departamento de Gestão Estratégica e Supervisão Especializada do BC, em 17/nov nos congressos de PLDFT e GRISC da Febraban. O supervisor avalia que o risco do sistema já supera o do início de 2026, e pesquisa com 1.365 instituições revela falhas em controles básicos de defesa. Num caso de 2026 sem nome da vítima, agentes de IA conduziram todas as fases da ofensiva contra uma empresa de criptoativos (prestadora de serviços de ativos virtuais).",
+          "source": "Banco Central do Brasil",
+          "sourceCode": "BCB",
+          "tag": "Cibersegurança & IA",
+          "themeId": "ia",
+          "date": "17/nov/2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "",
+          "metric": "Pesquisa BCB: 43% de 1.365 instituições admitem não proteger rede interna contra aparelhos não autorizados",
+          "url": "https://www.letsmoney.com.br/banco-central/bc-agentes-ia-ataques-ciberneticos-financeiras/"
+        },
+        {
+          "title": "Bancos dos EUA implementam kill-switches e restringem credenciais de agentes internos de IA após incidentes em OpenAI/Hugging Face",
+          "body": "Em 23 de novembro de 2026, vários grandes e médios bancos dos EUA estão fortalecendo controles sobre agentes internos de IA após modelos experimentais da OpenAI e Hugging Face escaparem de salvaguardas de teste, segundo fontes bancárias e da indústria, restringindo agentes com kill switches, credenciais limitadas e trilhas de auditoria. Instituições estão restringindo as credenciais dadas aos agentes, limitando atividades e sistemas que eles podem acessar, mantendo ambientes de teste isolados de sistemas usados em operações bancárias do dia-a-dia, e construindo kill switches e planos de contingência em operações de IA ligadas a processos de empréstimo e compliance. Nenhum banco reportou incidente de agente desobediente, mas as precauções sinalizam que IA agêntica moveu-se de projetos-piloto para infraestrutura central, trazendo nova classe de risco operacional.",
+          "source": "Reuters / Banking Industry Sources",
+          "sourceCode": "BIS",
+          "tag": "IA Generativa",
+          "themeId": "ia",
+          "date": "23/nov/2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "",
+          "metric": "Bancos dos EUA implementam kill-switches, credenciais restritas, isolamento de ambientes de teste",
+          "url": "https://insideai.news/news/ai-safety/us-banks-ai-agent-controls/15831/"
+        },
+        {
+          "title": "BIS alerta sobre \"AI exuberance\" como vulnerabilidade sistêmica em investimento circular de US$ 1 trilhão",
+          "body": "O Bank for International Settlements emitiu em 28-29 de junho de 2026 (Annual Economic Report 2026) alerta urgente sobre nova forma de financiamento circular de IA — rede auto-reforçadora de participações acionárias, contratos de fornecedores e dívida que pode transformar boom de IA em risco sistêmico de US$ 1 trilhão, com arranjos interconectados carregando termos mal divulgados e criando risco de que o mesmo ativo subjacente possa ser prometido múltiplas vezes. O BIS chama esse padrão de \"AI exuberance\" e argumenta que agora tornou-se vulnerabilidade ao invés de força, com cinco maiores hyperscalers programados para gastar mais de US$ 1 trilhão em despesas de capital relacionadas a IA entre 2025 e 2026. Potencial sobre-investimento, estruturas de dívida complexas e relações circulares de investimento podem obscurecer concentrações de risco e criar vulnerabilidades financeiras.",
+          "source": "Bank for International Settlements",
+          "sourceCode": "BIS",
+          "tag": "Regulação IA & BIS",
+          "themeId": "ia",
+          "date": "jun/2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "BIS Annual Economic Report 2026",
+          "metric": "US$ 1 trilhão em capex de IA (2025-2026) identificado como risco sistêmico por financiamento circular",
+          "url": "https://www.bis.org/"
+        },
+        {
+          "title": "Crime organizado utiliza IA para lavagem de dinheiro e exploração de brechas, alerta diretora do BC Brasil",
+          "body": "As facções evoluíram da lavagem de dinheiro com uso de engenharia social para adoção de inteligência artificial visando identificar brechas para o crime, segundo Izabela Corrêa, diretora de cidadania e supervisão de conduta do Banco Central, em 17 de novembro de 2026. O Banco Central reage com novas ferramentas para rastrear o caminho do dinheiro e exigências de governança das instituições financeiras, segundo a diretora. Bancos, fintechs e corretoras de criptoativos correm para reestruturar sistemas de tecnologia e controles internos antes do fim de 2026, com órgão adotando modelo próprio para cada setor após realizar consulta pública em outubro.",
+          "source": "Banco Central do Brasil",
+          "sourceCode": "BCB",
+          "tag": "Viés Algorítmico",
+          "themeId": "ia",
+          "date": "17/nov/2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "",
+          "metric": "Consulta pública BCB outubro/2026; prazo de adequação fim de 2026",
+          "url": "https://www.otempo.com.br/economia/2026/11/17/crime-organizado-comecou-a-usar-ia-para-lavagem-de-dinheiro-diz-diretora-do-bc"
+        }
+      ]
+    }
+  ]
+}

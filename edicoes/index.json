@@ -1,6 +1,16 @@
 {
-  "atualizado": "20/11, 15:25",
+  "atualizado": "23/11, 18:56",
   "edicoes": [
+    {
+      "data": "2026-11-23",
+      "foco": "Risco de IA",
+      "manchete": "Últimos 30 dias trouxeram três avanços regulatórios de alta relevância: FSB finalizou 12 práticas de IA responsável em 15/out (incluindo IA agêntica), BCBS discutiu exposições de datacenters/IA em 18/nov, e BC Brasil con",
+      "editorias": 1,
+      "itens": 6,
+      "temas": [
+        "Risco de IA"
+      ]
+    },
     {
       "data": "2026-11-20",
       "foco": "Risco Climático",
