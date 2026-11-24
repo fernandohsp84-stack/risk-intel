@@ -1,6 +1,16 @@
 {
-  "atualizado": "23/11, 18:56",
+  "atualizado": "24/11, 17:32",
   "edicoes": [
+    {
+      "data": "2026-11-24",
+      "foco": "Risco de Modelo",
+      "manchete": "Últimos 30 dias trouxeram avanços em governança BCBS 239 para bancos europeus, backtesting de ECL do EBA 2023, stress test desk-based do BoE nov/2024 com sensibilidade NII, Res. BCB 438/2024 sobre RWA padronizado, IN BCB",
+      "editorias": 1,
+      "itens": 6,
+      "temas": [
+        "Risco de Modelo"
+      ]
+    },
     {
       "data": "2026-11-23",
       "foco": "Risco de IA",

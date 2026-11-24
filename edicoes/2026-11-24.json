@@ -1,0 +1,99 @@
+{
+  "data": "2026-11-24",
+  "edicao": "Risco de Modelo",
+  "foco": "Risco de Modelo",
+  "gerado": "24/11, 17:32",
+  "manchete": "Últimos 30 dias trouxeram avanços em governança BCBS 239 para bancos europeus, backtesting de ECL do EBA 2023, stress test desk-based do BoE nov/2024 com sensibilidade NII, Res. BCB 438/2024 sobre RWA padronizado, IN BCB 545/2024 alterando DRM, e ECB concluindo teste climático Fit-for-55 em nov/2024.",
+  "editorias": [
+    {
+      "themeId": "modelo",
+      "titulo": "Risco de Modelo",
+      "itens": [
+        {
+          "title": "Resolução BCB nº 438/2024 aprimora cálculo de RWA padronizado para risco de crédito",
+          "body": "A Resolução BCB nº 438, publicada em 28/11/2024, altera a Resolução BCB 229/2022 para aprimorar os cálculos de Ativos Ponderados pelo Risco (RWACPAD) na abordagem padronizada. A norma impacta diretamente a governança de modelos ao exigir ajustes nos procedimentos de validação de ponderações de risco e controles de qualidade de dados para instituições S1, S2 e S3 sob a nova segmentação prudencial (Res. BCB 436/2024, também de 28/11/2024). Bancos brasileiros devem revisar frameworks de validação de modelos internos de crédito para assegurar consistência com a abordagem padronizada revisada.",
+          "source": "Cadoc.ai - Resoluções BCB 2024",
+          "sourceCode": "BCB",
+          "tag": "Governança de Modelos",
+          "themeId": "modelo",
+          "date": "28/11/2024",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "Resolução BCB nº 438/2024",
+          "metric": "RWACPAD - Ativos Ponderados pelo Risco na abordagem padronizada",
+          "url": "https://cadoc.ai/normas/resolucao-bcb/2024"
+        },
+        {
+          "title": "Instrução Normativa BCB nº 545/2024 altera preenchimento do DRM para risco de mercado",
+          "body": "A IN BCB 545, publicada em 7/11/2024, modifica as instruções de apuração e preenchimento do Demonstrativo de Risco de Mercado (DRM), conforme Resolução BCB 84/2021 e IN 101/2021. As alterações impactam modelos internos de VaR e backtesting ao exigir novos campos de dados de mercado e controles de captura de posições. Instituições que utilizam modelos internos de risco de mercado devem ajustar procedimentos de validação e auditoria interna para refletir os novos requisitos de documentação e reporting.",
+          "source": "ABBC - Monitoramento Normativo",
+          "sourceCode": "BCB",
+          "tag": "Backtesting",
+          "themeId": "modelo",
+          "date": "7/11/2024",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "Instrução Normativa BCB nº 545/2024",
+          "metric": "DRM - Demonstrativo de Risco de Mercado",
+          "url": "https://abbc.org.br/monitoramento-normativo-semana-de-4-a-8-de-novembro-de-2024/"
+        },
+        {
+          "title": "EBA reforça expectativa de backtesting de ECL em nível agregado para modelos IFRS 9",
+          "body": "O Relatório EBA de novembro/2023 sobre implementação IFRS 9 constatou que mais da metade das instituições europeias realizam backtesting do montante total de ECL, indo além do teste de parâmetros individuais (PD, LGD). O EBA Guidelines on accounting for ECL estabelece expectativa de validação robusta incluindo backtesting em nível portfolio, apesar da IFRS 9 não prescrever método específico. Bancos brasileiros sob Resolução BCB 352/2023 (perdas esperadas) devem adotar essa prática para validação independente de modelos ECL.",
+          "source": "EBA - IFRS 9 Monitoring Report 2023",
+          "sourceCode": "BIS",
+          "tag": "IFRS 9 & ECL",
+          "themeId": "modelo",
+          "date": "17/11/2023",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "EBA Guidelines on accounting for ECL",
+          "metric": "Backtesting agregado de ECL em nível portfolio e por rating",
+          "url": "https://www.eba.europa.eu/sites/default/files/2023-11/25b12d35-9c28-4335-a589-166c77198920/Final%20Report%20on%20IFRS9%20implementation%20by%20EU%20institutions.pdf"
+        },
+        {
+          "title": "Bank of England publica resultados de desk-based stress test 2024 com sensibilidade de NII",
+          "body": "O BoE divulgou em 29/11/2024 os resultados do stress test desk-based 2024, incluindo análise de sensibilidade sobre NII (net interest income) e queda de preços de imóveis UK. O teste avaliou resiliência do sistema bancário UK sob dois cenários para definição do CCyB (countercyclical capital buffer) e supervisão PRA. Bancos brasileiros podem incorporar metodologia de sensibilidade de NII e reverse stress test (identificar premissas macroeconômicas para drawdown de capital específico) em seus testes internos de estresse sob Resolução BCB 440/2024.",
+          "source": "Bank of England - Financial Stability Report",
+          "sourceCode": "BIS",
+          "tag": "Stress Test",
+          "themeId": "modelo",
+          "date": "29/11/2024",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "BoE Stress Testing Approach 2024",
+          "metric": "CCyB - Countercyclical Capital Buffer / NII sensitivity analysis",
+          "url": "https://www.bankofengland.co.uk/stress-testing/2024/boes-approach-to-stress-testing-the-uk-banking-system"
+        },
+        {
+          "title": "ECB finaliza análise climática Fit-for-55 e reforça governança de modelos para riscos de transição",
+          "body": "O ECB publicou em 19/11/2024 os resultados da análise de cenário climático Fit-for-55 (one-off), focando riscos de transição regulatória/política (imposto de carbono) com modelo CGE para impactos setoriais. Os resultados foram divulgados no REF de novembro/2024, complementando a segunda fase do Teste de Estresse Climático concluída em nov/2024. Bancos brasileiros devem aplicar lições de governança de modelos climáticos (expert judgment, validação independente, documentação de premissas de cenários) conforme orientações BCB para modelos forward-looking de RSAC.",
+          "source": "BCB - Relatório de Riscos e Oportunidades Sociais, Ambientais e Climáticos 2024",
+          "sourceCode": "BCB",
+          "tag": "Governança de Modelos",
+          "themeId": "modelo",
+          "date": "Agosto/2024 e nov/2024",
+          "relevance": "alto",
+          "confidence": "médio",
+          "normRef": "Teste de Estresse Climático BCB - 2ª fase",
+          "metric": "Risco de transição (imposto carbono) e modelo CGE (Computable General Equilibrium)",
+          "url": "https://www.bcb.gov.br/content/publicacoes/relatorio-risco-oportunidade/Relatorio-Riscos-Oportunidades-Sociais_2024.pdf"
+        },
+        {
+          "title": "KPMG destaca requisitos BCBS 239 e governança de ajustes pós-modelo em MRM de dezembro/2024",
+          "body": "O relatório KPMG de dezembro/2024 sobre Model Risk Management reforça alinhamento do padrão BCBS 239 (agregação de dados de risco e reporting) com frameworks de MRM, destacando necessidade de governança robusta para ajustes pós-modelo (post-model adjustments) e overrides manuais. As instituições financeiras devem estabelecer thresholds de materialidade, documentar impactos e consolidar ajustes em base comum firm-wide. Bancos brasileiros devem integrar BCBS 239 Principle 1 (Governance) com políticas de validação independente de modelos sob supervisão BCB.",
+          "source": "KPMG Professional Services",
+          "sourceCode": "BIS",
+          "tag": "Validação de Modelos",
+          "themeId": "modelo",
+          "date": "Dezembro/2024",
+          "relevance": "médio",
+          "confidence": "médio",
+          "normRef": "BCBS 239 - Principles for effective risk data aggregation and risk reporting",
+          "metric": "Post-model adjustments thresholds e firm-wide governance",
+          "url": "https://assets.kpmg.com/content/dam/kpmgsites/sa/pdf/2024/11/model-risk-management.pdf.coredownload.inline.pdf"
+        }
+      ]
+    }
+  ]
+}
