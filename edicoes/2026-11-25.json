@@ -1,0 +1,99 @@
+{
+  "data": "2026-11-25",
+  "edicao": "Risco de Crédito",
+  "foco": "Risco de Crédito",
+  "gerado": "25/11, 16:49",
+  "manchete": "Nos últimos 30 dias (até 25/nov/2026), destacam-se: (1) Inadimplência PF atingiu 84,2 milhões em nov/2026 e PJ alcançou 9,4 milhões em set/2026 (recorde Serasa); (2) Resolução BCB 606/2026 (operações Selic) vigente desde 27/nov, complementando o pacote 601–603 (concessão responsável, vigência 2027); (3) Estudos acadêmicos mostram impacto da IFRS 9/Res. 4.966 em PCLD, com aumentos de ~56% em provisões em cooperativas de crédito; (4) Recuperação de crédito empresas 42,3% em 60d (ago/2026), sinalizando melhora parcial no ciclo de cobrança.",
+  "editorias": [
+    {
+      "themeId": "credito",
+      "titulo": "Risco de Crédito",
+      "itens": [
+        {
+          "title": "Inadimplência de consumidores pessoa física atinge 84,2 milhões em novembro/2026 — desaceleração no ritmo, mas novo recorde histórico da série",
+          "body": "A Serasa Experian divulgou em 05/nov/2026 que a inadimplência PF alcançou 84,2 milhões de brasileiros, maior nível histórico, com desaceleração no crescimento mensal desde abril/2026 mas expansão continuada. Dívidas com financeiras ultrapassaram contas básicas pela primeira vez na série, com destaque para cartões e crédito pessoal. Para bancos brasileiros, o quadro mantém pressão sobre PCLD de varejo e concessão seletiva em massificados, impactando provisionamento forward-looking (Res. BCB 4.966) mesmo com ritmo desacelerando.",
+          "source": "Serasa Experian — Feirão Limpa Nome",
+          "sourceCode": "SERASA",
+          "tag": "Inadimplência",
+          "themeId": "credito",
+          "date": "nov/2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "",
+          "metric": "84,2 milhões de inadimplentes PF",
+          "url": "https://www.letsmoney.com.br/credito/serasa-feirao-limpa-nome-84-milhoes-inadimplentes/"
+        },
+        {
+          "title": "Inadimplência empresarial bate novo recorde: 9,4 milhões de CNPJs em set/2026 (R$ 247,8 bi) — micro e pequenas representam 95,2% do total",
+          "body": "O Indicador Serasa de Inadimplência das Empresas registrou 9,4 milhões de CNPJs negativados em setembro/2026 (+12% a.a.), com 68,9 milhões de dívidas somando R$ 247,8 bilhões. 95,2% são micro e pequenas empresas; serviços (31,7%) e bancos/cartões (19,6%) lideram setores credores. Para gestão de risco de crédito, o quadro exige reavaliação de limites PJ, scoring setorial refinado e provisões stage-2 elevadas (Res. 4.966), especialmente em regiões com taxa >40% (Alagoas 41,7%, Roraima 40,8%).",
+          "source": "Serasa Experian — Indicador Inadimplência Empresas",
+          "sourceCode": "SERASA",
+          "tag": "Inadimplência",
+          "themeId": "credito",
+          "date": "set/2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "",
+          "metric": "9,4 milhões CNPJs; R$ 247,8 bi; +12% a.a.",
+          "url": "https://www.letsmoney.com.br/credito/serasa-inadimplencia-empresas-setembro-2026/"
+        },
+        {
+          "title": "Resolução BCB 606/2026 (19/nov, vigente 27/nov): ajuste técnico em operações compromissadas Selic — sem impacto direto em crédito, mas reforça contexto de liquidez",
+          "body": "A Resolução BCB 606/2026, publicada 23/nov e vigente desde 27/nov/2026, altera Res. 75/2021, 129/2021 e Regulamento Selic (Res. 55/2020) sobre antecipação de revendas e readequação de operações compromissadas do BCB. Embora focada em mercado monetário, complementa o pacote regulatório recente (601–603 sobre concessão responsável) sinalizando postura BCB de ajuste fino em infraestrutura financeira. Para crédito, não há efeito normativo direto, mas o contexto reforça atenção à gestão de liquidez e funding em ambiente de inadimplência elevada.",
+          "source": "LegisWeb / BCB",
+          "sourceCode": "BCB",
+          "tag": "Res. BCB 4.966",
+          "themeId": "credito",
+          "date": "nov/2026",
+          "relevance": "médio",
+          "confidence": "alto",
+          "normRef": "Resolução BCB 606/2026",
+          "metric": "",
+          "url": "https://www.legisweb.com.br/legislacao/?id=504728"
+        },
+        {
+          "title": "Impacto IFRS 9 / Res. CMN 4.966 em provisionamento: estudos recentes mostram salto de 56% em PCLD em cooperativas de crédito (2024–2025)",
+          "body": "Pesquisa publicada em ago/2026 (Revista E&S) analisou cooperativa de crédito e identificou aumento de 56,45% no saldo de provisões (de R$ 310 mi PCLD para R$ 485 mi PEARC) após adoção Res. 4.966, com impacto de +38,37% nas despesas de provisão e redução temporária de sobras. Estudos acadêmicos (PUC-SP, REASE 2026) confirmam tendência global de maior conservadorismo e ECL elevado no Brasil pós-2021. Para bancos brasileiros, o modelo de perda esperada (stage 1–3) exige calibração contínua, dados históricos robustos e integração com scoring; antecipação de perdas gera pressão no resultado mas fortalece resiliência frente a deterioração creditícia.",
+          "source": "Revista E&S / PUC-SP / REASE",
+          "sourceCode": "BCB",
+          "tag": "PCLD & Provisionamento",
+          "themeId": "credito",
+          "date": "2024–2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "Res. CMN 4.966/2021; CPC 48; IFRS 9",
+          "metric": "+56,45% provisão; +38,37% despesa PCLD",
+          "url": "https://revistaes.com.br/artigos/impactos-da-resolucao-cmn-4-966-2021-nas-operacoes-de-credito-em-cooperativas-de-credito?lang=en"
+        },
+        {
+          "title": "Taxa de recuperação de crédito empresas em 42,3% (60 dias, ago/2026) — sinaliza melhora parcial no ciclo de cobrança, mas ainda distante de patamares pré-pandemia",
+          "body": "O indicador Serasa de Recuperação de Crédito empresas registrou 42,3% (média 12 meses até ago/2026), medindo percentual de dívidas recuperadas (pagas/renegociadas) em até 60 dias pós-negativação. Embora represente avanço frente a trimestres anteriores, o patamar reflete ambiente ainda restritivo para geração de caixa PJ (crédito caro, margens apertadas). Para bancos, a métrica é crítica para calibrar Loss Given Default (LGD) em modelos IFRS 9 e estratégias de cobrança ativa/renegociação; carteiras com recuperação <40% exigem provisões stage-3 mais conservadoras e revisão de critérios de write-off.",
+          "source": "Serasa Experian — Indicadores Econômicos",
+          "sourceCode": "SERASA",
+          "tag": "Recuperação de Crédito",
+          "themeId": "credito",
+          "date": "ago/2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "",
+          "metric": "42,3% recuperação em 60 dias (média 12m)",
+          "url": "https://www.serasaexperian.com.br/conteudos/indicadores-economicos/"
+        },
+        {
+          "title": "Resoluções BCB 601, 602 e 603/2026 sobre concessão responsável — vigência mar–jul/2027, mas já exigem preparação de sistemas e políticas de crédito em nov/2026",
+          "body": "O pacote regulatório BCB 601 (Painel de Dívidas, alertas 40% renda), 602 (bloqueio ofertas ativas, opt-in vulneráveis) e 603 (crédito no Pix com consentimento e espera 24h) entra em vigor entre 31/mar e 01/jul/2027, mas bancos devem adaptar sistemas, scoring e controles internos já em 4T2026. As normas reforçam avaliação de capacidade de pagamento (Res. 567) e transparência pré-contratual, impactando motores de concessão, réguas de oferta e modelos de risco comportamental. Compliance exige integração Open Finance, revisão de políticas de marketing e testes de simuladores até 1T2027; impacto esperado é redução de taxa de aprovação em perfis vulneráveis mas ganho de qualidade de carteira.",
+          "source": "BCB / Cooperativismo de Crédito / Agência Brasil",
+          "sourceCode": "BCB",
+          "tag": "Concessão & Scoring",
+          "themeId": "credito",
+          "date": "out/2026 (publicação); mar–jul/2027 (vigência)",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "Resoluções BCB 567, 601, 602, 603/2026",
+          "metric": "Alerta obrigatório 40% renda; opt-in vulneráveis",
+          "url": "https://cooperativismodecredito.coop.br/2026/11/banco-central-muda-regras-do-credito-e-reforca-a-oferta-responsavel/"
+        }
+      ]
+    }
+  ]
+}
