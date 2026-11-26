@@ -1,0 +1,133 @@
+{
+  "data": "2026-11-26",
+  "edicao": "Risco de Mercado e Liquidez",
+  "foco": "Risco de Mercado e Liquidez",
+  "gerado": "26/11, 16:27",
+  "manchete": "Resolução BCB 592/2026 (30 set) alterou cinco normas de risco de mercado — FRTB, IRRBB, carteira de negociação, RWADRC e exposição cambial. BIS atualizou framework Basel MAR em 23 nov 2026, consolidando requisitos para capital de mercado. Resolução CMN 5.296/2026 alterou a Res. CMN 4.616/2017 e expandiu LCR para bancos S2 e criou LCRS para S3/S4. BIS reportou em setembro/2026 LCR médio global de 136,6% e NSFR de 123,3% para bancos Grupo 1.",
+  "editorias": [
+    {
+      "themeId": "mercado",
+      "titulo": "Risco de Mercado",
+      "itens": [
+        {
+          "title": "Resolução BCB 592/2026: alterações em FRTB, RWASENS e IRRBB",
+          "body": "Resolução BCB 592, de 30 de setembro de 2026, publicada em 2 de outubro no DOU, altera cinco normas prudenciais simultâneas. Muda classificação na carteira de negociação, risco de crédito do trading book (RWADRC), abordagem padronizada por sensibilidades (RWASENS), choques do IRRBB e apuração de exposição cambial. Alterou Res. BCB 470/2025 (RWASENS) com entrada em 1º janeiro 2027 e Circular 3.876/2018 (IRRBB) com vigência imediata na publicação.",
+          "source": "FBM Educação",
+          "sourceCode": "FEBRABAN",
+          "tag": "FRTB",
+          "themeId": "mercado",
+          "date": "set-out/2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "Resolução BCB 592/2026",
+          "metric": "5 normas alteradas (Res. 111/2021, 313/2023, 470/2025, Circ. 3.876/2018, 4.750/2023)",
+          "url": "https://fbmeducacao.com.br/blog/resolucao-bcb-592-frtb-irrbb/"
+        },
+        {
+          "title": "IRRBB: recalibragem dos choques padronizados da Circular 3.876",
+          "body": "Resolução BCB 592 promoveu nova calibragem dos choques padronizados de taxa de juros no IRRBB, com onze choques alterados (paralelo, curto e longo) e quatro dos seis ponderadores do Anexo II-A elevados. Instituições devem calcular e monitorar mensalmente ΔEVE e ΔNII para observar adequação aos limites da Declaração de Apetite por Riscos (RAS). IRRBB mensura risco atual/prospectivo do impacto de movimentos de taxa de juros sobre instrumentos classificados na carteira bancária.",
+          "source": "FBM Educação e BOCOM BBM",
+          "sourceCode": "BCB",
+          "tag": "IRRBB",
+          "themeId": "mercado",
+          "date": "set-nov/2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "Circular BCB 3.876/2018 (alterada por Res. 592/2026)",
+          "metric": "11 choques IRRBB alterados; 4/6 ponderadores RRAO aumentados",
+          "url": "https://fbmeducacao.com.br/blog/resolucao-bcb-592-frtb-irrbb/"
+        },
+        {
+          "title": "VaR e migração para Expected Shortfall no framework FRTB",
+          "body": "Controle de Risco de Mercado em bancos brasileiros baseia-se no VaR (99% confiança), ferramenta que mede perda potencial máxima para dado nível de confiança e horizonte de investimento. FRTB substitui VaR por Expected Shortfall (ES) como medida regulatória primária, capturando perda média além do limiar VaR e removendo fraqueza conhecida na captura de risco de cauda. Framework FRTB (Sensitivities-Based Method, Default Risk Charge, Residual Risk Add-On) substituiu framework Basel 2.5 baseado em VaR e Stressed VaR.",
+          "source": "BOCOM BBM e Risk Publishing",
+          "sourceCode": "BCB",
+          "tag": "VaR & Backtesting",
+          "themeId": "mercado",
+          "date": "jun-nov/2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "Resolução BCB 470/2025 (RWASENS)",
+          "metric": "VaR 99% confiança → Expected Shortfall (ES)",
+          "url": "https://www.bocombbm.com.br/bbm-content./uploads/2026/08/relatorio-gerenciamento-de-risco-e-capital-202606.pdf"
+        },
+        {
+          "title": "Classificação de derivativos e instrumentos na carteira de negociação",
+          "body": "Novos critérios exigem alinhamento entre classificação contábil e modelo de negócio da instituição, com alterações no tratamento de instrumentos estruturados e critérios de ponderadores de risco. Res. BCB 111/2021 (classificação de instrumentos) e Res. BCB 313/2023 (RWADRC - risco de crédito dos instrumentos) foram alteradas com vigência imediata. Carteira de negociação consiste em operações com instrumentos financeiros/derivativos detidas com intenção de negociação, destinadas a hedge ou revenda, sem limitação de negociabilidade.",
+          "source": "MAPS e BOCOM BBM",
+          "sourceCode": "BCB",
+          "tag": "Carteira de Negociação",
+          "themeId": "mercado",
+          "date": "set-out/2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "Resolução BCB 111/2021 e 313/2023 (alteradas por Res. 592/2026)",
+          "metric": "RWADRC: RW 100% para fundos com investimento majoritário em emissores não categorizáveis",
+          "url": "https://www.maps.com.br/resolucao-bcb-592-carteira-negociacao-rwadrc/"
+        }
+      ]
+    },
+    {
+      "themeId": "liquidez",
+      "titulo": "Risco de Liquidez",
+      "itens": [
+        {
+          "title": "Expansão do LCR para Segmento S2 e criação do LCRS (Res. CMN 5.296/2026)",
+          "body": "Resolução CMN 5.296, de 23/04/2026, alterou a Res. 4.616/2017 e Res. 5.222/2025, estabelecendo LCR para instituições S1 e S2, e LCRS para S3 e S4. Limite mínimo de LCR permanece em 1,00 para S1; para S2 será 0,90 até jun/2027 e 1,00 a partir de jul/2027. A partir de 2027, S2 cumpre LCR e entra em vigor LCRS, ampliando requerimentos prudenciais de liquidez para universo mais amplo de IFs.",
+          "source": "Resolução CMN nº 5.296/2026 e análises BCB",
+          "sourceCode": "BCB",
+          "tag": "LCR",
+          "themeId": "liquidez",
+          "date": "abril 2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "Res. CMN 5.296/2026",
+          "metric": "LCR mínimo=1,00 (S1); 0,90→1,00 (S2 jan-jul/2027)",
+          "url": "https://cadoc.ai/post/resolucao-cmn-5296"
+        },
+        {
+          "title": "Monitoramento Basel III Global: LCR em 136,6% e NSFR em 123,3% (setembro/2026)",
+          "body": "BCBS publicou em 23/09/2026 exercício de monitoramento Basel III mostrando LCR médio de bancos Grupo 1 em 136,6% (aumento) e NSFR em 123,3% (leve queda). LCR subiu versus período anterior; NSFR caiu levemente; todos bancos reportaram LCR e NSFR acima de 100%. IFs do S1 brasileiro apresentam LCR significativamente acima do mínimo, demonstrando elevada capacidade de atender obrigações de curto prazo.",
+          "source": "BIS Basel III Monitoring Exercise",
+          "sourceCode": "BIS",
+          "tag": "NSFR",
+          "themeId": "liquidez",
+          "date": "setembro 2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "BCBS Basel III",
+          "metric": "LCR=136,6% | NSFR=123,3% (Grupo 1 global)",
+          "url": "https://www.bis.org/media-releases/20260923-basel-iii-risk-based-capital-and-leverage-ratios-are-stable-while-liquidity-indicators-show"
+        },
+        {
+          "title": "BIS lança toolkit global de stress de liquidez para 13.000 bancos (novembro/2026)",
+          "body": "BIS publicou em 11/11/2026 Working Paper 1394 com toolkit interativo gratuito para stress-testing de liquidez tipo LCR para bancos individuais e sistemas. Ferramenta cobre ~13.000 bancos em 100+ economias, US$ 170 trilhões em ativos; paper alerta que corridas digitais podem ocorrer em horas. Introduz 'breakeven stress factor': ponto onde saídas estressadas excedem caixa disponível dos ativos, tornando liquidez líquida negativa.",
+          "source": "BIS Working Paper 1394",
+          "sourceCode": "BIS",
+          "tag": "Stress de Liquidez",
+          "themeId": "liquidez",
+          "date": "novembro 2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "BIS WP 1394/2026",
+          "metric": "13.000 bancos | US$ 170tri ativos | breakeven stress factor",
+          "url": "https://www.bis.org/publications/working-paper-1394-ready-to-run-global-liquidity-stress-tests-banks-and-banking-systems"
+        },
+        {
+          "title": "Endurecimento de requisitos de captação e funding pós-crise Banco Master (abril/2026)",
+          "body": "CMN estendeu LCR (padrão Basileia III) para instituições S2 após liquidação do Banco Master em novembro/2025 por grave crise de liquidez. LCR mede relação entre ativos de alta liquidez e saídas líquidas projetadas para 30 dias, assegurando reservas suficientes em períodos de estresse. Quando captação com garantia FGC superar Ativo de Referência da instituição, banco é obrigado a direcionar excesso para títulos públicos federais.",
+          "source": "Medidas CMN pós-Master",
+          "sourceCode": "CMN",
+          "tag": "Funding & Captação",
+          "themeId": "liquidez",
+          "date": "abril 2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "Res. CMN 5.296/2026 | Res. CMN 4.616/2017",
+          "metric": "LCR S2: 90% (jan-jun/27) → 100% (jul/27+)",
+          "url": "https://capitalaberto.com.br/regulacao/2026/04/cmn-master-fcg-liquidez-regras"
+        }
+      ]
+    }
+  ]
+}

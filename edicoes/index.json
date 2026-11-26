@@ -1,6 +1,17 @@
 {
-  "atualizado": "25/11, 16:49",
+  "atualizado": "26/11, 16:27",
   "edicoes": [
+    {
+      "data": "2026-11-26",
+      "foco": "Risco de Mercado e Liquidez",
+      "manchete": "Resolução BCB 592/2026 (30 set) alterou cinco normas de risco de mercado — FRTB, IRRBB, carteira de negociação, RWADRC e exposição cambial. BIS atualizou framework Basel MAR em 23 nov 2026, consolidando requisitos para c",
+      "editorias": 2,
+      "itens": 8,
+      "temas": [
+        "Risco de Mercado",
+        "Risco de Liquidez"
+      ]
+    },
     {
       "data": "2026-11-25",
       "foco": "Risco de Crédito",
