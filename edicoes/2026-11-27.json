@@ -1,0 +1,99 @@
+{
+  "data": "2026-11-27",
+  "edicao": "Risco Climático",
+  "foco": "Risco Climático",
+  "gerado": "27/11, 16:23",
+  "manchete": "BCB publicou Consulta Pública 127/2026 sobre métricas quantitativas no Relatório GRSAC (emissões Scope 1-3, exposição setorial); NGFS comprometeu-se com metodologia revisada de risco físico para fim/2026 após retração acadêmica da Fase V; RIS BCB set/2026 inclui teste de estresse de risco físico sobre El Niño intensificado; ISSB emitiu amendments de IFRS S2 (dez/2025) aliviando reporte de emissões financiadas para bancos (efetivos jan/2027).",
+  "editorias": [
+    {
+      "themeId": "climatico",
+      "titulo": "Risco Climático",
+      "itens": [
+        {
+          "title": "Consulta Pública BCB 127/2026 — Métricas Quantitativas GRSAC (Fase 2)",
+          "body": "O BCB lançou consulta pública aberta até 13/fev/2026 sobre proposta regulatória que expande o escopo de informações a serem divulgadas no Relatório GRSAC, conforme Resolução BCB 139/2021 e Instrução Normativa BCB 153/2021. Esta fase 2 introduz novas tabelas padronizadas com requerimentos quantitativos sobre métricas e metas associadas aos riscos social, ambiental e climático. A iniciativa está alinhada ao documento Pilar 3 do Comitê da Basileia e incluirá métricas de exposição aos três tipos de risco e emissões de gases de efeito estufa.",
+          "source": "Public Consultation 127 — BCB",
+          "sourceCode": "BCB",
+          "tag": "GRSAC & Res. BCB 139",
+          "themeId": "climatico",
+          "date": "Nov–Fev 2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "Res. BCB 139/2021 · IN BCB 153/2021",
+          "metric": "métricas GEE (Scope 1-3) + exposições setoriais quantitativas",
+          "url": "https://www.bcb.gov.br/content/estabilidadefinanceira/regulacao_prudencial_docs/Relatorio_GRSAC/BCB_PublicConsultation_127.pdf"
+        },
+        {
+          "title": "NGFS Fase V Retração Acadêmica — Metodologia Revisada de Risco Físico para Fim/2026",
+          "body": "O paper acadêmico Kotz et al. (2024) que fundamentou as estimativas de risco físico na Fase V dos cenários NGFS de longo prazo (nov/2024) foi retratado da revista Nature. O NGFS reconheceu as críticas e comprometeu-se a usar metodologia atualizada no próximo lançamento de cenários de longo prazo, previsto para fim de 2026. Outros outputs do NGFS, incluindo cenários de risco de transição e cenários de curto prazo, permanecem inalterados.",
+          "source": "NGFS Statement Physical Risk Phase V",
+          "sourceCode": "NGFS",
+          "tag": "Cenários NGFS",
+          "themeId": "climatico",
+          "date": "Dez/2025–Fim/2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "",
+          "metric": "Fase V afetada: GDP damages Kotz-Wenz · próxima release: fim/2026",
+          "url": "https://www.ngfs.net/en/publications-and-statistics/publications/ngfs-climate-scenarios-central-banks-and-supervisors-phase-v"
+        },
+        {
+          "title": "RIS BCB Set/2026 — Teste de Estresse Climático Físico sobre El Niño Intensificado",
+          "body": "O Relatório de Riscos e Oportunidades Sociais, Ambientais e Climáticos (RIS) do BCB de set/2026 consolida os avanços institucionais e regulatórios, com destaque para o teste de estresse de risco climático físico sobre intensificação do fenômeno El Niño. O RIS reporta avanços em modelagem econômico-climática e atualizações do modelo de teste de estresse climático de transição. O National Weather Service emitiu alerta de que o El Niño continua a se fortalecer, com mais de 79% de chance de permanecer forte a muito forte até jan–mar/2027.",
+          "source": "Relatório RIS BCB 2026",
+          "sourceCode": "BCB",
+          "tag": "Stress Test Climático",
+          "themeId": "climatico",
+          "date": "Set/2026",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "Comunicação 192/2026-GRC",
+          "metric": "Teste de estresse físico: El Niño intensificado 2026-2027",
+          "url": "https://www.bcb.gov.br/content/acessoinformacao/atas_grc_docs/Ata_GRC_75.pdf"
+        },
+        {
+          "title": "ISSB Amendments IFRS S2 — Alívio de Emissões Financiadas para Bancos (Efetivo Jan/2027)",
+          "body": "Sob as orientações emendadas do ISSB, bancos e outras instituições financeiras podem limitar as divulgações de Scope 3 a emissões atribuídas a empréstimos e investimentos diretos. As mudanças respondem a desafios práticos de reporte de emissões financiadas que emergiram na aplicação prática do IFRS S2, particularmente em Scope 3, sem alterar a estrutura de transparência de risco climático voltada a investidores. As emendas de dez/2025 aos requerimentos de GEE do IFRS S2 aplicam-se a partir de 1º jan/2027, com aplicação antecipada permitida.",
+          "source": "ISSB Targeted Amendments IFRS S2",
+          "sourceCode": "ISSB",
+          "tag": "ISSB / IFRS S2 & TCFD",
+          "themeId": "climatico",
+          "date": "Dez/2025 · efetivo jan/2027",
+          "relevance": "alto",
+          "confidence": "alto",
+          "normRef": "IFRS S2 Amendments dez/2025",
+          "metric": "Scope 3 financed: apenas empréstimos/investimentos diretos; derivativos/subscrição excluídos do mandatory baseline",
+          "url": "https://esgnews.com/issb-eases-financed-emissions-rules-under-ifrs-s2-giving-banks-and-asset-managers-reporting-relief/"
+        },
+        {
+          "title": "Basel Framework Updated 23/Nov/2026 — Consolidação do Arcabouço Prudencial Vigente",
+          "body": "O BCBS publicou em 23/nov/2026 a versão consolidada do Basel Framework com 1.429 páginas, incluindo requerimentos de capital baseados em risco e referências cruzadas a capítulos de securitização (CRE45) atualizados em nov/2020. Embora não contenha alterações substantivas específicas de risco climático nos últimos 30 dias, a publicação consolida o arcabouço vigente que serve de base para a integração das orientações de divulgação climática (Pilar 3) em desenvolvimento desde a Consulta BCBS d560/2023. Para bancos brasileiros, a versão atualizada mantém a estrutura sobre a qual o BCB alinha a Consulta Pública 127/2026 sobre métricas climáticas do GRSAC.",
+          "source": "Basel Framework Consolidated Nov/2026",
+          "sourceCode": "BIS",
+          "tag": "PRSAC & Res. CMN 4.945",
+          "themeId": "climatico",
+          "date": "23/nov/2026",
+          "relevance": "médio",
+          "confidence": "alto",
+          "normRef": "Basel Framework 23/nov/2026",
+          "metric": "1.429 páginas · arcabouço consolidado prudencial vigente",
+          "url": "https://www.bis.org/committees/bcbs/basel-framework/basel-framework.pdf"
+        },
+        {
+          "title": "NGFS Plano 2026–2027 — Melhoria de Usabilidade e Produção de Cenários (Ciclo Bienal)",
+          "body": "A quinta geração de cenários NGFS foi publicada em nov/2024 e o programa de trabalho de 2025 incluiu atividades específicas para melhorar usabilidade e simplificar processos de produção e disseminação de cenários e dados, sob supervisão dos membros do NGFS. A atualização do conjunto de cenários em 2026 integrará melhorias de modelagem, e o consórcio científico engajará usuários de cenários do NGFS para fornecer produto alinhado às necessidades de bancos centrais e atores financeiros. Aprendizado adicional em 2026 informará melhorias do framework a serem implementadas em 2027.",
+          "source": "NGFS VI RD3 Project Plan",
+          "sourceCode": "NGFS",
+          "tag": "Cenários NGFS",
+          "themeId": "climatico",
+          "date": "Jan–Dez/2026",
+          "relevance": "médio",
+          "confidence": "alto",
+          "normRef": "",
+          "metric": "ciclo bienal de atualização: próximo release fim/2026",
+          "url": "https://www.pik-potsdam.de/en/output/projects/all/1027"
+        }
+      ]
+    }
+  ]
+}
